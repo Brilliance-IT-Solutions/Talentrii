@@ -55,6 +55,7 @@ const CreateChallenegeComponent = () => {
                         maxLength={100}
                     />
               <ButtonComponent title='Create' />*/}
+              <PopupComponent title="+" onPressFunc={Press}/>
              </View>
             </RootContainer>
             <CustomFooter/>
