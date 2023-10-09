@@ -18,7 +18,7 @@ const options = () => {
 export const HomeStackScreen = () => (
     <HomeStack.Navigator initialRouteName={RouterNames.HOME_SCREEN}>
         <HomeStack.Screen name={RouterNames.HOME_SCREEN} component={HomeScreen} options={options}/>
-        <HomeStack.Screen name={RouterNames.CREATE_CHALLENGE_SCREEN} component={CreateChallengeScreen} options={options}/>        
+        {/* <HomeStack.Screen name={RouterNames.CREATE_CHALLENGE_SCREEN} component={CreateChallengeScreen} options={options}/>         */}
         <HomeStack.Screen name={RouterNames.PROFILE_SCREEN} component={ProfileScreen} options={options}/>        
         <HomeStack.Screen name={RouterNames.UPDATE_PROFILE_SCREEN} component={UpdateProfileScreen} options={options}/>        
     </HomeStack.Navigator>

@@ -6,12 +6,12 @@ const styles = StyleSheet.create({
 
     //################-----> COMMON CSS <-----##############//    
     textBoxes : {
-        fontSize: 18,
-        // borderWidth: 0.8,
-        borderColor: Colors.Green,
-        borderBottomWidth: 2,        
-        marginHorizontal: 40,
+        fontSize: 16,
+        borderWidth: 0.8,
+        borderColor: Colors.lightGrey,
+        marginHorizontal: 30,
         marginVertical: 10,
+        borderRadius:10
         
     },
     leftStandardPadding : {

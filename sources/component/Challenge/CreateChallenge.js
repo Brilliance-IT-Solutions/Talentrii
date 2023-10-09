@@ -10,11 +10,13 @@ import Label from '../common/label/label';
 import ParagraphContainer from '../common/Paragraph/paragraph';
 import { staticConstant } from '../../constants/staticData/staticConstant';
 import { useNavigation } from '@react-navigation/native';
+import { RouterNames } from '../../constants/routeNames';
 
-const CreateChallenegeComponent = () => {
+const CreateChallenegeScreenComponent = () => {
 const navigation = useNavigation()
+
   function navigateTo(){
-     navigation.navigate("home")
+     navigation.navigate(RouterNames.CREATE_CHALLENGE_SCREEN)
   }
   return (
     <View style={styles.rootContainer}>
@@ -45,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateChallenegeComponent;
+export default CreateChallenegeScreenComponent;

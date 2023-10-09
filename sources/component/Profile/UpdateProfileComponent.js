@@ -7,13 +7,14 @@ import CustomHeader from '../customHeader/customHeader';
 import TittleHeader from '../customHeader/tittleHeader';
 import RootContainer from '../rootContainer/rootContainer';
 import styles from './styles'
+import { staticConstant } from '../../constants/staticData/staticConstant';
 
 const UpdateProfileComponent = () => {
 
     return (
         <View style={styles.rootContainer}>
             <CustomHeader showImage showBack/>
-            <TittleHeader title='Update Profile' />
+            <TittleHeader title={staticConstant.UpdateProfile.btnTitle}/>
             <RootContainer>
                 <View style={styles.rootContainer}>
                     <View style={styles.imageViewContainer}>
@@ -39,7 +40,7 @@ const UpdateProfileComponent = () => {
                             placeholder='Age'
                             maxLength={30}
                         />
-                        <ButtonComponent title='Update Profile' />
+                        <ButtonComponent title={staticConstant.UpdateProfile.btnTitle} />
                     </View>
                 </View>
             </RootContainer>

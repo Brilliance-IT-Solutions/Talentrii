@@ -29,15 +29,6 @@ const Navigation = () => {
                         }}
                     /> : getCurrentStack()
             }
-
-               <RootStack.Screen
-                    name="home"
-                    component={CreateChallenegeComponent}
-                    options={{
-                        animationEnabled: true,
-                        headerShown: false
-                    }}
-                />
         </RootStack.Navigator>
     );
 

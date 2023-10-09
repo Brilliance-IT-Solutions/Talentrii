@@ -5,6 +5,7 @@ import colors from '../../assets/themes/colors';
 import IconCont from '../../component/common/IconCount/iconCount';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
+import { staticConstant } from '../../constants/staticData/staticConstant';
 
 const HomeComponent = (props) => {
     // const pressLike = () => {console.log("1111")};
@@ -24,9 +25,9 @@ const HomeComponent = (props) => {
             </View>
             <View >
                 <View style={styles.topSection}>
-                    <Text style={styles.headerFont}>Accepted {props.index}</Text>
-                    <Text style={styles.headerFont} >Talentrii</Text>
-                    <Text style={styles.headerFont}>Following</Text>
+                    <Text style={styles.headerFont}>{staticConstant.Home.topSection.Accepted} {props.index}</Text>
+                    <Text style={styles.headerFont} >{staticConstant.Home.topSection.Talentrii}</Text>
+                    <Text style={styles.headerFont}>{staticConstant.Home.topSection.Following}</Text>
                 </View>
                 <View style={styles.topIconRowSection}>
                     <View style={styles.topIcon}>
@@ -66,9 +67,9 @@ const HomeComponent = (props) => {
                             defaultSource={IMAGES.BRAND_FULL_LOGO}
                         />
                         <View style={styles.bottomProfileTextContainer}>
-                            <Text style={styles.bottomProfileNameText}>{"Static Name"}</Text>
+                            <Text style={styles.bottomProfileNameText}>{staticConstant.Home.bottomSection.Name}</Text>
                             <View style={styles.bottomProfileFollowerSection}>
-                                <Text style={styles.followerCount}>{"Static Followers"}</Text>
+                                <Text style={styles.followerCount}>{staticConstant.Home.bottomSection.Followers}</Text>
                                 <Text style={styles.bottomFollowerText}>Followers</Text>
                             </View>
                         </View>
@@ -89,7 +90,7 @@ const HomeComponent = (props) => {
                     </View>
                     <View style={styles.challengeSubTitleContainer}>
                         <Text style={styles.challengeSubTitle}>
-                            {"Static Sub Title"}
+                            {staticConstant.Home.bottomSection.Title}
                         </Text>
                     </View>
                 </View>

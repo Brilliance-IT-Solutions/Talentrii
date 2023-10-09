@@ -20,4 +20,4 @@ const icon = StyleSheet.create({
         marginTop: 10,
     }
 });
-export default IconCont;
+export default IconCont

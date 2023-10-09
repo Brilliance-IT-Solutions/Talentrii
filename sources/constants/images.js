@@ -13,5 +13,9 @@ export const IMAGES = {
     USER_PROFILE_ICON : require('../assets/icons/profile.png'),
     CHALLENEGE_ICON : require('../assets/icons/challenge.png'),
     BACK_ICON : require('../assets/icons/back.png'),
-    EDIT_ICON : require('../assets/icons/edit.png')
+    EDIT_ICON : require('../assets/icons/edit.png'),
+    CALENDER_ICON: require('../assets/icons/calendar.png'),
+    DELETE_ICON: require('../assets/icons/delete.png'),
+    LOCATION_ICON: require('../assets/icons/location.png'),
+    PLAY_ICON: require('../assets/icons/Play.png')
 }

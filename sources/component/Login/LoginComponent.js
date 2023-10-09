@@ -5,6 +5,7 @@ import InputContainer from '../common/TextInput/textInput';
 import ButtonComponent from '../common/Buttons/buttonComponent';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { staticConstant } from '../../constants/staticData/staticConstant';
 
 
 const LoginComponent = (props) => {
@@ -29,7 +30,7 @@ const LoginComponent = (props) => {
                         props.onChange({ name: 'Password', value })
                     }}
                     error={props.errors.Password} />
-                <ButtonComponent disabled={props.loading} title='login' onPressFunc={props.onSubmit} loading={props.loading} />
+                <ButtonComponent disabled={props.loading} title={staticConstant.Login.btnTitle} onPressFunc={props.onSubmit} loading={props.loading} />
             </View>
         </SafeAreaView>
     );
