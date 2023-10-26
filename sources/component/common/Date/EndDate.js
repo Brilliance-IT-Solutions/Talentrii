@@ -4,7 +4,7 @@ import React from "react";
 import {useState} from 'react'
 import { IMAGES } from '../../../constants/images';
 import colors from '../../../assets/themes/colors';
-
+import moment from "moment";
 const EndDate = (props) =>{
   const handleEvent = () => {
     const eventValue = false;   
@@ -37,7 +37,7 @@ const EndDate = (props) =>{
     <View style={styles.container}>
       <Image source={IMAGES.CALENDER_ICON} style={{marginVertical:6}}/> 
       <View style={{flex:6,marginLeft:15.5,marginRight:9.5}}>
-      <TextInput  inputMode='none' placeholder='Choose Date' value={date.toLocaleDateString()}  onPressOut={showDatepicker}  style={styles.inputBox}/>
+      <TextInput  inputMode='none' placeholder='Choose Date' value={date?.toLocaleDateString()}  onPressOut={showDatepicker}  style={styles.inputBox}/>
       </View>
       {show && (
         <DateTimePicker

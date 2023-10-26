@@ -2,12 +2,10 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Enums} from '../../constants/Enum/enum';
 import {IMAGES} from '../../constants/images';
-import {getFooterBottomMargin} from '../../utils/GenericFunction';
 import IconCont from '../common/IconCount/iconCount';
 import colors from '../../assets/themes/colors';
-import {ScrollView} from 'react-native-gesture-handler';
 
-const bottomIconSize = 30;
+const bottomIconSize = 28;
 
 const CustomFooter = props => {
   return (
@@ -22,6 +20,12 @@ const CustomFooter = props => {
         imageSource={IMAGES.WARNING}
         width={bottomIconSize}
         height={bottomIconSize}
+      />
+      <IconCont
+        imageSource={IMAGES.CREATE_CHALLENGE}
+        width={bottomIconSize}
+        height={bottomIconSize}
+        onIconPress={() => props.didTapped(Enums.ChallengeIconRedirection.CREATE_CHALLENGE_SCREEN)}
       />
       <IconCont
         imageSource={IMAGES.FLAGS}
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     borderTopWidth: 1,
     borderColor: colors.lightGrey,
-    paddingVertical: 10
+    paddingVertical: 12,
   },
 });
 export default CustomFooter;

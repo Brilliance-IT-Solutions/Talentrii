@@ -46,24 +46,25 @@ const HomeScreen = ({ navigation }) => {
         /* set loader to true*/}
 
     const navigatePage = (index) => {
+        // console.log(index)
         var link = RouterNames.HOME_SCREEN;
         switch (index) {
             case Enums.HomeIconRedirection.HOME:
                 link = RouterNames.HOME_SCREEN; break;
-            case Enums.HomeIconRedirection.CREATE_CHALLENGE:
-                link = RouterNames.CREATE_CHALLENGE_SCREEN; break;
+            case Enums.ChallengeIconRedirection.CREATE_CHALLENGE_SCREEN:
+                link ='challenge', {screen:'createChallengeScreen'}; break;
             case Enums.HomeIconRedirection.PROFILE:
                 link = RouterNames.PROFILE_SCREEN; break;
             default: break;
         }
-        // console.log("aman....", link)
+        // console.log("....", link)
         navigation.navigate(link)
     }
     const onViewableItemsChanged = ({ viewableItems, changed }) => {
 
         if (viewableItems !== undefined) {
             if (viewableItems.length > 0) {
-                console.log(viewableItems[0].index)
+                // console.log(viewableItems[0].index)
                 setCurrentRenderVideoIndex(viewableItems[0].index ?? 0)
             }
         }
@@ -143,7 +144,15 @@ const HomeScreen = ({ navigation }) => {
                     )}
                     keyExtractor={(item, index) => index.toString()}
                 />
-                <CustomFooter didTapped={(index) => navigatePage(index)} />
+                 <View style={{
+         position: 'absolute',
+         bottom: 0,
+      }}>
+      <CustomFooter didTapped={(index) => {
+        console.log("sf", index)
+        navigatePage(index)}}/>
+      </View>
+                {/* <CustomFooter didTapped={(index) => navigatePage(index)} /> */}
             </View>
         </View>
     )

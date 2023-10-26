@@ -28,7 +28,10 @@ const Navigation = () => {
                             headerShown: false
                         }}
                     /> : getCurrentStack()
+
+                    
             }
+
         </RootStack.Navigator>
     );
 
@@ -36,15 +39,16 @@ const Navigation = () => {
         console.log("isLogged",isLogged)
         if (isLogged == Enums.LoggedInStatus.LoggedIn) {
             return (
-                // <RootStack.Screen
-                //     name="home"
-                //     component={HomeStackScreen}
-                //     options={{
-                //         animationEnabled: true,
-                //         headerShown: false
-                //     }}
-                // />
-
+                <>
+                <RootStack.Screen
+                    name="home"
+                    component={HomeStackScreen}
+                    options={{
+                        animationEnabled: true,
+                        headerShown: false
+                    }}
+                />
+                
                 <RootStack.Screen
                 name="challenge"
                 component={ChallengeStackScreen}
@@ -52,7 +56,8 @@ const Navigation = () => {
                     animationEnabled: true,
                     headerShown: false
                 }}
-            />
+            />   
+            </> 
             )
         } else {
             return <RootStack.Screen
@@ -64,6 +69,7 @@ const Navigation = () => {
                 }}
             />
         }
+ 
     }
     const authContext = React.useMemo(() => {
         return {

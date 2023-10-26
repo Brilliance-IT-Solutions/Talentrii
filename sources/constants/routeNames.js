@@ -8,4 +8,6 @@ export const RouterNames = {
   EDIT_PROFILE_SCREEN: "editProfileScreen",
   HOME_SCREEN: "homeScreen",
   CHALLENGE_SCREEN: "ChallengeScreen",
+  PREVIEW_CHALLENGE_SCREEN: "previewChallenge",
+
 };

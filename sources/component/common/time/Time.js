@@ -12,7 +12,7 @@ const Time = (props) =>{
     const [show, setShow] = useState(false);
   
     const onChange = (event, selectedDate) => {
-      const currentTime = selectedDate;
+      const currentTime = selectedDate || time;
       setShow(false);
       setTime(currentTime);
       props.onChange(currentTime)

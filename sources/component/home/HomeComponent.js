@@ -34,6 +34,9 @@ const HomeComponent = (props) => {
                         <IconCont
                             imageSource={IMAGES.LIKE}
                             onIconPress={pressLike}
+                            width={50}
+                            height={50}
+                          
                         />
                         <Text style={styles.topIconText}>{props.item.like}</Text>
                     </View>
@@ -41,6 +44,8 @@ const HomeComponent = (props) => {
                         <IconCont
                             imageSource={IMAGES.COMMENT}
                             onIconPress={pressLike}
+                            width={50}
+                            height={50}
                         />
                         <Text style={styles.topIconText}>{props.item.comment}</Text>
                     </View>
@@ -48,6 +53,8 @@ const HomeComponent = (props) => {
                         <IconCont
                             imageSource={IMAGES.SHARE}
                             onIconPress={pressLike}
+                             width={50}
+                            height={50}
                         />
                         <Text style={styles.topIconText}>{props.item.share}</Text>
                     </View>
@@ -61,7 +68,7 @@ const HomeComponent = (props) => {
                     <View style={{ flexDirection: 'row' }}>
                         <Image
                             style={styles.bottomProfileImage}
-                            // source={{ uri: props.item.url }}
+                            source={{ uri: props.item.url }}
                             // source={{ uri: props.payload.profileImage }}
                             resizeMode='cover'
                             defaultSource={IMAGES.BRAND_FULL_LOGO}

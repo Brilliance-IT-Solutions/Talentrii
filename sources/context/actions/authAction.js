@@ -14,7 +14,6 @@ const authAction = async (form) => {
         "password": form.Password,
         "firstName": "Amandeep Test"
     }
-    console.log(url, param)
     const response = await axiosManager.post(url, param)    
     return response
 }

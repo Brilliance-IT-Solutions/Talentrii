@@ -10,8 +10,12 @@ export const Enums = {
     },
     HomeIconRedirection : {
         HOME:0,
-        CREATE_CHALLENGE:1,
-        PROFILE: 2
+        // CREATE_CHALLENGE:1,
+        PROFILE: 1
+    },
+    ChallengeIconRedirection : {
+        CREATE_CHALLENGE:2,
+        CREATE_CHALLENGE_SCREEN:3,     
     },
     ServerStatus : {
         SUCCESS : 1,

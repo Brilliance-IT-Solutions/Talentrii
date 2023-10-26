@@ -20,7 +20,7 @@ const PopupComponent = (props) => {
 
     const showMenu = () => setVisible(true);
     return (
-        <View style={{alignItems:'center',bottom:15}}>
+        <View style={{bottom:80,paddingTop:15,alignItems:'flex-end', right:27}}>
         <Menu
           visible={visible}
           anchor={<Text onPress={showMenu} style={{backgroundColor:colors.Green,borderRadius:40,height:44,width:44,color:colors.White,textAlign:'center',fontSize:30}}>{props.title}</Text>}

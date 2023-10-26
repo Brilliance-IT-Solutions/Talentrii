@@ -9,10 +9,10 @@ const ButtonComponent = ({ title, onPressFunc, loading }) => {
             onPress={onPressFunc}
             style={styles.buttons}>
             <View style={[
-                { flexDirection: 'row' }
+                { flexDirection: 'row'}
             ]}>
             {loading && <ActivityIndicator color={colors.White} />}
-            <Text style={[styles.buttonText, {paddingLeft: 10}]}>{title}</Text>
+            <Text style={[styles.buttonText]}>{title}</Text>
             </View>
         </TouchableOpacity>
     )

@@ -26,11 +26,12 @@ axiosManager.interceptors.request.use(
 
 axiosManager.interceptors.response.use(
   (response) => {
-    
+    // return response
     return response.data ? response.data.response : response.data
   },
   (error) => {    
-    //  if (!checkAPIstatus(response)){
+
+    //  if (!checkAPIstatus(response)){ 
     // show alert
     //  }
     return Promise.reject(error)

@@ -10,7 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@baronha/react-native-multiple-image-picker": "^1.1.5",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-community/datetimepicker": "^7.6.0",
     "@react-native-community/masked-view": "^0.1.11",
@@ -18,15 +17,17 @@
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
     "@react-navigation/stack": "^6.3.18",
+    "axios": "^1.5.1",
+    "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.72.5",
     "react-native-awesome-alerts": "^2.0.0",
     "react-native-axios": "^0.17.1",
+    "react-native-document-picker": "^9.0.1",
     "react-native-double-tap": "^1.0.1",
     "react-native-gesture-handler": "^2.13.1",
     "react-native-get-location": "^4.0.0",
     "react-native-google-places-autocomplete": "^2.5.5",
-    "react-native-image-picker": "^7.0.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-material-menu": "^2.0.0",
@@ -35,6 +36,7 @@
     "react-native-screens": "^3.25.0",
     "react-native-status-bar-height": "^2.6.0",
     "react-native-swiper-flatlist": "^3.2.3",
+    "react-native-toast-notifications": "^3.4.0",
     "react-native-video": "^5.2.1"
   },
   "devDependencies": {
@@ -58,6 +60,3 @@
     "node": ">=16"
   }
 }
-
-
-

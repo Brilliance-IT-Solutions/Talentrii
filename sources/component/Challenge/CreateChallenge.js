@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   rootContainer: {
     backgroundColor: colors.White,
     flex: 1,
+    
   },
 });
 

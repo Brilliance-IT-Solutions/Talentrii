@@ -8,7 +8,7 @@ export const staticConstant = {
     paragraphTextOne:
       'If you already have the recorded challenge then you can post challenge under Past category. With this you are only posting the challenge for audience to break',
     paragraphTextTwo:
-      "'Its a kind of fresh challenge that you are going to createand want to challenge your friends also. This should be basedon start and end time/date'",
+      "'Its a kind of fresh challenge that you are going to create and want to challenge your friends also. This should be basedon start and end time/date'",
   },
   images: {
     titleOne: 'Choose from Device',

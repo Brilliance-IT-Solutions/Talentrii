@@ -13,10 +13,21 @@ import Time from '../common/time/Time';
 import Images from '../common/images/Images';
 import Location from '../common/location/Location';
 import {useState} from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-
-
+import {ScrollView} from 'react-native-gesture-handler';
+import {APIs} from '../../constants/api';
+import axiosManager from '../../helpers/axiosHandler';
+import ButtonComponent from '../common/Buttons/buttonComponent';
+import moment from 'moment';
+import {useToast} from 'react-native-toast-notifications';
+import {useNavigation} from '@react-navigation/native';
+import {RouterNames} from '../../constants/routeNames';
+import {Enums} from '../../constants/Enum/enum';
+import {Dimensions} from 'react-native';
+const {width} = Dimensions.get('window');
 const CreateChallenegeComponent = () => {
+  const toast = useToast();
+  const navigation = useNavigation();
+
   // const [form, setForm] = React.useState({})
   // const [errors, setErrors] = React.useState({})
 
@@ -39,6 +50,13 @@ const CreateChallenegeComponent = () => {
   const [addLocation, setLocation] = useState(false);
   const [addTime, setTime] = useState(false);
   const [minimumDate, setminimumDate] = useState(false);
+  const [images, AddImages] = useState([]);
+  const [title, addTitle] = useState('');
+  const [description, addDescription] = useState('');
+  const [location, setLocationValue] = useState('');
+  const [startdate, setStartDateValue] = useState(new Date());
+  const [enddate, setEndDateValue] = useState(startdate);
+  const [time, setTimeValue] = useState(new Date());
 
   const updateParentVariable = value => {
     setStartDate(value);
@@ -57,8 +75,8 @@ const CreateChallenegeComponent = () => {
     setTime(value);
   };
 
-  const handleChildStateChange = (newValue) => {
-    console.log(newValue);
+  const handleChildStateChange = newValue => {
+    AddImages(newValue);
   };
 
   const AddComponents = item => {
@@ -70,7 +88,7 @@ const CreateChallenegeComponent = () => {
     }
     //  else if (item === 'add endDate' && addStartDate) {
     //   setEndDate(true);
-    // } 
+    // }
     else if (item === 'add time') {
       setTime(true);
     } else if (item === 'add location') {
@@ -80,6 +98,102 @@ const CreateChallenegeComponent = () => {
     }
   };
 
+  const createChallengeApi = async () => {
+    const param = {
+      title: title,
+      description: description,
+      url: images,
+      latitude: location,
+      longitude: location,
+      from_date: moment(startdate).utc().format('YYYY-MM-DD'),
+      to_date: moment(enddate).utc().format('YYYY-MM-DD'),
+      time: moment(time).format('HH:mm:ss'),
+    };
+
+    if (param.title !== '') {
+      if (param.description !== '') {
+        if (param.url.length > 0) {
+          navigation.navigate('previewChallenge', {
+            data: JSON.stringify(param),
+          });
+        } else {
+          toast.show('please select atleast one image/video', {
+            type: 'danger',
+            placement: 'top',
+            duration: 3000,
+            animationType: 'slide-in',
+          });
+          return;
+        }
+      } else {
+        toast.show("description cann't be empty", {
+          type: 'danger',
+          placement: 'top',
+          duration: 3000,
+          animationType: 'slide-in',
+        });
+        return;
+      }
+    } else {
+      toast.show("title cann't be empty", {
+        type: 'danger',
+        placement: 'top',
+        duration: 3000,
+        animationType: 'slide-in',
+      });
+      return;
+    }
+    //   if(param.url.length > 0){
+    //   const url = APIs.BASE_URL + APIs.CREATE_CHALLENGE;
+    //   // console.log(url, param)
+    // await axiosManager.post(url, param).then((res)=>{
+    //     console.log("response",res.message)
+    //     toast.show(res.message, {
+    //       type: "success",
+    //       placement: "top",
+    //       duration: 3000,
+    //       animationType: "slide-in",
+    //     });
+    //     navigation.navigate(RouterNames.HOME_SCREEN)
+    //   }).catch((error)=>{
+    //     console.log('error', error.response.data.response.message);
+    //     toast.show(error.response.data.response.message, {
+    //       type: "danger",
+    //       placement: "top",
+    //       duration: 3000,
+    //       animationType: "slide-in",
+    //     });
+
+    //   })
+    // }else{
+    //   toast.show("please select atleast one image/video", {
+    //     type: "danger",
+    //     placement: "top",
+    //     duration: 3000,
+    //     animationType: "slide-in",
+    //   });
+    // return
+    // }
+  };
+
+  const navigatePage = index => {
+    var link = RouterNames.HOME_SCREEN;
+    switch (index) {
+      case Enums.HomeIconRedirection.HOME:
+        link = RouterNames.HOME_SCREEN;
+        break;
+      case Enums.ChallengeIconRedirection.CREATE_CHALLENGE_SCREEN:
+        (link = 'challenge'), {screen: 'createChallengeScreen'};
+        break;
+      case Enums.HomeIconRedirection.PROFILE:
+        link = RouterNames.PROFILE_SCREEN;
+        break;
+      default:
+        break;
+    }
+    navigation.navigate(link);
+  };
+
   return (
     <View style={styles.rootContainer}>
       <CustomHeader showImage showBack />
@@ -87,12 +201,17 @@ const CreateChallenegeComponent = () => {
 
       <RootContainer>
         <View style={{marginTop: 20}}>
-          <InputContainer placeholder="Title" maxLength={30} />
+          <InputContainer
+            placeholder="Title"
+            maxLength={30}
+            onChangeText={title => addTitle(title)}
+          />
           <InputContainer
             placeholder="Description"
             maxLength={120}
             needMultilie={true}
             noLines={4}
+            onChangeText={description => addDescription(description)}
           />
           {/*<InputContainer
                         placeholder='Video Link'
@@ -110,7 +229,10 @@ const CreateChallenegeComponent = () => {
                 title={staticConstant.Date.startDate}
                 minimumDate={new Date()}
                 updateParent={updateParentVariable}
-                onChange={date => setminimumDate(date)}
+                onChange={date => {
+                  setminimumDate(date);
+                  setStartDateValue(date);
+                }}
               />
             </View>
           )}
@@ -121,13 +243,16 @@ const CreateChallenegeComponent = () => {
                 title={staticConstant.Date.endDate}
                 minimumDate={minimumDate}
                 updateParent={updateParentVariable}
-                onChange={date => console.log(date)}
+                onChange={date => setEndDateValue(date)}
               />
             </View>
           )}
           {addLocation && (
             <View>
-              <Location updateParent={updateParentVariable3} />
+              <Location
+                updateParent={updateParentVariable3}
+                onChangeText={location => setLocationValue(location)}
+              />
             </View>
           )}
           {addTime && (
@@ -135,27 +260,38 @@ const CreateChallenegeComponent = () => {
               <Time
                 title={staticConstant.Time.timer}
                 updateParent={updateParentVariable4}
-                onChange={date => console.log(date)}
+                onChange={time => setTimeValue(time)}
               />
             </View>
           )}
           {addImage && (
-            <View>
-              <Images onChildStateChange={handleChildStateChange}/>
+            <View style={{width: width}}>
+              <Images onChildStateChange={handleChildStateChange} />
             </View>
           )}
+          <View style={{paddingBottom: 10}}>
+            <ButtonComponent
+              title="Preview Challenge"
+              onPressFunc={createChallengeApi}
+            />
+          </View>
         </View>
       </RootContainer>
       <PopupComponent
         title={staticConstant.Popup.icon}
         addComponent={AddComponents}
       />
-      {/* <View style={{
-         position: 'absolute',
-    bottom: 0,
-      }}> */}
-      <CustomFooter/>
-      {/* </View>/ */}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+        }}>
+        <CustomFooter
+          didTapped={index => {
+            navigatePage(index);
+          }}
+        />
+      </View>
     </View>
   );
 };

@@ -10,9 +10,11 @@ import { REGISTER_LOADING, REGISTER_SUCCESS } from '../../constants/actionTypes/
 import { getUserLocation, saveUserLocation, setToken, setUser } from '../../utils/GenericFunction';
 import { AuthContext } from '../../context/context';
 
-import GetLocation from 'react-native-get-location'
+import GetLocation from 'react-native-get-location';
+import {useToast} from 'react-native-toast-notifications';
 
 const LoginScreen = () => {
+  const toast = useToast()
 
   const { authDispatch, authState: { error, loading, data } } = useContext(GlobalContext);
 
@@ -27,16 +29,26 @@ const LoginScreen = () => {
     authDispatch({ type: REGISTER_LOADING })
     try {
       const res = await authAction(form);
-      console.log("res",res)
       if (res.token) { await setToken(res.token) }
       if (res.data) { await setUser(JSON.stringify(res.data)) }
-
+      
       authDispatch({ type: REGISTER_SUCCESS, payload: res.response })
       signIn()
+      toast.show(res.message, {
+        type: "success",
+        placement: "top",
+        duration: 3000,
+        animationType: "slide-in",
+      });
 
     } catch (error) {
-      console.log("error",error)
       authDispatch({ type: constants.REGISTER_FAIL, payload: error });
+      toast.show(error.message, {
+        type: "danger",
+        placement: "top",
+        duration: 3000,
+        animationType: "slide-in",
+      });
     }
   }
 

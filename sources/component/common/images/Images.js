@@ -3,11 +3,19 @@ import React, {useRef, useEffect} from 'react';
 import {useState} from 'react';
 import colors from '../../../assets/themes/colors';
 import {IMAGES} from '../../../constants/images';
-import {openPicker} from '@baronha/react-native-multiple-image-picker';
 import Video from 'react-native-video';
+import {APIs} from '../../../constants/api';
+import axios from 'axios';
+import {getToken} from '../../../../sources/utils/GenericFunction';
+import DocumentPicker from 'react-native-document-picker';
+import {useToast} from 'react-native-toast-notifications';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Images = ({onChildStateChange}) => {
+  const toast = useToast();
   const [selectedImage, setSelectedImage] = useState([]);
+  const [loader, setLoader] = useState(false);
+
   const videoPlayer = useRef(null);
 
   useEffect(() => {
@@ -15,19 +23,96 @@ const Images = ({onChildStateChange}) => {
   }, [selectedImage, onChildStateChange]);
 
   const openImagePicker = async () => {
-    const options = {
-      mediaType: 'all',
-      isPreview: true,
-      isExportThumbnail: true,
-      allowedVideo: true,
-      multiple: true,
-    };
+    try {
+      const response = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images, DocumentPicker.types.video],
+        allowMultiSelection: true,
+        copyTo: 'documentDirectory',
+      });
 
-    const response = await openPicker(options);
-    console.log(response);
+      const selectedFiles = response.map(result => result);
+      setLoader(true);
+      const maxImageCount = 5;
+      const maxVideoCount = 2;
+      const maxImageSize = 2 * 1024 * 1024;
+      const maxVideoSize = 10 * 1024 * 1024;
 
-    if (response.length > 0) {
-      setSelectedImage(response);
+      let imageCount = 0;
+      let videoCount = 0;
+      let invalidFiles = [];
+
+      for (const file of selectedFiles) {
+        if (file.type.startsWith('image/')) {
+          imageCount++;
+          if (imageCount > maxImageCount || file.size > maxImageSize) {
+            invalidFiles.push(file);
+          }
+        } else if (file.type.startsWith('video/')) {
+          videoCount++;
+          if (videoCount > maxVideoCount || file.size > maxVideoSize) {
+            invalidFiles.push(file);
+          }
+        }
+      }
+
+      if (invalidFiles.length > 0) {
+        const messgae = `File count exceeds allowed limits is upto 5 images and 2 videos and File size of image upto 2mb and for videos 10mb`;
+        toast.show(messgae, {
+          type: 'danger',
+          placement: 'top',
+          duration: 5000,
+          animationType: 'slide-in',
+        });
+        setLoader(false);
+      } else {
+        const formData = new FormData();
+        selectedFiles.forEach((file, index) => {
+          formData.append('files', file);
+        });
+        const url = APIs.BASE_URL + APIs.UPLOAD_IMAGE;
+
+        const token = await getToken();
+        await axios
+          .post(url, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              token: token,
+            },
+          })
+          .then(res => {
+            console.log('====================================');
+            console.log('Success!', res.data.response.urls);
+            // console.log('Success!', res.data.response.message);
+            toast.show(res.data.response.message, {
+              type: 'success',
+              placement: 'top',
+              duration: 3000,
+              animationType: 'slide-in',
+            });
+            // console.log(res.data.response.urls)
+            setSelectedImage(res.data.response.urls);
+            setLoader(false);
+
+            console.log('====================================');
+          })
+          .catch(error => {
+            // console.log(`The error we're getting from the backend--->${error.response.data.response.message}`),
+            toast.show(error.response.data.response.message, {
+              type: 'success',
+              placement: 'top',
+              duration: 3000,
+              animationType: 'slide-in',
+            });
+            setLoader(false);
+          });
+      }
+    } catch (error) {
+      console.log(error);
+      if (DocumentPicker.isCancel(error)) {
+        console.log('closed picker');
+      } else {
+        console.log('some error occured while uploading media files ');
+      }
     }
   };
 
@@ -38,30 +123,27 @@ const Images = ({onChildStateChange}) => {
   };
 
   return (
-    <View
-      style={styles.container}>
+    <View style={styles.container}>
       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
         {selectedImage &&
-          selectedImage.map((image, i) => {
+          selectedImage?.map((image, i) => {
             return (
-              <View style={{position: 'relative'}} key={image.position}>
-                {image?.mime === 'video/mp4' ? (
-                  <View style={{height: 100, width: 115, borderRadius: 10}}>
+              <View style={{position: 'relative'}} key={i}>
+                {image?.type === 'video/mp4' ? (
+                  <View style={{borderRadius: 10, height: 100}}>
                     <Video
-                      source={{uri: image.path}}
+                      source={{uri: image.thumbnailurl}}
                       controls={false}
                       style={styles.backgroundVideo}
                       ref={videoPlayer}
                       pause={true}
+                      resizeMode={'cover'}
                     />
-                    <Image
-                      source={IMAGES.PLAY_ICON}
-                      style={styles.playIcon}
-                    />
+                    <Image source={IMAGES.PLAY_ICON} style={styles.playIcon} />
                   </View>
                 ) : (
                   <Image
-                    source={{uri: image.path}}
+                    source={{uri: image.thumbnailurl}}
                     style={{
                       borderRadius: 10,
                       marginHorizontal: 10,
@@ -93,16 +175,27 @@ const Images = ({onChildStateChange}) => {
             </View>
           </TouchableOpacity>
         </View>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Spinner
+            visible={loader}
+            textContent={'Please Wait Media Uploading...'}
+            textStyle={{
+              textAlign: 'center',
+              color: colors.Grey,
+              fontSize: 13,
+            }}
+          />
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container:{
-    flexDirection: 'row', 
+  container: {
+    flexDirection: 'row',
     marginVertical: 20,
-     marginHorizontal: 20
+    marginHorizontal: 20,
   },
   imageContainer: {
     borderWidth: 1,
@@ -121,12 +214,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 4,
   },
-  deleteIcon:{
+  deleteIcon: {
     width: 15,
     height: 15,
     resizeMode: 'contain',
   },
-  playIcon:{
+  playIcon: {
     marginVertical: 35,
     marginHorizontal: 50,
     flex: 1,

@@ -19,18 +19,22 @@ const styles = StyleSheet.create({
     },
     buttons : {
         marginVertical: 10,
-        marginHorizontal: 90,
+        // marginHorizontal: 80,
+        width:'auto',
+        paddingHorizontal:30,
         backgroundColor: Colors.Green,        
-        alignItems: 'center',
         borderRadius: 8,
         // height:50,
+        alignSelf:'center',
+        justifyContent: 'center',
+        alignItems:'center'
     },
     
     buttonText : {
         marginVertical: 12,        
         fontSize: 15,
         fontWeight: '400',
-        color: Colors.White
+        color: Colors.White,
     },
 
     topMargin20 : {
