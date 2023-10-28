@@ -48,7 +48,6 @@ const Navigation = () => {
                         headerShown: false
                     }}
                 />
-                
                 <RootStack.Screen
                 name="challenge"
                 component={ChallengeStackScreen}

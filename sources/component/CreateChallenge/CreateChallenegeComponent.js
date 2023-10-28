@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import colors from '../../assets/themes/colors';
 import InputContainer from '../common/TextInput/textInput';
 import CustomHeader from '../customHeader/customHeader';
@@ -24,7 +24,7 @@ import {RouterNames} from '../../constants/routeNames';
 import {Enums} from '../../constants/Enum/enum';
 import {Dimensions} from 'react-native';
 const {width} = Dimensions.get('window');
-const CreateChallenegeComponent = () => {
+const CreateChallenegeComponent = ({props}) => {
   const toast = useToast();
   const navigation = useNavigation();
 
@@ -98,6 +98,12 @@ const CreateChallenegeComponent = () => {
     }
   };
 
+  function getPreviousDay(date = new Date()) {
+    const previous = new Date(date.getTime());
+    previous.setDate(date.getDate() - 1);
+
+    return previous;
+  }
   const createChallengeApi = async () => {
     const param = {
       title: title,
@@ -110,69 +116,42 @@ const CreateChallenegeComponent = () => {
       time: moment(time).format('HH:mm:ss'),
     };
 
-    if (param.title !== '') {
-      if (param.description !== '') {
-        if (param.url.length > 0) {
-          navigation.navigate('previewChallenge', {
-            data: JSON.stringify(param),
-          });
-        } else {
-          toast.show('please select atleast one image/video', {
-            type: 'danger',
-            placement: 'top',
-            duration: 3000,
-            animationType: 'slide-in',
-          });
-          return;
-        }
-      } else {
-        toast.show("description cann't be empty", {
-          type: 'danger',
-          placement: 'top',
-          duration: 3000,
-          animationType: 'slide-in',
-        });
-        return;
-      }
-    } else {
-      toast.show("title cann't be empty", {
-        type: 'danger',
-        placement: 'top',
-        duration: 3000,
-        animationType: 'slide-in',
-      });
-      return;
-    }
-    //   if(param.url.length > 0){
-    //   const url = APIs.BASE_URL + APIs.CREATE_CHALLENGE;
-    //   // console.log(url, param)
-    // await axiosManager.post(url, param).then((res)=>{
-    //     console.log("response",res.message)
-    //     toast.show(res.message, {
-    //       type: "success",
-    //       placement: "top",
-    //       duration: 3000,
-    //       animationType: "slide-in",
-    //     });
-    //     navigation.navigate(RouterNames.HOME_SCREEN)
-    //   }).catch((error)=>{
-    //     console.log('error', error.response.data.response.message);
-    //     toast.show(error.response.data.response.message, {
-    //       type: "danger",
-    //       placement: "top",
-    //       duration: 3000,
-    //       animationType: "slide-in",
-    //     });
+    navigation.navigate('previewChallenge', {
+      data: JSON.stringify(param),
+    });
 
-    //   })
-    // }else{
-    //   toast.show("please select atleast one image/video", {
-    //     type: "danger",
-    //     placement: "top",
+    // if (param.title !== '') {
+    //   if (param.description !== '') {
+    //     if (param.url.length > 0) {
+    //       navigation.navigate('previewChallenge', {
+    //         data: JSON.stringify(param),
+    //       });
+    //     } else {
+    //       toast.show('please select atleast one image/video', {
+    //         type: 'danger',
+    //         placement: 'top',
+    //         duration: 3000, 
+    //         animationType: 'slide-in',
+    //       });
+    //       return;
+    //     }
+    //   } else {
+    //     toast.show("description cann't be empty", {
+    //       type: 'danger',
+    //       placement: 'top',
+    //       duration: 3000,
+    //       animationType: 'slide-in',
+    //     });
+    //     return;
+    //   }
+    // } else {
+    //   toast.show("title cann't be empty", {
+    //     type: 'danger',
+    //     placement: 'top',
     //     duration: 3000,
-    //     animationType: "slide-in",
+    //     animationType: 'slide-in',
     //   });
-    // return
+    //   return;
     // }
   };
 
@@ -193,6 +172,8 @@ const CreateChallenegeComponent = () => {
     }
     navigation.navigate(link);
   };
+
+  if (!props.data && !addStartDate) return null;
 
   return (
     <View style={styles.rootContainer}>
@@ -223,7 +204,8 @@ const CreateChallenegeComponent = () => {
                     />
     */}
 
-          {addStartDate && (
+{/* ///////////////  START DATE ////////////////////////////////// */}
+          {addStartDate && props.data === 'upcoming' && (
             <View>
               <EndDate
                 title={staticConstant.Date.startDate}
@@ -237,7 +219,22 @@ const CreateChallenegeComponent = () => {
             </View>
           )}
 
-          {addStartDate && (
+          {addStartDate && props.data === 'past' && (
+            <View>
+              <EndDate
+                title={staticConstant.Date.startDate}
+                updateParent={updateParentVariable}
+                onChange={date => {
+                  setminimumDate(date)
+                  setStartDateValue(date);
+                }}
+              />
+            </View>
+          )}
+          
+{/* ///////////////  END DATE ////////////////////////////////// */}
+
+          {addStartDate && props.data === 'upcoming' && (
             <View>
               <EndDate
                 title={staticConstant.Date.endDate}
@@ -247,6 +244,18 @@ const CreateChallenegeComponent = () => {
               />
             </View>
           )}
+
+          {addStartDate && props.data === 'past' && (
+            <View>
+              <EndDate
+                title={staticConstant.Date.endDate}
+                minimumDate={minimumDate}
+                updateParent={updateParentVariable}
+                onChange={date => setEndDateValue(date)}
+              />
+            </View>
+          )}
+
           {addLocation && (
             <View>
               <Location
@@ -281,7 +290,7 @@ const CreateChallenegeComponent = () => {
         title={staticConstant.Popup.icon}
         addComponent={AddComponents}
       />
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           bottom: 0,
@@ -291,7 +300,7 @@ const CreateChallenegeComponent = () => {
             navigatePage(index);
           }}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

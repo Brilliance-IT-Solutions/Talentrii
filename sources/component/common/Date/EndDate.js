@@ -45,7 +45,7 @@ const EndDate = (props) =>{
           value={date}
           mode={mode}
           onChange={onChange}
-          minimumDate={props.minimumDate}
+          minimumDate={props.minimumDate|| null}
         />
       )}
       <TouchableOpacity onPress={handleEvent}><Image source={IMAGES.DELETE_ICON} style={{marginVertical:12}}/></TouchableOpacity>

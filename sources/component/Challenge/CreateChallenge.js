@@ -15,8 +15,10 @@ import { RouterNames } from '../../constants/routeNames';
 const CreateChallenegeScreenComponent = () => {
 const navigation = useNavigation()
 
-  function navigateTo(){
-     navigation.navigate(RouterNames.CREATE_CHALLENGE_SCREEN)
+  function navigateTo(page){
+     navigation.navigate(RouterNames.CREATE_CHALLENGE_SCREEN,{
+      data: page,
+    })
   }
   return (
     <View style={styles.rootContainer}>
@@ -27,12 +29,12 @@ const navigation = useNavigation()
           <View style={{marginTop: 20, marginBottom: 140}}>
             <Label title={staticConstant.createChallenge.titleLabelOne} />
             <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextOne} />
-            <ButtonComponent title={staticConstant.createChallenge.buttonTitleOne} onPressFunc={navigateTo}/>
+            <ButtonComponent title={staticConstant.createChallenge.buttonTitleOne} onPressFunc={()=>navigateTo('upcoming')}/>
           </View>
           <View>
             <Label title={staticConstant.createChallenge.titleLabelTwo} />
             <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextTwo} />
-            <ButtonComponent title={staticConstant.createChallenge.buttonTitleTwo}/>
+            <ButtonComponent title={staticConstant.createChallenge.buttonTitleTwo} onPressFunc={()=>navigateTo('past')}/>
           </View>       
         </View>
       </RootContainer>

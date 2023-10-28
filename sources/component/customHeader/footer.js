@@ -12,14 +12,14 @@ const CustomFooter = props => {
     <View style={styles.footer}>
       <IconCont
         imageSource={IMAGES.HOME}
-        width={bottomIconSize}
-        height={bottomIconSize}
+        width={33}
+        height={32}
         onIconPress={() => props.didTapped(Enums.HomeIconRedirection.HOME)}
       />
       <IconCont
         imageSource={IMAGES.WARNING}
         width={bottomIconSize}
-        height={bottomIconSize}
+        height={27}
       />
       <IconCont
         imageSource={IMAGES.CREATE_CHALLENGE}

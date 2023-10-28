@@ -17,5 +17,7 @@ export const IMAGES = {
     CALENDER_ICON: require('../assets/icons/calendar.png'),
     DELETE_ICON: require('../assets/icons/delete.png'),
     LOCATION_ICON: require('../assets/icons/location.png'),
-    PLAY_ICON: require('../assets/icons/Play.png')
+    PLAY_ICON: require('../assets/icons/Play.png'),
+    PLAY_BUTTON_ICON: require('../assets/icons/playbutton.png')
+
 }

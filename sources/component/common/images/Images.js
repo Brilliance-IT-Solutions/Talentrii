@@ -111,10 +111,18 @@ const Images = ({onChildStateChange}) => {
       if (DocumentPicker.isCancel(error)) {
         console.log('closed picker');
       } else {
-        console.log('some error occured while uploading media files ');
+        toast.show('some error occured while uploading media files ', {
+          type: 'danger',
+          placement: 'top',
+          duration: 3000,
+          animationType: 'slide-in',
+        })
+        setLoader(false);
+      };
       }
+    
     }
-  };
+  
 
   const handleEvent = i => {
     const newItems = [...selectedImage];
@@ -139,7 +147,7 @@ const Images = ({onChildStateChange}) => {
                       pause={true}
                       resizeMode={'cover'}
                     />
-                    <Image source={IMAGES.PLAY_ICON} style={styles.playIcon} />
+                    <Image source={IMAGES.PLAY_BUTTON_ICON} style={styles.playIcon} />
                   </View>
                 ) : (
                   <Image
