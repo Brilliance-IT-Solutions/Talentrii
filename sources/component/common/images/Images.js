@@ -4,15 +4,13 @@ import {useState} from 'react';
 import colors from '../../../assets/themes/colors';
 import {IMAGES} from '../../../constants/images';
 import Video from 'react-native-video';
-import {APIs} from '../../../constants/api';
-import axios from 'axios';
-import {getToken} from '../../../../sources/utils/GenericFunction';
 import DocumentPicker from 'react-native-document-picker';
-import {useToast} from 'react-native-toast-notifications';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { showError } from '../toaster/toaster';
+import { ToastMessage } from '../../../constants/toasterConstants';
+import CustomLoader from '../loader/loader';
 
 const Images = ({onChildStateChange}) => {
-  const toast = useToast();
   const [selectedImage, setSelectedImage] = useState([]);
   const [loader, setLoader] = useState(false);
 
@@ -56,67 +54,18 @@ const Images = ({onChildStateChange}) => {
       }
 
       if (invalidFiles.length > 0) {
-        const messgae = `File count exceeds allowed limits is upto 5 images and 2 videos and File size of image upto 2mb and for videos 10mb`;
-        toast.show(messgae, {
-          type: 'danger',
-          placement: 'top',
-          duration: 5000,
-          animationType: 'slide-in',
-        });
         setLoader(false);
+        showError(ToastMessage.UNSUPPORTED_FILE)
       } else {
-        const formData = new FormData();
-        selectedFiles.forEach((file, index) => {
-          formData.append('files', file);
-        });
-        const url = APIs.BASE_URL + APIs.UPLOAD_IMAGE;
-
-        const token = await getToken();
-        await axios
-          .post(url, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              token: token,
-            },
-          })
-          .then(res => {
-            console.log('====================================');
-            console.log('Success!', res.data.response.urls);
-            // console.log('Success!', res.data.response.message);
-            toast.show(res.data.response.message, {
-              type: 'success',
-              placement: 'top',
-              duration: 3000,
-              animationType: 'slide-in',
-            });
-            // console.log(res.data.response.urls)
-            setSelectedImage(res.data.response.urls);
-            setLoader(false);
-
-            console.log('====================================');
-          })
-          .catch(error => {
-            // console.log(`The error we're getting from the backend--->${error.response.data.response.message}`),
-            toast.show(error.response.data.response.message, {
-              type: 'success',
-              placement: 'top',
-              duration: 3000,
-              animationType: 'slide-in',
-            });
-            setLoader(false);
-          });
+        setLoader(false);
+        setSelectedImage(response)
       }
     } catch (error) {
       console.log(error);
       if (DocumentPicker.isCancel(error)) {
         console.log('closed picker');
       } else {
-        toast.show('some error occured while uploading media files ', {
-          type: 'danger',
-          placement: 'top',
-          duration: 3000,
-          animationType: 'slide-in',
-        })
+        showError(ToastMessage.MEDIA_ERROR)
         setLoader(false);
       };
       }
@@ -140,7 +89,7 @@ const Images = ({onChildStateChange}) => {
                 {image?.type === 'video/mp4' ? (
                   <View style={{borderRadius: 10, height: 100}}>
                     <Video
-                      source={{uri: image.thumbnailurl}}
+                      source={{uri: image.fileCopyUri}}
                       controls={false}
                       style={styles.backgroundVideo}
                       ref={videoPlayer}
@@ -151,7 +100,7 @@ const Images = ({onChildStateChange}) => {
                   </View>
                 ) : (
                   <Image
-                    source={{uri: image.thumbnailurl}}
+                    source={{uri: image.fileCopyUri}}
                     style={{
                       borderRadius: 10,
                       marginHorizontal: 10,
@@ -183,18 +132,8 @@ const Images = ({onChildStateChange}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Spinner
-            visible={loader}
-            textContent={'Please Wait Media Uploading...'}
-            textStyle={{
-              textAlign: 'center',
-              color: colors.Grey,
-              fontSize: 13,
-            }}
-          />
-        </View>
       </View>
+        <CustomLoader isLoading={loader}/>
     </View>
   );
 };

@@ -24,6 +24,9 @@ export const staticConstant = {
   Popup: {
     icon: '+',
   },
+  Button:{
+    title:"Preview Challenge"
+  },
   Home: {
     topSection: {
       Accepted: 'Accepted',

@@ -1,10 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import colors from '../../assets/themes/colors';
 import InputContainer from '../common/TextInput/textInput';
 import CustomHeader from '../customHeader/customHeader';
 import RootContainer from '../rootContainer/rootContainer';
-import CustomFooter from '../customHeader/footer';
 import PopupComponent from '../common/Buttons/popupComponent';
 import TittleHeader from '../customHeader/tittleHeader';
 import {staticConstant} from '../../constants/staticData/staticConstant';
@@ -13,19 +12,15 @@ import Time from '../common/time/Time';
 import Images from '../common/images/Images';
 import Location from '../common/location/Location';
 import {useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {APIs} from '../../constants/api';
-import axiosManager from '../../helpers/axiosHandler';
 import ButtonComponent from '../common/Buttons/buttonComponent';
 import moment from 'moment';
-import {useToast} from 'react-native-toast-notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RouterNames} from '../../constants/routeNames';
-import {Enums} from '../../constants/Enum/enum';
 import {Dimensions} from 'react-native';
-const {width} = Dimensions.get('window');
+import { ToastMessage } from '../../constants/toasterConstants';
+import { width } from '../../style/responsiveSize';
+import {showSuccess,showError} from '../common/toaster/toaster';
 const CreateChallenegeComponent = ({props}) => {
-  const toast = useToast();
   const navigation = useNavigation();
 
   // const [form, setForm] = React.useState({})
@@ -98,79 +93,37 @@ const CreateChallenegeComponent = ({props}) => {
     }
   };
 
-  function getPreviousDay(date = new Date()) {
-    const previous = new Date(date.getTime());
-    previous.setDate(date.getDate() - 1);
-
-    return previous;
-  }
-  const createChallengeApi = async () => {
+  const previewChallenge = async () => {
     const param = {
       title: title,
       description: description,
       url: images,
-      latitude: location,
-      longitude: location,
+      latitude: location ? location : '',
+      longitude: location? location : '',
       from_date: moment(startdate).utc().format('YYYY-MM-DD'),
       to_date: moment(enddate).utc().format('YYYY-MM-DD'),
       time: moment(time).format('HH:mm:ss'),
     };
 
-    navigation.navigate('previewChallenge', {
-      data: JSON.stringify(param),
-    });
-
-    // if (param.title !== '') {
-    //   if (param.description !== '') {
-    //     if (param.url.length > 0) {
-    //       navigation.navigate('previewChallenge', {
-    //         data: JSON.stringify(param),
-    //       });
-    //     } else {
-    //       toast.show('please select atleast one image/video', {
-    //         type: 'danger',
-    //         placement: 'top',
-    //         duration: 3000, 
-    //         animationType: 'slide-in',
-    //       });
-    //       return;
-    //     }
-    //   } else {
-    //     toast.show("description cann't be empty", {
-    //       type: 'danger',
-    //       placement: 'top',
-    //       duration: 3000,
-    //       animationType: 'slide-in',
-    //     });
-    //     return;
-    //   }
-    // } else {
-    //   toast.show("title cann't be empty", {
-    //     type: 'danger',
-    //     placement: 'top',
-    //     duration: 3000,
-    //     animationType: 'slide-in',
-    //   });
-    //   return;
-    // }
-  };
-
-  const navigatePage = index => {
-    var link = RouterNames.HOME_SCREEN;
-    switch (index) {
-      case Enums.HomeIconRedirection.HOME:
-        link = RouterNames.HOME_SCREEN;
-        break;
-      case Enums.ChallengeIconRedirection.CREATE_CHALLENGE_SCREEN:
-        (link = 'challenge'), {screen: 'createChallengeScreen'};
-        break;
-      case Enums.HomeIconRedirection.PROFILE:
-        link = RouterNames.PROFILE_SCREEN;
-        break;
-      default:
-        break;
+    if (param.title !== '') {
+      if (param.description !== '') {
+        if (param.url.length > 0) {
+          navigation.navigate(RouterNames.PREVIEW_CHALLENGE_SCREEN, {
+            data: JSON.stringify(param),
+          });
+        } else {
+        
+          showError(ToastMessage.REQUIRED_MEDIA)
+          return;
+        }
+      } else {
+        showError(ToastMessage.REQUIRED_DESCRIPTION)
+        return;
+      }
+    } else {
+      showError(ToastMessage.REQUIRED_TITLE)
+      return;
     }
-    navigation.navigate(link);
   };
 
   if (!props.data && !addStartDate) return null;
@@ -280,27 +233,18 @@ const CreateChallenegeComponent = ({props}) => {
           )}
           <View style={{paddingBottom: 10}}>
             <ButtonComponent
-              title="Preview Challenge"
-              onPressFunc={createChallengeApi}
+              title={staticConstant.Button.title}
+              onPressFunc={previewChallenge}
             />
           </View>
         </View>
       </RootContainer>
+        <View style={{position:'absolute',bottom:0,right:0,padding:15}}>
       <PopupComponent
         title={staticConstant.Popup.icon}
         addComponent={AddComponents}
       />
-      {/* <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-        }}>
-        <CustomFooter
-          didTapped={index => {
-            navigatePage(index);
-          }}
-        />
-      </View> */}
+        </View>
     </View>
   );
 };

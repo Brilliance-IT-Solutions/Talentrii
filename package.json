@@ -13,6 +13,7 @@
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-community/datetimepicker": "^7.6.0",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-community/netinfo": "^9.4.1",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
@@ -25,6 +26,7 @@
     "react-native-axios": "^0.17.1",
     "react-native-document-picker": "^9.0.1",
     "react-native-double-tap": "^1.0.1",
+    "react-native-flash-message": "^0.4.2",
     "react-native-gesture-handler": "^2.13.1",
     "react-native-get-location": "^4.0.0",
     "react-native-google-places-autocomplete": "^2.5.5",
@@ -36,7 +38,6 @@
     "react-native-screens": "^3.25.0",
     "react-native-status-bar-height": "^2.6.0",
     "react-native-swiper-flatlist": "^3.2.3",
-    "react-native-toast-notifications": "^3.4.0",
     "react-native-video": "^5.2.1"
   },
   "devDependencies": {

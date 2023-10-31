@@ -8,13 +8,13 @@
 import React from 'react';
 import Navigation from './sources/navigation/navigator';
 import GlobalProvider from './sources/context/Provider';
-import { ToastProvider } from 'react-native-toast-notifications';
+import FlashMessage from 'react-native-flash-message';
+
 function App(): JSX.Element {
   return (
     <GlobalProvider>
-      <ToastProvider>
         <Navigation />
-        </ToastProvider>
+         <FlashMessage position="top" />
     </GlobalProvider>
   );
 }

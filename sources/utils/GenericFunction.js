@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Enums } from "../constants/Enum/enum"
 import { Dimensions, Platform } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
 
 export const setLogOut = async () => {
 
@@ -117,6 +118,22 @@ export const getHeight = () => {
         return (height - getStatusBarHeight())
     }
 }
+
+
+export const getNetworkState = () =>{
+   return new Promise((resolve, reject) => {
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                return resolve(true);
+            }
+            else {
+                return resolve(false);
+            }
+        });
+    })
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////.     STRING BASED GENERIC FUNCTIONS         //////////////

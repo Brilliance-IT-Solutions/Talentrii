@@ -15,7 +15,6 @@ import { DASHBOARD_FAIL, DASHBOARD_LOADING, DASHBOARD_SUCCESS } from '../../cons
 import { APIs } from '../../constants/api';
 import axios from "react-native-axios";
 import axiosManager from '../../helpers/axiosHandler';
-
 const HomeScreen = ({ navigation }) => {
 
     const { signOut } = React.useContext(AuthContext)
@@ -46,13 +45,12 @@ const HomeScreen = ({ navigation }) => {
         /* set loader to true*/}
 
     const navigatePage = (index) => {
-        // console.log(index)
         var link = RouterNames.HOME_SCREEN;
         switch (index) {
             case Enums.HomeIconRedirection.HOME:
                 link = RouterNames.HOME_SCREEN; break;
             case Enums.ChallengeIconRedirection.CREATE_CHALLENGE_SCREEN:
-                link ='challenge', {screen:'createChallengeScreen'}; break;
+                link =RouterNames.CHALLENGE, {screen:RouterNames.CHALLENGE_SCREEN}; break;
             case Enums.HomeIconRedirection.PROFILE:
                 link = RouterNames.PROFILE_SCREEN; break;
             default: break;
@@ -76,9 +74,14 @@ const HomeScreen = ({ navigation }) => {
             const param = {
                 
             }
-            const response = await axiosManager.post(url, param)
-            // console.log("rt", response.data)
-            setUsers(response.data)
+                await axiosManager.post(url, param).then(response =>{
+                    console.log(response)
+                setUsers(response.data)
+
+            }).catch(error => {
+                showError(error.response.data.response.message)
+
+            })
         }
         // setIsLoading(false);
         fetchMyAPI()
@@ -114,7 +117,10 @@ const HomeScreen = ({ navigation }) => {
                 <SwiperFlatList vertical data={users}
                     // onViewableItemsChanged={onViewableItemsChanged}
                     viewabilityConfig={viewabilityConfig}
+                    slidesToScroll={3}
+                    renderAll={true}
                     renderItem={({ item, index }) => (
+                    (item.type==="video/mp4" && 
                         <View>
                             <DoubleClick
                                 singleTap={() => {
@@ -124,7 +130,7 @@ const HomeScreen = ({ navigation }) => {
                                     console.log("double tap");
                                     signOut()
                                 }}>
-                                <Video source={{ uri: item.url }}
+                                <Video source={{ uri: item.original_url}}
                                     ref={videoRef} 
                                     onBuffer={onBuffer}
                                      onError={onError} 
@@ -141,6 +147,7 @@ const HomeScreen = ({ navigation }) => {
                             <HomeComponent item={item} index={index} />
 
                         </View>
+                        )
                     )}
                     keyExtractor={(item, index) => index.toString()}
                 />
@@ -152,7 +159,6 @@ const HomeScreen = ({ navigation }) => {
         console.log("sf", index)
         navigatePage(index)}}/>
       </View>
-                {/* <CustomFooter didTapped={(index) => navigatePage(index)} /> */}
             </View>
         </View>
     )

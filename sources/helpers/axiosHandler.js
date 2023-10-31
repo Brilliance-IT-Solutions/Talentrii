@@ -7,7 +7,6 @@ import {
 const axiosManager = axios.create({
 })
 
-
 axiosManager.interceptors.request.use(
   async config => {
       const token = await getToken()

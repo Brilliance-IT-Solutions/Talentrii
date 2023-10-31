@@ -11,10 +11,9 @@ import { getUserLocation, saveUserLocation, setToken, setUser } from '../../util
 import { AuthContext } from '../../context/context';
 
 import GetLocation from 'react-native-get-location';
-import {useToast} from 'react-native-toast-notifications';
+import { showError, showSuccess } from '../../component/common/toaster/toaster';
 
 const LoginScreen = () => {
-  const toast = useToast()
 
   const { authDispatch, authState: { error, loading, data } } = useContext(GlobalContext);
 
@@ -34,21 +33,11 @@ const LoginScreen = () => {
       
       authDispatch({ type: REGISTER_SUCCESS, payload: res.response })
       signIn()
-      toast.show(res.message, {
-        type: "success",
-        placement: "top",
-        duration: 3000,
-        animationType: "slide-in",
-      });
+      showSuccess(res.message)
 
     } catch (error) {
       authDispatch({ type: constants.REGISTER_FAIL, payload: error });
-      toast.show(error.message, {
-        type: "danger",
-        placement: "top",
-        duration: 3000,
-        animationType: "slide-in",
-      });
+    showError(error.message)
     }
   }
 
