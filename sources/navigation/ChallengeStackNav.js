@@ -6,6 +6,7 @@ import { RouterNames } from '../constants/routeNames';
 import ChallengeScreen from '../screen/Challenge/ChallengeScreen';
 import CreateChallengeScreen from '../screen/createChallenge/createChallengeScreen';
 import PreviewChallenge from '../component/PreviewChallenge/PreviewChallenge';
+import PrivacyComponent from '../component/common/privacy/Privacy';
 ///////////////////////
 
 const ChallengeStack = createStackNavigator();
@@ -18,6 +19,8 @@ export const ChallengeStackScreen = () => (
     <ChallengeStack.Navigator initialRouteName={RouterNames.CHALLENGE_SCREEN}>
         <ChallengeStack.Screen name={RouterNames.CHALLENGE_SCREEN} component={ChallengeScreen} options={options}/>  
         <ChallengeStack.Screen name={RouterNames.CREATE_CHALLENGE_SCREEN} component={CreateChallengeScreen} options={options}/>        
-        <ChallengeStack.Screen name={RouterNames.PREVIEW_CHALLENGE_SCREEN} component={PreviewChallenge} options={options}/>        
+        <ChallengeStack.Screen name={RouterNames.PRIVACY} component={PrivacyComponent} options={options}/>        
+        <ChallengeStack.Screen name={RouterNames.PREVIEW_CHALLENGE_SCREEN} component={PreviewChallenge} options={options}/> 
+
     </ChallengeStack.Navigator>
 );

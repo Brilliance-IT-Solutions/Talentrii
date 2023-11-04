@@ -1,4 +1,5 @@
 {
   "name": "Talentrii",
-  "displayName": "Talentrii"
+  "displayName": "Talentrii",
+  "plugins": ["react-native-compressor"]
 }

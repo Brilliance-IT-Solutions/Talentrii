@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, { useEffect,useContext } from 'react';
+import {StyleSheet, View,TextInput,Text} from 'react-native';
 import colors from '../../assets/themes/colors';
 import InputContainer from '../common/TextInput/textInput';
 import CustomHeader from '../customHeader/customHeader';
@@ -20,7 +20,14 @@ import {Dimensions} from 'react-native';
 import { ToastMessage } from '../../constants/toasterConstants';
 import { width } from '../../style/responsiveSize';
 import {showSuccess,showError} from '../common/toaster/toaster';
+import style from '../../style/styles';
+import { ToggleContext } from '../../context/privacy/context';
+
 const CreateChallenegeComponent = ({props}) => {
+  const { isToggled } = useContext(ToggleContext);
+  useEffect(()=>{
+    console.log("component",isToggled)
+  })
   const navigation = useNavigation();
 
   // const [form, setForm] = React.useState({})
@@ -93,6 +100,10 @@ const CreateChallenegeComponent = ({props}) => {
     }
   };
 
+  const privacyChallenge = () =>{
+    navigation.navigate(RouterNames.PRIVACY)
+  }
+
   const previewChallenge = async () => {
     const param = {
       title: title,
@@ -147,6 +158,19 @@ const CreateChallenegeComponent = ({props}) => {
             noLines={4}
             onChangeText={description => addDescription(description)}
           />
+          <View style={{position:'relative'}}>
+             <TextInput 
+             inputMode='none'
+            placeholder="Challenge Privacy"
+            style={[style.textBoxes, style.leftStandardPadding, {height:50}
+             ]}
+           onPressOut={privacyChallenge}
+           
+          />
+          <View  style={{position:'absolute', right:40, marginVertical:25}}>
+            <Text>{isToggled === false ? 'public' : 'private'}</Text>
+          </View>
+          </View>
           {/*<InputContainer
                         placeholder='Video Link'
                         maxLength={100}

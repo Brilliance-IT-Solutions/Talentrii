@@ -3,10 +3,7 @@ import {StyleSheet, View, Image,TouchableOpacity} from 'react-native';
 import colors from '../../assets/themes/colors';
 
 import CustomHeader from '../customHeader/customHeader';
-import TittleHeader from '../customHeader/tittleHeader';
-import RootContainer from '../rootContainer/rootContainer';
 
-import {staticConstant} from '../../constants/staticData/staticConstant';
 import {useRoute} from '@react-navigation/native';
 
 import {IMAGES} from '../../constants/images';
@@ -20,7 +17,6 @@ import {APIs} from '../../constants/api';
 import axiosManager from '../../helpers/axiosHandler';
 import {useNavigation} from '@react-navigation/native';
 import {RouterNames} from '../../constants/routeNames';
-import Spinner from 'react-native-loading-spinner-overlay';
 import {getToken} from '../../utils/GenericFunction';
 import axios from 'axios';
 import { ToastMessage } from '../../constants/toasterConstants';
@@ -148,6 +144,7 @@ const PreviewChallenge = () => {
     <View style={{flex: 1}}>
        <CustomHeader showImage showBack />
       <View style={[styles.container, {position: 'relative'}]}>
+        <View>
         <SwiperFlatList
           horizontal={true}
           data={users}
@@ -165,12 +162,11 @@ const PreviewChallenge = () => {
                   onBuffer={onBuffer}
                   onError={onError}
                   style={{height: getHeight(), width: width}}
-                  resizeMode="contain"
                   muted
                   paused={!isPlaying}
                   onLoadStart={onVideoLoadStart}
                   onLoad={onLoad}
-                  
+                  resizeMode='contain'
                 ></Video>
                 {!isPlaying && <View style={{position:'absolute',top:"48%",left:"44%"}}>                 
                 <Image source={IMAGES.PLAY_ICON} style={styles.playIcon} />
@@ -181,17 +177,17 @@ const PreviewChallenge = () => {
               <Image
                 source={{uri: item.fileCopyUri}}
                 style={{
-                  marginHorizontal: 10,
-                  marginBottom: 10,
+                  flex: 1,
+                  width: width,
+                  height: getHeight(),
+                  resizeMode: 'contain',
                 }}
-                resizeMode="contain"
-                width={width}
-                height={getHeight()}
               />
             )
           }
           keyExtractor={(item, index) => index.toString()}
         />
+        </View>
         <View style={{position: 'absolute', right: 10}}>
           <ButtonComponent title="Publish" onPressFunc={publishChallenge} />
         </View>
@@ -206,19 +202,15 @@ const PreviewChallenge = () => {
 const styles = StyleSheet.create({
   rootContainer: {
     backgroundColor: colors.White,
-    //  height:height,
     flex: 1,
   },
   container: {
     flex: 1
   },
   playIcon: {
-    // position: 'absolute',
     width:50,
     height:50,
     resizeMode:'contain',
-    // top: '52%',
-    // left: '45%',
   },
 });
 export default PreviewChallenge;

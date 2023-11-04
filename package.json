@@ -24,6 +24,7 @@
     "react-native": "0.72.5",
     "react-native-awesome-alerts": "^2.0.0",
     "react-native-axios": "^0.17.1",
+    "react-native-compressor": "^1.8.14",
     "react-native-document-picker": "^9.0.1",
     "react-native-double-tap": "^1.0.1",
     "react-native-flash-message": "^0.4.2",
