@@ -14,7 +14,7 @@ import Location from '../common/location/Location';
 import {useState} from 'react';
 import ButtonComponent from '../common/Buttons/buttonComponent';
 import moment from 'moment';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {RouterNames} from '../../constants/routeNames';
 import {Dimensions} from 'react-native';
 import { ToastMessage } from '../../constants/toasterConstants';
@@ -22,12 +22,15 @@ import { width } from '../../style/responsiveSize';
 import {showSuccess,showError} from '../common/toaster/toaster';
 import style from '../../style/styles';
 import { ToggleContext } from '../../context/privacy/context';
+import { APIs } from '../../constants/api';
+import axiosManager from '../../helpers/axiosHandler';
 
 const CreateChallenegeComponent = ({props}) => {
   const { isToggled } = useContext(ToggleContext);
-  useEffect(()=>{
-    console.log("component",isToggled)
-  })
+
+ 
+
+
   const navigation = useNavigation();
 
   // const [form, setForm] = React.useState({})
@@ -59,6 +62,31 @@ const CreateChallenegeComponent = ({props}) => {
   const [startdate, setStartDateValue] = useState(new Date());
   const [enddate, setEndDateValue] = useState(startdate);
   const [time, setTimeValue] = useState(new Date());
+  const [privacy , setIsPrivate] = useState(false)
+  const [privacyVal, setIPrivacyVal] = useState(false)
+
+  useFocusEffect(
+    React.useCallback(()=>{
+      callApi()
+  },[]),
+  )
+
+  const callApi = async () =>{
+    const url = APIs.BASE_URL + '/privacy'
+    let param = {
+    }
+    await axiosManager.get(url, param).then((res)=>{
+      console.log(res)
+      const privacy = res.data[0].privacy
+      setIPrivacyVal(privacy)
+      if(privacy === "1"){
+        setIsPrivate(true)
+      }else{
+        setIsPrivate(false)
+      }
+    })
+  }
+
 
   const updateParentVariable = value => {
     setStartDate(value);
@@ -114,7 +142,11 @@ const CreateChallenegeComponent = ({props}) => {
       from_date: moment(startdate).utc().format('YYYY-MM-DD'),
       to_date: moment(enddate).utc().format('YYYY-MM-DD'),
       time: moment(time).format('HH:mm:ss'),
+      // privacy:privacyVal
+   
     };
+
+    console.log("param",param)
 
     if (param.title !== '') {
       if (param.description !== '') {
@@ -168,7 +200,7 @@ const CreateChallenegeComponent = ({props}) => {
            
           />
           <View  style={{position:'absolute', right:40, marginVertical:25}}>
-            <Text>{isToggled === false ? 'public' : 'private'}</Text>
+            <Text>{privacy === false ? 'public' : 'private'}</Text>
           </View>
           </View>
           {/*<InputContainer

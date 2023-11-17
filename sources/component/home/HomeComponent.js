@@ -9,7 +9,7 @@ import { staticConstant } from '../../constants/staticData/staticConstant';
 
 const HomeComponent = (props) => {
     // const pressLike = () => {console.log("1111")};
-
+    const [count, setCount] = useState(0);
     const pressLike = () => setCount(prevCount => prevCount + 1);
     return (
         <View style={{ position: 'absolute' }}>

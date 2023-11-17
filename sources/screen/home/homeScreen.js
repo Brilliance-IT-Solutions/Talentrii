@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {
   View,
+  FlatList
 } from 'react-native';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import CustomFooter from '../../component/customHeader/footer';
@@ -22,6 +23,8 @@ import {width, height} from '../../style/responsiveSize';
 import {getHeight} from '../../utils/GenericFunction';
 import {showError} from '../../component/common/toaster/toaster';
 import InnerSwiper from '../../component/home/InnerSwiper';
+import HomeComponent from '../../component/home/HomeComponent';
+
 const HomeScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
   const [pause, setPause] = useState(false);
@@ -123,12 +126,13 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={{flex: 1}}>
       <View>
-        <SwiperFlatList
+        <FlatList
          vertical
           data={users}
-
+          pagingEnabled={true}
+          decelerationRate={'fast'}
+          disableintervalmomentum={true}       
           renderItem={({item, index}) => (
-  
               <InnerSwiper innerdata={item} />
           )}
           keyExtractor={(item, index) => index.toString()}

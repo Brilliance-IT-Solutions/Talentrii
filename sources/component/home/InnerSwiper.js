@@ -1,41 +1,60 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {View, Image,FlatList, Text} from 'react-native';
+import {View, Image, FlatList, Text} from 'react-native';
 import Video from 'react-native-video';
 import {getHeight} from '../../utils/GenericFunction';
 import HomeComponent from './HomeComponent';
 import styles from '../../screen/home/styles';
 import DoubleClick from 'react-native-double-tap';
 import colors from '../../assets/themes/colors';
-import { width } from '../../style/responsiveSize';
-
-
+import {height, width} from '../../style/responsiveSize';
+import {AuthContext} from '../../context/context';
+import FastImage from 'react-native-fast-image';
 
 const InnerSwiper = props => {
+  const url = 'https://bit-aws-s3.s3.ap-south-1.amazonaws.com/'
+  const {signOut} = React.useContext(AuthContext);
+  const [count, setCount] = useState(0);
+  const [visibleVideos, setVisibleVideos] = useState([]);
   const videoRef = useRef(null);
-  // console.log('fdgfd', props.innerdata.inner);
-  
+
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 95,
     waitForInteraction: true,
   };
-  
-const onBuffer = e => {
-  // setIsLoading(false)
-  //    buffering: true
-  // console.log("buffering....", e)
-};
-const onError = e => {
-  // console.log("error released....", e)
-};
-const onLoad = e => {
-  // console.log("error loader....", e)
-  /* set loader to true*/
-};
+
+  const onBuffer = e => {
+    // setIsLoading(false)
+    // console.log("buffering....")
+  };
+  const onError = e => {
+    // console.log("error released....", e)
+  };
+  const onLoad = e => {
+    // console.log("play")
+    // console.log("error loader....", e)
+    /* set loader to true*/
+  };
+
+  const onLoadStart = e => {
+    //  console.log("..............")
+  };
+
+  // Function to preload the video
+  const preloadVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.seek(0); // Start from the beginning
+    }
+  };
+
+  // Handle visibility changes of videos
+  const onViewableItemsChanged = ({viewableItems}) => {
+    setVisibleVideos(viewableItems.map(({index}) => videos[index]));
+  };
 
   return (
     <>
-      <View style={{flex:1}}>
+      <View style={{flex: 1}}>
         <SwiperFlatList
           data={props.innerdata.inner || []}
           horizontal
@@ -44,7 +63,7 @@ const onLoad = e => {
           viewabilityConfig={viewabilityConfig}
           // onViewableItemsChanged={onViewableItemsChanged}
           paginationStyle={{
-            bottom:60
+            bottom: 60,
           }}
           renderItem={({item, index}) =>
             item.type === 'video/mp4' ? (
@@ -58,11 +77,16 @@ const onLoad = e => {
                     signOut();
                   }}>
                   <Video
-                    source={{uri: item.original_url}}
+                    // poster={item.thumbnail_url}
+                    // posterResizeMode="cover"
+                    source={{uri: item.original_url, type: 'mp4'}}
                     ref={videoRef}
+                    onLoadStart={onLoadStart}
                     onBuffer={onBuffer}
                     onError={onError}
-                    // onLoad={onLoad}
+                    onLoad={onLoad}
+                    preload={'metadata'} // Set preload to true
+                    // onLoad={preloadVideo} // Trigger preload when the video is loaded
                     repeat
                     // paused={true}
                     style={styles.bgvideo}
@@ -70,6 +94,7 @@ const onLoad = e => {
                     // paused={index !== currentRenderVideoIndex}
                     muted
                     autoplay
+                    removeClippedSubviews={true}
                   />
                 </DoubleClick>
 
@@ -77,14 +102,13 @@ const onLoad = e => {
               </View>
             ) : (
               <View>
-                <Image
-                  source={{uri: item.original_url}}
-                  style={{
-                    flex: 1,
-                    width: width,
-                    height: getHeight(),
-                    resizeMode: 'cover',
+                <FastImage
+                  style={{width: width, height: getHeight(), flex: 1}}
+                  source={{
+                    uri: item.original_url,
+                    priority: FastImage.priority.high,
                   }}
+                  resizeMode={FastImage.resizeMode.cover}
                 />
                 <HomeComponent item={item} index={index} />
               </View>

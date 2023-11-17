@@ -104,6 +104,7 @@ const PreviewChallenge = () => {
               from_date: data.from_date,
               to_date: data.to_date,
               time: data.time,
+              // privacy : data.privacy
             }
 
             await axiosManager
@@ -148,7 +149,7 @@ const PreviewChallenge = () => {
         <SwiperFlatList
           horizontal={true}
           data={users}
-          showPagination={true}
+          showPagination={users.length > 1 ? true : false}
           paginationActiveColor={colors.Green}
        
           viewabilityConfig={viewabilityConfig}

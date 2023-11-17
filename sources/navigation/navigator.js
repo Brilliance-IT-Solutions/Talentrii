@@ -12,7 +12,7 @@ import { ChallengeStackScreen } from './ChallengeStackNav'
 import CreateChallenegeComponent from '../component/CreateChallenge/CreateChallenegeComponent'
 
 const Navigation = () => {
-
+ 
     const [isLogged, setisLogged] = React.useState(Enums.LoggedInStatus.initial);
 
     const RootStack = createStackNavigator();
