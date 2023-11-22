@@ -57,4 +57,10 @@ export const staticConstant = {
     nextScreen:'going to next screen',
     btnTitle: 'next page',
   },
+  gender : [
+    // { label: 'Select gender', value: null },
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
+  ]
 };
+

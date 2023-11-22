@@ -122,18 +122,23 @@ const HomeScreen = ({navigation}) => {
   //         });
   //     }
   //   }
-
+const handleChangeIndexvalue = ({index}) =>{
+  setCurrentRenderVideoIndex(index)
+}
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1,height:height}}>
       <View>
         <FlatList
          vertical
           data={users}
           pagingEnabled={true}
           decelerationRate={'fast'}
-          disableintervalmomentum={true}       
+          disableintervalmomentum={true}   
+          onChangeIndex={handleChangeIndexvalue}   
+          removeClippedSubviews={true} 
+          maxToRenderPerBatch={1}
           renderItem={({item, index}) => (
-              <InnerSwiper innerdata={item} />
+              <InnerSwiper innerdata={item} index={index} currentIndex={currentRenderVideoIndex}/>
           )}
           keyExtractor={(item, index) => index.toString()}
         />

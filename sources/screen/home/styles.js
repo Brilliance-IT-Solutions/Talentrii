@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
         flex: 1,
         height: getHeight(),
         width: width,
+        backgroundColor:colors.Black
     },
     bottomHomeIconContainer: {
         position: 'absolute',

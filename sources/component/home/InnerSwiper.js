@@ -12,10 +12,9 @@ import {AuthContext} from '../../context/context';
 import FastImage from 'react-native-fast-image';
 
 const InnerSwiper = props => {
-  const url = 'https://bit-aws-s3.s3.ap-south-1.amazonaws.com/'
   const {signOut} = React.useContext(AuthContext);
   const [count, setCount] = useState(0);
-  const [visibleVideos, setVisibleVideos] = useState([]);
+  const [visibleVideos, setVisibleVideos] = useState(0);
   const videoRef = useRef(null);
 
   const viewabilityConfig = {
@@ -25,7 +24,7 @@ const InnerSwiper = props => {
 
   const onBuffer = e => {
     // setIsLoading(false)
-    // console.log("buffering....")
+    console.log("buffering....")
   };
   const onError = e => {
     // console.log("error released....", e)
@@ -48,8 +47,8 @@ const InnerSwiper = props => {
   };
 
   // Handle visibility changes of videos
-  const onViewableItemsChanged = ({viewableItems}) => {
-    setVisibleVideos(viewableItems.map(({index}) => videos[index]));
+  const onViewableItemsChanged = ({index}) => {
+      setVisibleVideos(index);  
   };
 
   return (
@@ -61,7 +60,11 @@ const InnerSwiper = props => {
           showPagination={props.innerdata.inner.length > 1 ? true : false}
           paginationActiveColor={colors.Green}
           viewabilityConfig={viewabilityConfig}
-          // onViewableItemsChanged={onViewableItemsChanged}
+          onChangeIndex={onViewableItemsChanged}
+          removeClippedSubviews={true}
+          initialScrollIndex={0}
+          maxToRenderPerBatch={1}
+          
           paginationStyle={{
             bottom: 60,
           }}
@@ -88,10 +91,9 @@ const InnerSwiper = props => {
                     preload={'metadata'} // Set preload to true
                     // onLoad={preloadVideo} // Trigger preload when the video is loaded
                     repeat
-                    // paused={true}
+                    paused={visibleVideos === index ? false:true}
                     style={styles.bgvideo}
                     resizeMode="cover"
-                    // paused={index !== currentRenderVideoIndex}
                     muted
                     autoplay
                     removeClippedSubviews={true}
@@ -103,7 +105,7 @@ const InnerSwiper = props => {
             ) : (
               <View>
                 <FastImage
-                  style={{width: width, height: getHeight(), flex: 1}}
+                  style={{width: width, height: getHeight(), flex: 1 ,backgroundColor:colors.Black}}
                   source={{
                     uri: item.original_url,
                     priority: FastImage.priority.high,
