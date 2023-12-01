@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState,useEffect} from 'react';
 import {
   View,
   FlatList
@@ -24,6 +24,7 @@ import {getHeight} from '../../utils/GenericFunction';
 import {showError} from '../../component/common/toaster/toaster';
 import InnerSwiper from '../../component/home/InnerSwiper';
 import HomeComponent from '../../component/home/HomeComponent';
+import CustomLoader from '../../component/common/loader/loader';
 
 const HomeScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -35,6 +36,11 @@ const HomeScreen = ({navigation}) => {
   const [users, setUsers] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
 
+  const [page, setPage] = useState(1); // Initial page
+  const [pageSize] = useState(7); // Adjust the page size as needed
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [debounceTimeout, setDebounceTimeout] = useState(null);
+  
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 95,
     waitForInteraction: true,
@@ -81,24 +87,50 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
-  async function fetchMyAPI() {
+  async function fetchMyAPI(pagenumber) {
+    // console.log("page", page)
     try {
-      const url = APIs.BASE_URL + APIs.DASHBOARD_LINK;
+      // const url = `${APIs.BASE_URL}${APIs.DASHBOARD_LINK}?&page=${pagenumber}&pageSize=${pageSize}`;
+
+      const url = `${APIs.BASE_URL}${APIs.DASHBOARD_LINK}`;
       const param = {};
       const response = await axiosManager.post(url, param);
-      console.log(response)
       setUsers(response.data);
+      // setUsers(prevData => [...prevData, ...response.data]);
     } catch (error) {
       console.log('gfhhhhhhhhhhhhhh', error);
-      // const data = error.response.data.response.message ? error.response.data.response.message : error.response.data.error
-      // showError(data);
+      const data = error.response.data.response.message ? error.response.data.response.message : error.response.data.error
+      showError(data);
     }
   }
 
+  // const handleEndReached = () => {
+  //   if (!loadingMore) {
+  //     setPage((prevPage) => prevPage + 1);
+  //     fetchMyAPI(page + 1);
+  //   }
+  // };
+
+  // const debouncedLoadMore = () => {
+  //   if (debounceTimeout) {
+  //     clearTimeout(debounceTimeout);
+  //   }
+
+  //   const timeout = setTimeout(() => {
+  //     handleEndReached();
+  //     setDebounceTimeout(null);
+  //   }, 1000); // Adjust the debounce delay as needed
+
+  //   setDebounceTimeout(timeout);
+  // };
+
+  // useFocusEffect to fetch data for page 1 when the route changes
   useFocusEffect(
     React.useCallback(() => {
-      fetchMyAPI(); // Refresh data when the screen gains focus
-    }, []),
+      // setPage(1);
+      // setUsers([]); // Clear existing data when route changes
+      fetchMyAPI(1);
+    }, [])
   );
 
   // const callDashboardAPI = async () => {
@@ -136,7 +168,10 @@ const handleChangeIndexvalue = ({index}) =>{
           disableintervalmomentum={true}   
           onChangeIndex={handleChangeIndexvalue}   
           removeClippedSubviews={true} 
+          // initialNumToRender={5}
+          initialScrollIndex={0}
           maxToRenderPerBatch={1}
+          // onEndReached={debouncedLoadMore}
           renderItem={({item, index}) => (
               <InnerSwiper innerdata={item} index={index} currentIndex={currentRenderVideoIndex}/>
           )}

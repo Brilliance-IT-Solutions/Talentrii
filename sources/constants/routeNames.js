@@ -11,6 +11,7 @@ export const RouterNames = {
   CHALLENGE_SCREEN: "ChallengeScreen",
   PREVIEW_CHALLENGE_SCREEN: "previewChallenge",
   CHALLENGE :"challenge",
+  LOGIN :"login",
   PRIVACY :"privacy"
   
 

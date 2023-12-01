@@ -73,7 +73,7 @@ const PreviewChallenge = () => {
   const publishChallenge = async () => {
     if (data) {
        const formData = new FormData();
-        data.url.forEach((file, index) => {
+        data?.url.forEach((file, index) => {
           formData.append('files', file);
         });
         setLoader(true)
@@ -93,17 +93,17 @@ const PreviewChallenge = () => {
             console.log('Success!', res.data.response.urls);
 
             const urls = APIs.BASE_URL + APIs.CREATE_CHALLENGE;
-            if(res.data.response.urls.length > 0){
+            if(res?.data.response.urls.length > 0){
 
             let param = {
-              title: data.title,
-              description: data.description,
-              url: res.data.response.urls,
-              latitude: data.location ? data.location : '',
-              longitude:  data.location ?data.location :'',
-              from_date: data.from_date,
-              to_date: data.to_date,
-              time: data.time,
+              title: data?.title,
+              description: data?.description,
+              url: res?.data.response.urls,
+              latitude: data?.location ? data?.location : '',
+              longitude:  data?.location ?data?.location :'',
+              from_date: data?.from_date,
+              to_date: data?.to_date,
+              time: data?.time,
               // privacy : data.privacy
             }
 

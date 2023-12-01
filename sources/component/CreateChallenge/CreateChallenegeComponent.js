@@ -149,20 +149,29 @@ const CreateChallenegeComponent = ({props}) => {
     console.log("param",param)
 
     if (param.title !== '') {
+       if(param.title.length >= 4){
       if (param.description !== '') {
+        if(param.description.length >= 5){
         if (param.url.length > 0) {
           navigation.navigate(RouterNames.PREVIEW_CHALLENGE_SCREEN, {
             data: JSON.stringify(param),
           });
         } else {
-        
           showError(ToastMessage.REQUIRED_MEDIA)
           return;
         }
-      } else {
+      }else{
+        showError('Description should of 5 characters')
+        return
+      }
+      }else {
         showError(ToastMessage.REQUIRED_DESCRIPTION)
         return;
       }
+    }else{
+      showError('Title should of 4 characters')
+      return
+    }
     } else {
       showError(ToastMessage.REQUIRED_TITLE)
       return;

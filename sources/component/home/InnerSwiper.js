@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState,useEffect} from 'react';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import {View, Image, FlatList, Text} from 'react-native';
 import Video from 'react-native-video';
@@ -16,6 +16,11 @@ const InnerSwiper = props => {
   const [count, setCount] = useState(0);
   const [visibleVideos, setVisibleVideos] = useState(0);
   const videoRef = useRef(null);
+
+  // useEffect(() => {
+  //   const imageUris = props.innerdata.inner.map(item => item.original_url);
+  //   FastImage.preload(imageUris.map(uri => ({ uri })));
+  // }, [ props.innerdata.inner]);
 
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 95,
@@ -51,6 +56,59 @@ const InnerSwiper = props => {
       setVisibleVideos(index);  
   };
 
+  const renderItem = ({item,index})=>{
+    return(
+    item.type === 'video/mp4' ? (
+      <View>
+        <DoubleClick
+          singleTap={() => {
+            console.log('single tap');
+          }}
+          doubleTap={() => {
+            console.log('double tap');
+            signOut();
+          }}>
+          <Video
+            // poster={item.thumbnail_url}
+            // posterResizeMode="cover"
+            source={{uri: item.original_url, type: 'm3u8',cache: true}}
+            ref={videoRef}
+            onLoadStart={onLoadStart}
+            onBuffer={onBuffer}
+            onError={onError}
+            onLoad={onLoad}
+            preload={'metadata'} // Set preload to true
+            // onLoad={preloadVideo} // Trigger preload when the video is loaded
+            repeat
+            paused={visibleVideos === index ? false:true}
+            style={styles.bgvideo}
+            resizeMode="cover"
+            muted
+            autoplay
+            removeClippedSubviews={true}
+            progress={true}
+          />
+        </DoubleClick>
+
+        <HomeComponent item={item} index={index} />
+      </View>
+    ) : (
+      <View>
+        <FastImage
+          style={{width: width, height: getHeight(), flex: 1 ,backgroundColor:colors.Black}}
+          source={{
+            uri: item.original_url,
+            priority: FastImage.priority.high,
+            cache:FastImage.cacheControl.immutable
+          }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <HomeComponent item={item} index={index} />
+      </View>
+    )
+    )
+  }
+
   return (
     <>
       <View style={{flex: 1}}>
@@ -63,60 +121,12 @@ const InnerSwiper = props => {
           onChangeIndex={onViewableItemsChanged}
           removeClippedSubviews={true}
           initialScrollIndex={0}
-          maxToRenderPerBatch={1}
-          
+          maxToRenderPerBatch={1}         
           paginationStyle={{
             bottom: 60,
           }}
-          renderItem={({item, index}) =>
-            item.type === 'video/mp4' ? (
-              <View>
-                <DoubleClick
-                  singleTap={() => {
-                    console.log('single tap');
-                  }}
-                  doubleTap={() => {
-                    console.log('double tap');
-                    signOut();
-                  }}>
-                  <Video
-                    // poster={item.thumbnail_url}
-                    // posterResizeMode="cover"
-                    source={{uri: item.original_url, type: 'mp4'}}
-                    ref={videoRef}
-                    onLoadStart={onLoadStart}
-                    onBuffer={onBuffer}
-                    onError={onError}
-                    onLoad={onLoad}
-                    preload={'metadata'} // Set preload to true
-                    // onLoad={preloadVideo} // Trigger preload when the video is loaded
-                    repeat
-                    paused={visibleVideos === index ? false:true}
-                    style={styles.bgvideo}
-                    resizeMode="cover"
-                    muted
-                    autoplay
-                    removeClippedSubviews={true}
-                  />
-                </DoubleClick>
-
-                <HomeComponent item={item} index={index} />
-              </View>
-            ) : (
-              <View>
-                <FastImage
-                  style={{width: width, height: getHeight(), flex: 1 ,backgroundColor:colors.Black}}
-                  source={{
-                    uri: item.original_url,
-                    priority: FastImage.priority.high,
-                  }}
-                  resizeMode={FastImage.resizeMode.cover}
-                />
-                <HomeComponent item={item} index={index} />
-              </View>
-            )
-          }
-          keyExtractor={(item, index) => item.id}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     </>
