@@ -27,10 +27,6 @@ import axiosManager from '../../helpers/axiosHandler';
 
 const CreateChallenegeComponent = ({props}) => {
   const { isToggled } = useContext(ToggleContext);
-
- 
-
-
   const navigation = useNavigation();
 
   // const [form, setForm] = React.useState({})
@@ -212,15 +208,6 @@ const CreateChallenegeComponent = ({props}) => {
             <Text>{privacy === false ? 'public' : 'private'}</Text>
           </View>
           </View>
-          {/*<InputContainer
-                        placeholder='Video Link'
-                        maxLength={100}
-                    />
-                    <InputContainer
-                        placeholder='Location'
-                        maxLength={100}
-                    />
-    */}
 
 {/* ///////////////  START DATE ////////////////////////////////// */}
           {addStartDate && props.data === 'upcoming' && (

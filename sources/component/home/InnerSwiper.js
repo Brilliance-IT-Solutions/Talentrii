@@ -13,14 +13,8 @@ import FastImage from 'react-native-fast-image';
 
 const InnerSwiper = props => {
   const {signOut} = React.useContext(AuthContext);
-  const [count, setCount] = useState(0);
   const [visibleVideos, setVisibleVideos] = useState(0);
   const videoRef = useRef(null);
-
-  // useEffect(() => {
-  //   const imageUris = props.innerdata.inner.map(item => item.original_url);
-  //   FastImage.preload(imageUris.map(uri => ({ uri })));
-  // }, [ props.innerdata.inner]);
 
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 95,
@@ -44,13 +38,6 @@ const InnerSwiper = props => {
     //  console.log("..............")
   };
 
-  // Function to preload the video
-  const preloadVideo = () => {
-    if (videoRef.current) {
-      videoRef.current.seek(0); // Start from the beginning
-    }
-  };
-
   // Handle visibility changes of videos
   const onViewableItemsChanged = ({index}) => {
       setVisibleVideos(index);  
@@ -69,16 +56,13 @@ const InnerSwiper = props => {
             signOut();
           }}>
           <Video
-            // poster={item.thumbnail_url}
-            // posterResizeMode="cover"
-            source={{uri: item.original_url, type: 'm3u8',cache: true}}
+            source={{uri: item.original_url, type: 'mp4',cache: true}}
             ref={videoRef}
             onLoadStart={onLoadStart}
             onBuffer={onBuffer}
             onError={onError}
             onLoad={onLoad}
-            preload={'metadata'} // Set preload to true
-            // onLoad={preloadVideo} // Trigger preload when the video is loaded
+            preload={'metadata'} 
             repeat
             paused={visibleVideos === index ? false:true}
             style={styles.bgvideo}
