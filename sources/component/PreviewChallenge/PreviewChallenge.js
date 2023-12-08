@@ -22,6 +22,7 @@ import axios from 'axios';
 import { ToastMessage } from '../../constants/toasterConstants';
 import { showError, showSuccess } from '../common/toaster/toaster';
 import CustomLoader from '../common/loader/loader';
+import { staticConstant } from '../../constants/staticData/staticConstant';
 
 
 const {width} = Dimensions.get('window');
@@ -32,15 +33,11 @@ const PreviewChallenge = () => {
   const navigation = useNavigation();
   const [loader, setLoader] = useState(false);
   const [isPlaying, setPlaying] = useState(false);
-  const [isCurrent, setCurrent] = useState(false);
-  const [currentRenderVideoIndex, setCurrentRenderVideoIndex] = useState(0);
-
-  const [control, setControl] = useState(false);
 
   const data =
     route.params.data.length > 0 ? JSON.parse(route.params.data) : '';
   const users = data.url
-  // [{"originalurl": "https://dutchuppblob.s3.amazonaws.com/originals/183271%20%28720p%29.mp4", "thumbnailurl": "https://dutchuppblob.s3.amazonaws.com/thumbnails/183271%20%28720p%29.mp4", "type": "video/mp4"},{"originalurl": "https://dutchuppblob.s3.amazonaws.com/originals/183271%20%28720p%29.mp4", "thumbnailurl": "https://dutchuppblob.s3.amazonaws.com/thumbnails/183271%20%28720p%29.mp4", "type": "video/mp4"},{"originalurl": "https://dutchuppblob.s3.amazonaws.com/originals/183271%20%28720p%29.mp4", "thumbnailurl": "https://dutchuppblob.s3.amazonaws.com/thumbnails/183271%20%28720p%29.mp4", "type": "video/mp4"}];
+
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 95,
     waitForInteraction: true,
@@ -142,8 +139,9 @@ const PreviewChallenge = () => {
   return (
     <>
     <View style={styles.rootContainer}>
-    <View style={{flex: 1}}>
+    <View>
        <CustomHeader showImage showBack />
+       </View>
       <View style={[styles.container, {position: 'relative'}]}>
         <View>
         <SwiperFlatList
@@ -190,9 +188,8 @@ const PreviewChallenge = () => {
         />
         </View>
         <View style={{position: 'absolute', right: 10}}>
-          <ButtonComponent title="Publish" onPressFunc={publishChallenge} />
+          <ButtonComponent title={staticConstant.publishButton} onPressFunc={publishChallenge}/>
         </View>
-      </View>
     </View>
         <CustomLoader isLoading={loader}/>
     </View>

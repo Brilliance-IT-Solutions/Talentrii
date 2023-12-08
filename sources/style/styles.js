@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     buttons : {
         marginVertical: 10,
         // marginHorizontal: 80,
-        width:'auto',
         paddingHorizontal:30,
         backgroundColor: Colors.Green,        
         borderRadius: 8,

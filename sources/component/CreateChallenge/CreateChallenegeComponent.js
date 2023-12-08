@@ -71,8 +71,8 @@ const CreateChallenegeComponent = ({props}) => {
     const url = APIs.BASE_URL + '/privacy'
     let param = {
     }
+    try{
     await axiosManager.get(url, param).then((res)=>{
-      console.log(res)
       const privacy = res.data[0].privacy
       setIPrivacyVal(privacy)
       if(privacy === "1"){
@@ -81,6 +81,10 @@ const CreateChallenegeComponent = ({props}) => {
         setIsPrivate(false)
       }
     })
+  }
+  catch(error){
+    console.log(error.response.data)
+  }
   }
 
 
@@ -141,8 +145,6 @@ const CreateChallenegeComponent = ({props}) => {
       // privacy:privacyVal
    
     };
-
-    console.log("param",param)
 
     if (param.title !== '') {
        if(param.title.length >= 4){

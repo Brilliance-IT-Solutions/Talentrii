@@ -93,7 +93,9 @@ const Images = ({onChildStateChange}) => {
                       controls={false}
                       style={styles.backgroundVideo}
                       ref={videoPlayer}
-                      pause={true}
+                      poster={image.fileCopyUri}
+                      posterResizeMode="cover"
+                      paused={true}
                       resizeMode={'cover'}
                     />
                     <Image source={IMAGES.PLAY_BUTTON_ICON} style={styles.playIcon} />

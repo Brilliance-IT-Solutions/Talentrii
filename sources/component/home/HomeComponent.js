@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { IMAGES } from '../../constants/images';
 import colors from '../../assets/themes/colors';
@@ -6,11 +6,36 @@ import IconCont from '../../component/common/IconCount/iconCount';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import { staticConstant } from '../../constants/staticData/staticConstant';
+import axiosManager from '../../helpers/axiosHandler';
+import { APIs } from '../../constants/api';
+import {useNavigation} from '@react-navigation/native'
+import { RouterNames } from '../../constants/routeNames';
 
 const HomeComponent = (props) => {
+    const navigation = useNavigation()
     // const pressLike = () => {console.log("1111")};
-    const [count, setCount] = useState(0);
-    const pressLike = () => setCount(prevCount => prevCount + 1);
+    const [tap, setTap] = useState(false);
+    const [likecount, setLikeCount] = useState(props.item.likes_count);
+
+    useEffect(()=>{
+        setTap(props.Tap)
+        setLikeCount(prev => prev + 1)
+    },[props.Tap])
+
+    useEffect(()=>{
+       setLikeCount(props.likeCount)
+    },[props.item.likes_count])
+
+    const pressLike = async () => {
+        console.log("clicked")
+        props.LikePress()    
+    };
+
+    const comments = () =>{
+        navigation.navigate(RouterNames.COMMENTS,{
+            challengeId: props.item.challenge_id,
+          })
+    }
     return (
         <View style={{ position: 'absolute' }}>
             <View>
@@ -31,23 +56,32 @@ const HomeComponent = (props) => {
                 </View>
                 <View style={styles.topIconRowSection}>
                     <View style={styles.topIcon}>
+                        {tap === true ? (
+                        <IconCont
+                            imageSource={IMAGES.LIKED}
+                            onIconPress={pressLike}
+                            width={35}
+                            height={35}                         
+                        />
+                        ) :(
                         <IconCont
                             imageSource={IMAGES.LIKE}
                             onIconPress={pressLike}
                             width={35}
-                            height={35}
-                          
+                            height={35}                         
                         />
-                        <Text style={styles.topIconText}>{props.item.like}</Text>
+                        )
+}
+                        <Text style={styles.topIconText}>{likecount}</Text>
                     </View>
                     <View style={styles.topIcon}>
                         <IconCont
                             imageSource={IMAGES.COMMENT}
-                            onIconPress={pressLike}
+                            onIconPress={comments}
                             width={35}
                             height={35}
                         />
-                        <Text style={styles.topIconText}>{props.item.comment}</Text>
+                        <Text style={styles.topIconText}>{props.item.comment_count}</Text>
                     </View>
                     <View style={styles.topIcon}>
                         <IconCont

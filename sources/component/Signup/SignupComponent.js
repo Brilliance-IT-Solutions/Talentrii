@@ -143,6 +143,7 @@ const Signup = () => {
         <ButtonComponent
           title="Sign Up"
           onPressFunc={handleSubmit(onSignUpClick)}
+          width="70%"
         />
         
       </View>

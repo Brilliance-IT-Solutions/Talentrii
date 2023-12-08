@@ -58,9 +58,15 @@ export const staticConstant = {
     btnTitle: 'next page',
   },
   gender : [
-    // { label: 'Select gender', value: null },
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
-  ]
+  ],
+  publishButton:'Publish',
+  privacyTitle:'Challenge Privacy',
+  publicChallenge : 'Public Challenge will appear on home screen which can be accessible to everyone by default it is public',
+  privateChallenge : 'Private Challenge will not appear on home screen which can not  be accessible to anyone by toggle the switch your account will be private',
+  publicTitle :'Public',
+  privateTitle :'Private',
+
 };
 

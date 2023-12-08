@@ -3,6 +3,7 @@ export const IMAGES = {
     BRAND_FULL_LOGO : require('../assets/image/splashLogo.png'),
     USER_PIC : require('../assets/image/aman.png'),
     LIKE : require('../assets/icons/like.png'),
+    LIKED : require('../assets/icons/liked.png'),
     COMMENT : require('../assets/icons/comment.png'),
     SHARE : require('../assets/icons/share.png'),
     HOME : require('../assets/icons/Home.png'),

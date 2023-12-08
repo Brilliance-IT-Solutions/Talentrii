@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', marginRight: 30, marginVertical: 8
     },
     topIconText: {
-        marginTop: 5, fontSize: 16, color: colors.Black, fontWeight: '600'
+        marginTop: 5, fontSize: 16, color: colors.Green, fontWeight: '600'
     },
     bottomSection: {
         margin: 20, position: 'absolute', top: getHeight() - 200

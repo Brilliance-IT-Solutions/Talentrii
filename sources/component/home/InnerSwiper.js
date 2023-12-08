@@ -1,6 +1,6 @@
 import React, {useRef, useState,useEffect} from 'react';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {View, Image, FlatList, Text} from 'react-native';
+import {View, Image, FlatList, Text,Share} from 'react-native';
 import Video from 'react-native-video';
 import {getHeight} from '../../utils/GenericFunction';
 import HomeComponent from './HomeComponent';
@@ -10,10 +10,15 @@ import colors from '../../assets/themes/colors';
 import {height, width} from '../../style/responsiveSize';
 import {AuthContext} from '../../context/context';
 import FastImage from 'react-native-fast-image';
-
+import DoubleTap from "@memrearal/react-native-doubletap";
+import axiosManager from '../../helpers/axiosHandler';
+import { APIs } from '../../constants/api';
 const InnerSwiper = props => {
+  const [tap,setTap] = useState(false)
   const {signOut} = React.useContext(AuthContext);
   const [visibleVideos, setVisibleVideos] = useState(0);
+  const [likeChallenge, setLikeChallenge] = useState(0);
+
   const videoRef = useRef(null);
 
   const viewabilityConfig = {
@@ -43,18 +48,39 @@ const InnerSwiper = props => {
       setVisibleVideos(index);  
   };
 
+
+  const doubleTap = async (challengeId) =>{
+      // setTap(true)
+      let param = {
+        challengeId : challengeId,
+        status : true
+      }
+      try{
+        const response = await axiosManager.post(APIs.BASE_URL + '/likechallenge', param)
+        console.log(response.data)
+         if(response.data.message === 'Liked Success'){
+          setTap(true)         
+         }
+      }
+      catch(error){
+        console.log(error.response.data)
+      }      
+  }
+
+
   const renderItem = ({item,index})=>{
     return(
-    item.type === 'video/mp4' ? (
-      <View>
-        <DoubleClick
-          singleTap={() => {
-            console.log('single tap');
+      <>
+        <DoubleTap
+          onSingleTap={() => {
+            console.log("single tap!");
           }}
-          doubleTap={() => {
-            console.log('double tap');
-            signOut();
-          }}>
+          onDoubleTap={()=>doubleTap(item.challenge_id)}
+          delay={0}
+        >
+      {
+       item.type === 'video/mp4' ? (
+      <View>
           <Video
             source={{uri: item.original_url, type: 'mp4',cache: true}}
             ref={videoRef}
@@ -72,9 +98,7 @@ const InnerSwiper = props => {
             removeClippedSubviews={true}
             progress={true}
           />
-        </DoubleClick>
-
-        <HomeComponent item={item} index={index} />
+       
       </View>
     ) : (
       <View>
@@ -87,9 +111,12 @@ const InnerSwiper = props => {
           }}
           resizeMode={FastImage.resizeMode.cover}
         />
-        <HomeComponent item={item} index={index} />
       </View>
     )
+    }
+    <HomeComponent item={item} index={index} Tap={tap} LikePress={()=>doubleTap(item.challenge_id)} likeCount={item.likes_count} />
+    </DoubleTap>
+    </>
     )
   }
 

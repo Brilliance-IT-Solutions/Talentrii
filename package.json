@@ -10,10 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@memrearal/react-native-doubletap": "^1.0.3",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-community/datetimepicker": "^7.6.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/netinfo": "^9.4.1",
+    "@react-native-google-signin/google-signin": "^10.1.1",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
@@ -27,6 +29,7 @@
     "react-native-awesome-alerts": "^2.0.0",
     "react-native-axios": "^0.17.1",
     "react-native-compressor": "^1.8.14",
+    "react-native-confirmation-code-field": "^7.3.2",
     "react-native-document-picker": "^9.0.1",
     "react-native-double-tap": "^1.0.1",
     "react-native-element-dropdown": "^2.10.0",

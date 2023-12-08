@@ -12,7 +12,9 @@ export const RouterNames = {
   PREVIEW_CHALLENGE_SCREEN: "previewChallenge",
   CHALLENGE :"challenge",
   LOGIN :"login",
-  PRIVACY :"privacy"
-  
-
+  PRIVACY :"privacy",
+  FORGOT_SCREEN:'forgotPassword',
+  OTP_SCREEN:'otp',
+  RESET_SCREEN:'resetPassword',
+  COMMENTS:'comments'
 };

@@ -13,7 +13,8 @@ import {useFocusEffect} from '@react-navigation/native';
 import {height} from '../../style/responsiveSize';
 import {showError} from '../../component/common/toaster/toaster';
 import InnerSwiper from '../../component/home/InnerSwiper';
-
+import HomeComponent from '../../component/home/HomeComponent';
+import DoubleTap from "@memrearal/react-native-doubletap";
 const HomeScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
   const [count, setCount] = useState(0);
