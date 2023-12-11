@@ -36,8 +36,8 @@ const LoginScreen = () => {
       showSuccess(res.message)
 
     } catch (error) {
+      showError(error.response.data.response.message)
       authDispatch({ type: constants.REGISTER_FAIL, payload: error });
-    showError(error.message)
     }
   }
 

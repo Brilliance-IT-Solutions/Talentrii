@@ -1,6 +1,6 @@
 import React, {useRef, useState,useEffect} from 'react';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import {View, Image, FlatList, Text,Share} from 'react-native';
+import {View, Image, FlatList, Text} from 'react-native';
 import Video from 'react-native-video';
 import {getHeight} from '../../utils/GenericFunction';
 import HomeComponent from './HomeComponent';
@@ -13,6 +13,7 @@ import FastImage from 'react-native-fast-image';
 import DoubleTap from "@memrearal/react-native-doubletap";
 import axiosManager from '../../helpers/axiosHandler';
 import { APIs } from '../../constants/api';
+import Share from 'react-native-share';
 const InnerSwiper = props => {
   const [tap,setTap] = useState(false)
   const {signOut} = React.useContext(AuthContext);
@@ -57,7 +58,6 @@ const InnerSwiper = props => {
       }
       try{
         const response = await axiosManager.post(APIs.BASE_URL + '/likechallenge', param)
-        console.log(response.data)
          if(response.data.message === 'Liked Success'){
           setTap(true)         
          }
@@ -66,6 +66,21 @@ const InnerSwiper = props => {
         console.log(error.response.data)
       }      
   }
+
+  const onShare = async (item) => {
+    const options ={
+      url : item
+    }
+
+    try {
+     await Share.open(options).then((res)=>{
+       console.log("dfdg",res)
+
+     })
+    } catch (error) {
+      console.log("error")
+    }
+  };
 
 
   const renderItem = ({item,index})=>{
@@ -114,7 +129,7 @@ const InnerSwiper = props => {
       </View>
     )
     }
-    <HomeComponent item={item} index={index} Tap={tap} LikePress={()=>doubleTap(item.challenge_id)} likeCount={item.likes_count} />
+    <HomeComponent item={item} index={index} Tap={tap} LikePress={()=>doubleTap(item.challenge_id)} likeCount={item.likes_count} onShare={()=>onShare(item.original_url)}/>
     </DoubleTap>
     </>
     )

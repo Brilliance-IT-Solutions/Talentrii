@@ -31,6 +31,11 @@ const HomeComponent = (props) => {
         props.LikePress()    
     };
 
+    const pressShare = async () =>{
+        console.log("share")
+        props.onShare()
+    }
+
     const comments = () =>{
         navigation.navigate(RouterNames.COMMENTS,{
             challengeId: props.item.challenge_id,
@@ -56,7 +61,7 @@ const HomeComponent = (props) => {
                 </View>
                 <View style={styles.topIconRowSection}>
                     <View style={styles.topIcon}>
-                        {tap === true ? (
+                        {tap === true || props.item.isLiked === 'true'? (
                         <IconCont
                             imageSource={IMAGES.LIKED}
                             onIconPress={pressLike}
@@ -86,7 +91,7 @@ const HomeComponent = (props) => {
                     <View style={styles.topIcon}>
                         <IconCont
                             imageSource={IMAGES.SHARE}
-                            onIconPress={pressLike}
+                            onIconPress={pressShare}
                              width={35}
                             height={35}
                         />
