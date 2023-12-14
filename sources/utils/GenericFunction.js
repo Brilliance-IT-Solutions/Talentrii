@@ -16,10 +16,10 @@ export const setLogIn = async () => {
 ////////////////////.     LOGGED USER GENERIC FUNCTIONS         /////////////////
 
 export const setUser = async (data) => {
-    await AsyncStorage.setItem('user', data)
+  return  await AsyncStorage.setItem('user', data)
 }
 export const getUser = async () => {
-    await AsyncStorage.getItem('user')
+   return await AsyncStorage.getItem('user')
 }
 export const removeUser = async () => {
     await AsyncStorage.removeItem('user')

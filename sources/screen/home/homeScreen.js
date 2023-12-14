@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   View,
   FlatList
@@ -15,16 +15,30 @@ import {showError} from '../../component/common/toaster/toaster';
 import InnerSwiper from '../../component/home/InnerSwiper';
 import HomeComponent from '../../component/home/HomeComponent';
 import DoubleTap from "@memrearal/react-native-doubletap";
+import { getUser } from '../../utils/GenericFunction';
+
 const HomeScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
   const [count, setCount] = useState(0);
   const pressLike = () => setCount(prevCount => prevCount + 1);
   const [currentRenderVideoIndex, setCurrentRenderVideoIndex] = useState(0);
   const [users, setUsers] = useState([]);
+  const [userDetail, setUserDetail] = useState('');
 
   
+  const getuserDetail = async () =>{
+    const data = await getUser();
+    const userDetailID = data ? JSON.parse(data) : ''
+  setUserDetail(userDetailID.id)
+ }
+
+ useEffect(()=>{
+   getuserDetail()
+ },[])
+
   const navigatePage = index => {
     var link = RouterNames.HOME_SCREEN;
+    var params = {};
     switch (index) {
       case Enums.HomeIconRedirection.HOME:
         link = RouterNames.HOME_SCREEN;
@@ -34,11 +48,12 @@ const HomeScreen = ({navigation}) => {
         break;
       case Enums.HomeIconRedirection.PROFILE:
         link = RouterNames.PROFILE_SCREEN;
+        params = {userId : userDetail}
         break;
       default:
         break;
     }
-    navigation.navigate(link);
+    navigation.navigate(link,params);
   };
 
   async function fetchMyAPI(pagenumber) {

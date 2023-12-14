@@ -1,9 +1,11 @@
 import { Dimensions, StyleSheet } from "react-native";
 import colors from "../../assets/themes/colors";
 import { Constants } from "../../constants/constants";
+import { width } from "../../style/responsiveSize";
 
 const numColumns = Constants.PROFILE_PAGE_NUMBER_OF_COLUMNS;
-const size = Dimensions.get('window').width / numColumns;
+const size = Dimensions.get('window').width / 3.2;
+const sizeheight = Dimensions.get('window').width / 2;
 
 const styles = StyleSheet.create({
        
@@ -13,21 +15,30 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
     bioDataSection: {
-        flexDirection: 'row',
-        marginHorizontal: 40, marginVertical: 20, height: 130,
-        borderColor: colors.Green, borderWidth: 0.5, borderRadius: 26
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems:'center'
+        // marginHorizontal: 40, marginVertical: 20, height: 130,
+        // borderColor: colors.Green, borderWidth: 0.5, borderRadius: 26
     },
     bioDataImageView: {
-        flex: 0.5, justifyContent: 'center'
+        // flex: 0.5, 
+        // justifyContent: 'center'
     },
     bioDataImage: {
-        height: 100, left: 0, width: 100, marginLeft: '10%'
+        height: 70, 
+        // left: 0, 
+        width: 70,
+        //  marginLeft: '10%'
     },
     bioDataTextView: {
-        flex: 0.5, justifyContent: 'center'
+        // flex: 0.5, 
+        // justifyContent: 'center'
     },
     bioDataText: {
-        fontSize: 16, fontWeight: '700', letterSpacing: 1
+        fontSize: 16, fontWeight: '700', 
+        // letterSpacing: 1,
+        color:colors.Black
     },
     multiLineContainerSection: {
         justifyContent: 'center', flexDirection: 'row', height: 50, margin: 10
@@ -37,12 +48,17 @@ const styles = StyleSheet.create({
         borderColor: colors.Green, borderWidth: 0.5,
     },
     bottomHistorySection: {
-        flex: 1, paddingBottom: 10,
+        flex: 1, 
+        // flexDirection:'row',
+        // width:width,
+        // flexWrap:"wrap",
+        // width:300,
+        paddingBottom: 10,
     },
     bottomHistoryView: {
         width: size,
-        height: size,
-        padding: 8        
+        height: sizeheight,
+        // padding: 8        
     },
     bottomHistoryImageView: {
         flex: 1,

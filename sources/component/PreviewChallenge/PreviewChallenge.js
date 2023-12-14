@@ -101,6 +101,7 @@ const PreviewChallenge = () => {
               from_date: data?.from_date,
               to_date: data?.to_date,
               time: data?.time,
+              purpose:data?.purpose.toString()
               // privacy : data.privacy
             }
 

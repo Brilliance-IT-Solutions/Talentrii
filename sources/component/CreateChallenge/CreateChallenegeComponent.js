@@ -1,5 +1,5 @@
-import React, { useEffect,useContext } from 'react';
-import {StyleSheet, View,TextInput,Text} from 'react-native';
+import React, {useEffect, useContext} from 'react';
+import {StyleSheet, View, TextInput, Text} from 'react-native';
 import colors from '../../assets/themes/colors';
 import InputContainer from '../common/TextInput/textInput';
 import CustomHeader from '../customHeader/customHeader';
@@ -16,17 +16,17 @@ import ButtonComponent from '../common/Buttons/buttonComponent';
 import moment from 'moment';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {RouterNames} from '../../constants/routeNames';
-import {Dimensions} from 'react-native';
-import { ToastMessage } from '../../constants/toasterConstants';
-import { width } from '../../style/responsiveSize';
-import {showSuccess,showError} from '../common/toaster/toaster';
+import {ToastMessage} from '../../constants/toasterConstants';
+import {width} from '../../style/responsiveSize';
+import {showError} from '../common/toaster/toaster';
 import style from '../../style/styles';
-import { ToggleContext } from '../../context/privacy/context';
-import { APIs } from '../../constants/api';
+import {ToggleContext} from '../../context/privacy/context';
+import {APIs} from '../../constants/api';
 import axiosManager from '../../helpers/axiosHandler';
+import CustomDropdown from '../common/dropdown/CustomDropdown';
 
 const CreateChallenegeComponent = ({props}) => {
-  const { isToggled } = useContext(ToggleContext);
+  const {isToggled} = useContext(ToggleContext);
   const navigation = useNavigation();
 
   // const [form, setForm] = React.useState({})
@@ -58,35 +58,49 @@ const CreateChallenegeComponent = ({props}) => {
   const [startdate, setStartDateValue] = useState(new Date());
   const [enddate, setEndDateValue] = useState(startdate);
   const [time, setTimeValue] = useState(new Date());
-  const [privacy , setIsPrivate] = useState(false)
-  const [privacyVal, setIPrivacyVal] = useState(false)
+  const [privacy, setIsPrivate] = useState(false);
+  const [privacyVal, setIPrivacyVal] = useState(false);
+  const [dropdown, setDropdown] = useState('');
+  const [dropdownData, setDropdownData] = useState([]);
 
   useFocusEffect(
-    React.useCallback(()=>{
-      callApi()
-  },[]),
-  )
+    React.useCallback(() => {
+      callApi();
+    }, []),
+  );
 
-  const callApi = async () =>{
-    const url = APIs.BASE_URL + '/privacy'
-    let param = {
+  const callApi = async () => {
+    const url = APIs.BASE_URL + '/privacy';
+    let param = {};
+    try {
+      await axiosManager.get(url, param).then(res => {
+        const privacy = res.data[0].privacy;
+        setIPrivacyVal(privacy);
+        if (privacy === '1') {
+          setIsPrivate(true);
+        } else {
+          setIsPrivate(false);
+        }
+      });
+    } catch (error) {
+      console.log(error.response.data);
     }
-    try{
-    await axiosManager.get(url, param).then((res)=>{
-      const privacy = res.data[0].privacy
-      setIPrivacyVal(privacy)
-      if(privacy === "1"){
-        setIsPrivate(true)
-      }else{
-        setIsPrivate(false)
-      }
-    })
-  }
-  catch(error){
-    console.log(error.response.data)
-  }
-  }
+  };
 
+  useEffect(() => {
+    const fetchapi = async () => {
+      const url = APIs.BASE_URL + '/getPurposeChallenge';
+      try {
+        const response = await axiosManager.post(url);
+        if (response.data) {
+          setDropdownData(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchapi();
+  }, []);
 
   const updateParentVariable = value => {
     setStartDate(value);
@@ -128,9 +142,9 @@ const CreateChallenegeComponent = ({props}) => {
     }
   };
 
-  const privacyChallenge = () =>{
-    navigation.navigate(RouterNames.PRIVACY)
-  }
+  const privacyChallenge = () => {
+    navigation.navigate(RouterNames.PRIVACY);
+  };
 
   const previewChallenge = async () => {
     const param = {
@@ -138,40 +152,44 @@ const CreateChallenegeComponent = ({props}) => {
       description: description,
       url: images,
       latitude: location ? location : '',
-      longitude: location? location : '',
+      longitude: location ? location : '',
       from_date: moment(startdate).utc().format('YYYY-MM-DD'),
       to_date: moment(enddate).utc().format('YYYY-MM-DD'),
       time: moment(time).format('HH:mm:ss'),
-      // privacy:privacyVal
-   
+      purpose: dropdown,
     };
 
     if (param.title !== '') {
-       if(param.title.length >= 4){
-      if (param.description !== '') {
-        if(param.description.length >= 5){
-        if (param.url.length > 0) {
-          navigation.navigate(RouterNames.PREVIEW_CHALLENGE_SCREEN, {
-            data: JSON.stringify(param),
-          });
+      if (param.title.length >= 4) {
+        if (param.description !== '') {
+          if (param.description.length >= 5) {
+            if (param.purpose !== '') {
+              if (param.url.length > 0) {
+                navigation.navigate(RouterNames.PREVIEW_CHALLENGE_SCREEN, {
+                  data: JSON.stringify(param),
+                });
+              } else {
+                showError(ToastMessage.REQUIRED_MEDIA);
+                return;
+              }
+            } else {
+              showError("purpose cann't be empty");
+              return;
+            }
+          } else {
+            showError('Description should of 5 characters');
+            return;
+          }
         } else {
-          showError(ToastMessage.REQUIRED_MEDIA)
+          showError(ToastMessage.REQUIRED_DESCRIPTION);
           return;
         }
-      }else{
-        showError('Description should of 5 characters')
-        return
-      }
-      }else {
-        showError(ToastMessage.REQUIRED_DESCRIPTION)
+      } else {
+        showError('Title should of 4 characters');
         return;
       }
-    }else{
-      showError('Title should of 4 characters')
-      return
-    }
     } else {
-      showError(ToastMessage.REQUIRED_TITLE)
+      showError(ToastMessage.REQUIRED_TITLE);
       return;
     }
   };
@@ -197,21 +215,30 @@ const CreateChallenegeComponent = ({props}) => {
             noLines={4}
             onChangeText={description => addDescription(description)}
           />
-          <View style={{position:'relative'}}>
-             <TextInput 
-             inputMode='none'
-            placeholder="Challenge Privacy"
-            style={[style.textBoxes, style.leftStandardPadding, {height:50}
-             ]}
-           onPressOut={privacyChallenge}
-           
-          />
-          <View  style={{position:'absolute', right:40, marginVertical:25}}>
-            <Text>{privacy === false ? 'public' : 'private'}</Text>
-          </View>
+
+          <View style={{position: 'relative'}}>
+            <TextInput
+              inputMode="none"
+              placeholder="Challenge Privacy"
+              style={[style.textBoxes, style.leftStandardPadding, {height: 50}]}
+              onPressOut={privacyChallenge}
+            />
+            <View style={{position: 'absolute', right: 40, marginVertical: 25}}>
+              <Text>{privacy === false ? 'public' : 'private'}</Text>
+            </View>
           </View>
 
-{/* ///////////////  START DATE ////////////////////////////////// */}
+          <View>
+            <CustomDropdown
+              placeholder={'Purpose'}
+              dropdownData={dropdownData}
+              onChange={value => {
+                setDropdown(value);
+              }}
+            />
+          </View>
+
+          {/* ///////////////  START DATE ////////////////////////////////// */}
           {addStartDate && props.data === 'upcoming' && (
             <View>
               <EndDate
@@ -232,14 +259,14 @@ const CreateChallenegeComponent = ({props}) => {
                 title={staticConstant.Date.startDate}
                 updateParent={updateParentVariable}
                 onChange={date => {
-                  setminimumDate(date)
+                  setminimumDate(date);
                   setStartDateValue(date);
                 }}
               />
             </View>
           )}
-          
-{/* ///////////////  END DATE ////////////////////////////////// */}
+
+          {/* ///////////////  END DATE ////////////////////////////////// */}
 
           {addStartDate && props.data === 'upcoming' && (
             <View>
@@ -293,12 +320,12 @@ const CreateChallenegeComponent = ({props}) => {
           </View>
         </View>
       </RootContainer>
-        <View style={{position:'absolute',bottom:0,right:0,padding:15}}>
-      <PopupComponent
-        title={staticConstant.Popup.icon}
-        addComponent={AddComponents}
-      />
-        </View>
+      <View style={{position: 'absolute', bottom: 0, right: 0, padding: 15}}>
+        <PopupComponent
+          title={staticConstant.Popup.icon}
+          addComponent={AddComponents}
+        />
+      </View>
     </View>
   );
 };

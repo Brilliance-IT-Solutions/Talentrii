@@ -99,7 +99,7 @@ const Comments = () => {
                 paddingHorizontal: 12,
                 paddingVertical: 8,
               }}>
-              submit
+              Submit
             </Text>
           </TouchableOpacity>
         </View>
@@ -114,7 +114,7 @@ const Comments = () => {
                 paddingHorizontal: 12,
                 paddingVertical: 8,
               }}>
-              cancel
+              Cancel
             </Text>
           </TouchableOpacity>
         </View>
@@ -142,7 +142,7 @@ const Comments = () => {
                   style={{borderRadius: 50}}></Image>
               </View>
               <View style={{paddingHorizontal: 10}}>
-                <Text>{item.emailId}</Text>
+                <Text style={{fontWeight:700,color:colors.Black}}>{item.emailId}</Text>
                 <Text>{item.comments}</Text>
               </View>
             </View>

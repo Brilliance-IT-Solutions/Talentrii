@@ -45,6 +45,9 @@ export const staticConstant = {
   Profile: {
     titleHeader: 'Profile',
   },
+  DetailProfile:{
+    titleHeader: 'Detail Profile Screen',
+  },
   UpdateProfile: {
     titleHeader: 'Update Profile',
     btnTitle: 'Update Profile',

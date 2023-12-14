@@ -37,6 +37,7 @@ const CustomFooter = props => {
         imageSource={IMAGES.FLAG}
         width={bottomIconSize}
         height={bottomIconSize}
+        onIconPress={() => props.didTapped(Enums.HomeIconRedirection.PROFILE)}
       />
 
       {/* <IconCont

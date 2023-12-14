@@ -1,41 +1,28 @@
-import React, {useRef, useState, useEffect} from 'react';
-import SwiperFlatList from 'react-native-swiper-flatlist';
+import React, {useRef} from 'react';
 import {View, Text} from 'react-native';
-import Video from 'react-native-video';
-import {getHeight} from '../../utils/GenericFunction';
-import HomeComponent from './HomeComponent';
-import styles from '../../screen/home/styles';
+import {staticConstant} from '../../constants/staticData/staticConstant';
+import TittleHeader from '../customHeader/tittleHeader';
+import CustomHeader from '../customHeader/customHeader';
 import colors from '../../assets/themes/colors';
-import {width} from '../../style/responsiveSize';
-import {AuthContext} from '../../context/context';
+import {useRoute} from '@react-navigation/native';
+import Video from 'react-native-video';
 import FastImage from 'react-native-fast-image';
 import DoubleTap from '@memrearal/react-native-doubletap';
 import axiosManager from '../../helpers/axiosHandler';
 import {APIs} from '../../constants/api';
 import Share from 'react-native-share';
-import {getUser} from '../../utils/GenericFunction';
+import {width} from '../../style/responsiveSize';
+import SwiperFlatList from 'react-native-swiper-flatlist';
 
-const InnerSwiper = props => {
-  const [tap, setTap] = useState(false);
-  const {signOut} = React.useContext(AuthContext);
-  const [visibleVideos, setVisibleVideos] = useState(0);
-  const [userDetail, setUserDetail] = useState('');
+const DetailProfileScreen = () => {
+  const route = useRoute();
+  const userProfileDetail = route.params.detail;
   const videoRef = useRef(null);
 
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 95,
     waitForInteraction: true,
   };
-
-  const getuserDetail = async () => {
-    const data = await getUser();
-    const userDetailID = data ? JSON.parse(data) : '';
-    setUserDetail(userDetailID.id);
-  };
-
-  useEffect(() => {
-    getuserDetail();
-  }, []);
 
   const onBuffer = e => {
     // setIsLoading(false)
@@ -56,7 +43,7 @@ const InnerSwiper = props => {
 
   // Handle visibility changes of videos
   const onViewableItemsChanged = ({index}) => {
-    setVisibleVideos(index);
+    //   setVisibleVideos(index);
   };
 
   const doubleTap = async challengeId => {
@@ -102,9 +89,15 @@ const InnerSwiper = props => {
           onDoubleTap={() => doubleTap(item.challenge_id)}
           delay={0}>
           {item.type === 'video/mp4' ? (
-            <View>
+            <View
+              style={{
+                width: width,
+                height: 300,
+                backgroundColor: colors.Black,
+              }}>
+              {/* <Text>{item.original_url}</Text> */}
               <Video
-                source={{uri: item.original_url, type: 'mp4', cache: true}}
+                source={{uri: item.original_url}}
                 ref={videoRef}
                 onLoadStart={onLoadStart}
                 onBuffer={onBuffer}
@@ -112,8 +105,8 @@ const InnerSwiper = props => {
                 onLoad={onLoad}
                 preload={'metadata'}
                 repeat
-                paused={visibleVideos === index ? false : true}
-                style={styles.bgvideo}
+                // paused={visibleVideos === index ? false:true}
+                style={{width: '100%', height: '100%'}}
                 resizeMode="cover"
                 muted
                 autoplay
@@ -122,11 +115,16 @@ const InnerSwiper = props => {
               />
             </View>
           ) : (
-            <View>
+            <View
+              style={{
+                width: width,
+                height: 300,
+                backgroundColor: colors.Black,
+              }}>
               <FastImage
                 style={{
-                  width: width,
-                  height: getHeight(),
+                  width: '100%',
+                  height: '100%',
                   flex: 1,
                   backgroundColor: colors.Black,
                 }}
@@ -138,42 +136,46 @@ const InnerSwiper = props => {
               />
             </View>
           )}
-          <HomeComponent
-            item={item}
-            index={index}
-            Tap={tap}
-            LikePress={() => doubleTap(item.challenge_id)}
-            likeCount={item.likes_count}
-            onShare={() => onShare(item.original_url)}
-            LoggedInUser={userDetail}
-          />
         </DoubleTap>
       </>
     );
   };
 
   return (
-    <>
-      <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: colors.White}}>
+      <CustomHeader showImage showBack />
+      <TittleHeader title={staticConstant.DetailProfile.titleHeader} />
+      <View>
         <SwiperFlatList
-          data={props.innerdata.inner || []}
+          data={userProfileDetail.inner}
+          pagingEnabled={true}
           horizontal
-          showPagination={props.innerdata.inner.length > 1 ? true : false}
+          showPagination={userProfileDetail.inner.length > 1 ? true : false}
           paginationActiveColor={colors.Green}
           viewabilityConfig={viewabilityConfig}
           onChangeIndex={onViewableItemsChanged}
           removeClippedSubviews={true}
           initialScrollIndex={0}
           maxToRenderPerBatch={1}
-          paginationStyle={{
-            bottom: 60,
-          }}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+          keyExtractor={(item, index) => index.toString()}></SwiperFlatList>
       </View>
-    </>
+      <View>
+        {userProfileDetail.inner.map((item, index) => {
+          return (
+            <>
+              {index === 0 ? (
+                <View key={index}>
+                  <Text>Likes:{item.likes_count}</Text>
+                  <Text>comment:{item.comment_count}</Text>
+                </View>
+              ) : null}
+            </>
+          );
+        })}
+      </View>
+    </View>
   );
 };
 
-export default InnerSwiper;
+export default DetailProfileScreen;
