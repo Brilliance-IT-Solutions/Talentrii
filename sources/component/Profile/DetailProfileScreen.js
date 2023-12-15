@@ -163,16 +163,17 @@ const DetailProfileScreen = () => {
       <View>
         {userProfileDetail.inner.map((item, index) => {
           return (
-            <>
+            <View key={item.id}>
               {index === 0 ? (
-                <View key={index}>
+                <View>
                   <Text>Likes:{item.likes_count}</Text>
                   <Text>comment:{item.comment_count}</Text>
                 </View>
               ) : null}
-            </>
-          );
-        })}
+            </View>
+          )
+        }
+        )}
       </View>
     </View>
   );

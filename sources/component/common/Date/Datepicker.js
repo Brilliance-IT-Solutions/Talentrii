@@ -2,7 +2,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React from 'react';
 import { Controller } from 'react-hook-form';
-import {TouchableOpacity, View ,Image,TextInput} from 'react-native';
+import {TouchableOpacity, View ,Image,TextInput,Text} from 'react-native';
 import { IMAGES } from '../../../constants/images';
 import styles from '../../../style/styles';
 import colors from '../../../assets/themes/colors';
@@ -23,6 +23,17 @@ const DatePickerComponent = ({
   // selectedDate = new Date(),
   isVisible = false,
 }) => {
+
+  const formatDate = (utcString, format = 'dd/mm/yyyy') => {
+    if (!utcString) {
+        return ''
+    }
+    var local = new Date(utcString);
+    return local.toJSON().slice(0, 10);
+  };
+
+
+
   return (
     <Controller
       control={control}
@@ -39,9 +50,9 @@ const DatePickerComponent = ({
             marginHorizontal:25, 
             marginVertical: 10}} >
           
-            <Image source={IMAGES.CALENDER_ICON} style={{marginVertical:6}}/> 
-      <View style={{flex:6,marginLeft:15.5,marginRight:9.5}}>
-      <TextInput  inputMode='none' placeholder='Choose Date' value={value?.toLocaleDateString()} onPressOut={() => onPress(!isVisible)}  style={{ borderWidth: 0.8,
+      <Image source={IMAGES.CALENDER_ICON} style={{marginVertical:6,marginLeft:6}}/> 
+      <View style={{flex:6,marginLeft:12,marginRight:5}}>
+      <TextInput  inputMode='none' placeholder='Choose Date' value={formatDate(value)} onPressOut={() => onPress(!isVisible)}  style={{ borderWidth: 0.8,
       borderColor: colors.lightGrey,
       borderRadius:10,
       height:50,
@@ -51,10 +62,10 @@ const DatePickerComponent = ({
            
             { isVisible && (
               <DateTimePicker
-                value={new Date(value)}
+              testID='date'
+              value={new Date(value)}
                 mode={mode}
                 is24Hour={false}
-              
                 onChange={d => {
                   if (d.type === 'set') {
                     onPress(false);

@@ -123,7 +123,7 @@ const Comments = () => {
         comments?.map((item,index) => {
           return (
             <View
-              key={index}
+              key={item.id}
               style={{
                 flexDirection: 'row',
                 marginHorizontal: 10,

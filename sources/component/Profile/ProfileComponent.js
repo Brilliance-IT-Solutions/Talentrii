@@ -90,14 +90,11 @@ const ProfileComponent = ({userId}) => {
       <RootContainer>
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {userdetail?.media &&
-            userdetail?.media?.map((items, index) => {
-              return (
+            userdetail?.media?.map((items, i) =>  (
                 <View style={{padding: 3}} key={items.id}>
                   {items.inner &&
-                    items.inner.map((item, index) => {
-                      return (
-                        <>
-                          <TouchableOpacity onPress={() => navigateTo(items)}>
+                    items.inner.map((item, index) => (
+                          <TouchableOpacity onPress={() => navigateTo(items)} key={item.id}>
                             {index === 0 ? (
                               item.type === 'video/mp4' ? (
                                 <View
@@ -105,7 +102,7 @@ const ProfileComponent = ({userId}) => {
                                     styles.bottomHistoryView,
                                     {backgroundColor: colors.lightGrey},
                                   ]}
-                                  key={item.id}>
+                                 >
                                   <Video
                                     source={{uri: item.original_url}}
                                     ref={videoRef}
@@ -132,7 +129,7 @@ const ProfileComponent = ({userId}) => {
                                     styles.bottomHistoryView,
                                     {backgroundColor: colors.lightGrey},
                                   ]}
-                                  key={index}>
+                                  >
                                   <Image
                                     source={{
                                       uri:
@@ -159,12 +156,11 @@ const ProfileComponent = ({userId}) => {
                               )
                             ) : null}
                           </TouchableOpacity>
-                        </>
-                      );
-                    })}
+                      )
+                    )}
                 </View>
-              );
-            })}
+              )
+            )}
         </View>
       </RootContainer>
     </View>

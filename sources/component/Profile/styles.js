@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         // left: 0, 
         width: 70,
         //  marginLeft: '10%'
+        borderRadius:50
     },
     bioDataTextView: {
         // flex: 0.5, 
@@ -66,7 +67,9 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     bottomHistoryImage: {
-        height: '100%', width: '100%'
+        height: '100%', width: '100%',
+       
+
     },
     bottomHistoryTextContainer: {
         position: 'absolute',
@@ -80,12 +83,15 @@ const styles = StyleSheet.create({
     imageViewContainer: {
         marginTop: 40,
         height: 100,    
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
     },
     imgaeView: {
-        flex: 1, height: 120
+        flex: 1, 
+        height: 100,
+        width:100,
+        borderRadius:50
     }, 
 
 

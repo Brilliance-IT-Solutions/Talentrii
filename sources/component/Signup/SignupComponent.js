@@ -147,7 +147,6 @@ const Signup = () => {
         />
         
       </View>
-      {/* <Reels videos={videos} /> */}
       </RootContainer>
     </View>
     </View>
