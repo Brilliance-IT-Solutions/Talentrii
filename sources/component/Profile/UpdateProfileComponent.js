@@ -83,10 +83,11 @@ const UpdateProfileComponent = () => {
 
       
       const updateProfile = async (data) => {
+        let profileUrl = {}
         if (data) {
             const formData = new FormData();
             selectedImage.forEach((file, index) => {
-               formData.append('files', file);
+               formData.append('files', file ? file : []);
              });
              const url = APIs.BASE_URL + APIs.UPLOAD_IMAGE;
      
@@ -102,29 +103,28 @@ const UpdateProfileComponent = () => {
      
                  console.log('====================================');
                  console.log('Success!', res.data.response.urls);
-                //  const profileUrl = res.data.response.urls.reduce((result, currentObject) => ({
-                //     ...result,
-                //     ...currentObject
-                //   }), {});
-        const profileUrl = { ...res.data.response.urls[0]};
-        const url = APIs.BASE_URL + '/updateProfile'
+         profileUrl = { ...res.data.response.urls[0]};
+        }).catch(error=>{
+          console.log(error)
+        })
+        const url1 = APIs.BASE_URL + '/updateProfile'
         const DOB = data.DOB
         let param = {
             firstName : data.firstName,
             lastName : data.lastName,
             userName : data.userName,
             emailId : data.emailId,
-            profileImage : profileUrl.originalurl,
+            profileImage : profileUrl.originalurl ? profileUrl.originalurl : 'undefined',
             contact : data.contact,
             DOB : moment(DOB).utc().format('YYYY-MM-DD'),
         }
-           await axiosManager.patch(url, param).then((response)=>{
+           await axiosManager.patch(url1, param).then((response)=>{
                showSuccess(response.data.message)
 
            }).catch(error =>
                showError(error.response.data.response.message)
            )
-           })
+          
       }
     }
 

@@ -1,5 +1,5 @@
-import React, {useRef} from 'react';
-import {View, Text} from 'react-native';
+import React, {useRef,useEffect,useState} from 'react';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {staticConstant} from '../../constants/staticData/staticConstant';
 import TittleHeader from '../customHeader/tittleHeader';
 import CustomHeader from '../customHeader/customHeader';
@@ -13,10 +13,21 @@ import {APIs} from '../../constants/api';
 import Share from 'react-native-share';
 import {width} from '../../style/responsiveSize';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import Comments from '../home/Comments';
+import RootContainer from '../rootContainer/rootContainer';
+import { IMAGES } from '../../constants/images';
+import IconCont from '../common/IconCount/iconCount';
 
 const DetailProfileScreen = () => {
   const route = useRoute();
-  const userProfileDetail = route.params.detail;
+  const userName = route.params.userName;
+  const userProfile = route.params.userProfile;
+  const challengeId = route.params.challengeId;
+
+  const [comments , setComments] = useState([])
+  const [showComments , setShowComments] = useState(false)
+  const [userProfileDetail , setuserProfileDetail] = useState([])
+  const [tap, setTap] = useState(false);
   const videoRef = useRef(null);
 
   const viewabilityConfig = {
@@ -64,6 +75,40 @@ const DetailProfileScreen = () => {
       console.log(error.response.data);
     }
   };
+
+  const pressLike = async (challengeId) =>{
+    doubleTap(challengeId)
+  }
+
+
+    async function getComments(challengeId) {
+      setShowComments(true)
+      try {
+        const commentsData = await axiosManager.post(
+          APIs.BASE_URL + '/getcommentChallenge',
+          {challengeId: challengeId},
+        );
+        setComments(commentsData.data);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    }
+
+  useEffect(()=>{
+    async function getChallenges() {
+      try {
+        const challenges = await axiosManager.post(
+          APIs.BASE_URL + '/getChallengeById',
+          {challengeId: challengeId},
+        );
+         setuserProfileDetail(challenges.data)
+
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    }
+    getChallenges()
+  },[])
 
   const onShare = async item => {
     const options = {
@@ -145,12 +190,20 @@ const DetailProfileScreen = () => {
     <View style={{flex: 1, backgroundColor: colors.White}}>
       <CustomHeader showImage showBack />
       <TittleHeader title={staticConstant.DetailProfile.titleHeader} />
+      <RootContainer>
+      <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:"center"}}>
+      <View style={{padding:5}}>
+        <Image source={{uri: userProfile}} height={40} width={40} style={{borderRadius:50}}></Image></View>
+         <View style={{padding:5}}>
+        <Text style={{color:colors.Black}}>{userName}</Text>
+        </View>
+      </View>
       <View>
         <SwiperFlatList
-          data={userProfileDetail.inner}
+          data={userProfileDetail[0]?.inner}
           pagingEnabled={true}
           horizontal
-          showPagination={userProfileDetail.inner.length > 1 ? true : false}
+          showPagination={userProfileDetail[0]?.inner.length > 1 ? true : false}
           paginationActiveColor={colors.Green}
           viewabilityConfig={viewabilityConfig}
           onChangeIndex={onViewableItemsChanged}
@@ -161,13 +214,54 @@ const DetailProfileScreen = () => {
           keyExtractor={(item, index) => index.toString()}></SwiperFlatList>
       </View>
       <View>
-        {userProfileDetail.inner.map((item, index) => {
+        {userProfileDetail[0]?.inner?.map((item, index) => {
           return (
             <View key={item.id}>
               {index === 0 ? (
                 <View>
-                  <Text>Likes:{item.likes_count}</Text>
-                  <Text>comment:{item.comment_count}</Text>
+                  <View style={{flexDirection:'row'}}>
+                  {tap === true || item.isLiked === 'true' ?  (
+                <IconCont
+                imageSource={IMAGES.LIKED}
+                onIconPress={()=>pressLike(item.challenge_id)}
+                width={20}
+                height={20}
+                marginhorizontal={5}
+                marginvertical={5}            
+            />):(
+              <IconCont
+                imageSource={IMAGES.LIKE}
+                onIconPress={()=>pressLike(item.challenge_id)}
+                width={20}
+                height={20}
+                marginhorizontal={5}
+                marginvertical={5}
+            />
+            )
+           }                
+                   <IconCont
+                imageSource={IMAGES.COMMENT}
+                // onIconPress={()=>pressLike(item.challenge_id)}
+                width={20}
+                height={20}
+                marginhorizontal={5}
+                marginvertical={5}
+            />     
+                <IconCont
+                imageSource={IMAGES.SHARE}
+                // onIconPress={pressLike}
+                width={20}
+                height={20}
+                marginhorizontal={5}
+                marginvertical={5}
+            />              
+                
+                  </View>     
+                  <Text>Likes {item.likes_count}</Text>   
+                  <Text>comments {item.comment_count}</Text>   
+                  <TouchableOpacity onPress={()=>getComments(item.challenge_id)}>
+                  <Text>View all comments</Text>
+                  </TouchableOpacity>
                 </View>
               ) : null}
             </View>
@@ -175,6 +269,43 @@ const DetailProfileScreen = () => {
         }
         )}
       </View>
+      {showComments && 
+      (comments.length > 0  ?(
+        comments?.map((item,index) => {
+          return (
+            <View
+              key={item.id}
+              style={{
+                flexDirection: 'row',
+                marginhorizontal: 10,
+                marginvertical: 5,
+              }}>
+              <View style={{paddingHorizontal: 10, borderRadius: 50}}>
+                <Image
+                  source={{
+                    uri:
+                     item.profileImage !== 'undefined'
+                        ? item.profileImage
+                        : 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png',
+                  }}
+                  height={40}
+                  width={40}
+                  style={{borderRadius: 50}}></Image>
+              </View>
+              <View style={{paddingHorizontal: 10}}>
+                <Text style={{fontWeight:700,color:colors.Black}}>{item.emailId}</Text>
+                <Text>{item.comments}</Text>
+              </View>
+            </View>
+          );
+        })
+      ): (
+        <Text style={{textAlign: 'center'}}>No Comments yet</Text>
+      ))
+      }
+      <View>
+      </View>
+      </RootContainer>
     </View>
   );
 };

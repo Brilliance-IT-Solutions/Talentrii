@@ -19,8 +19,8 @@ import Video from 'react-native-video';
 import {getHeight} from '../../utils/GenericFunction';
 import {Dimensions} from 'react-native';
 import {getUser} from '../../utils/GenericFunction';
+import {useFocusEffect} from '@react-navigation/native';
 const {width} = Dimensions.get('window');
-
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import RootContainer from '../rootContainer/rootContainer';
 
@@ -40,7 +40,9 @@ const ProfileComponent = ({userId}) => {
 
   const navigateTo = item => {
     navigation.navigate(RouterNames.DETAIL_PROFILE_SCREEN, {
-      detail: item,
+      userName : userdetail.userName,
+      userProfile : userdetail.profileImage,
+      challengeId : item
     });
   };
 
@@ -59,7 +61,6 @@ const ProfileComponent = ({userId}) => {
     navigation.navigate(RouterNames.UPDATE_PROFILE_SCREEN);
   };
 
-  useEffect(() => {
     const fetchProfileApi = async () => {
       try {
         const response = await axiosManager.post(
@@ -72,8 +73,13 @@ const ProfileComponent = ({userId}) => {
         console.log(error);
       }
     };
-    fetchProfileApi();
-  }, []);
+   
+    // useFocusEffect to fetch data for page 1 when the route changes
+    useFocusEffect(
+      React.useCallback(() => {
+        fetchProfileApi();
+      }, [])
+    );
 
   const getuserDetail = async () => {
     const data = await getUser();
@@ -94,7 +100,7 @@ const ProfileComponent = ({userId}) => {
                 <View style={{padding: 3}} key={items.id}>
                   {items.inner &&
                     items.inner.map((item, index) => (
-                          <TouchableOpacity onPress={() => navigateTo(items)} key={item.id}>
+                          <TouchableOpacity onPress={() => navigateTo(item.challenge_id)} key={item.id}>
                             {index === 0 ? (
                               item.type === 'video/mp4' ? (
                                 <View
