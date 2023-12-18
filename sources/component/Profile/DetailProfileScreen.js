@@ -70,6 +70,7 @@ const DetailProfileScreen = () => {
       );
       if (response.data.message === 'Liked Success') {
         setTap(true);
+        getChallenges();
       }
     } catch (error) {
       console.log(error.response.data);
@@ -94,8 +95,7 @@ const DetailProfileScreen = () => {
       }
     }
 
-  useEffect(()=>{
-    async function getChallenges() {
+  async function getChallenges() {
       try {
         const challenges = await axiosManager.post(
           APIs.BASE_URL + '/getChallengeById',
@@ -107,8 +107,10 @@ const DetailProfileScreen = () => {
         console.log(error.response.data);
       }
     }
+    
+  useEffect(()=>{
     getChallenges()
-  },[])
+  },[route.params.challengeId])
 
   const onShare = async item => {
     const options = {
