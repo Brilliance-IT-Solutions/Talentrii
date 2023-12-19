@@ -38,15 +38,25 @@ export const staticConstant = {
       Followers: 'static Followers',
       Title: 'Static Sub Title',
     },
+    challengeFriends:'Challenge Friends',
+    acceptedFriends:'Accept/Accepted Friends'
   },
   Login: {
     btnTitle: 'Login',
   },
   Profile: {
     titleHeader: 'Profile',
+    routeTabs:[
+      {key: 'first', title: 'My Challenges'},
+      {key: 'second', title: 'Engaged Challenges'},
+    ]
   },
   DetailProfile:{
     titleHeader: 'Detail Profile Screen',
+    Likes:"Likes",
+    Comments:"comments",
+    ViewAllComments:"View All comments"
+
   },
   UpdateProfile: {
     titleHeader: 'Update Profile',
@@ -70,6 +80,10 @@ export const staticConstant = {
   privateChallenge : 'Private Challenge will not appear on home screen which can not  be accessible to anyone by toggle the switch your account will be private',
   publicTitle :'Public',
   privateTitle :'Private',
+
+  comments:{
+    NO_COMMENTS:'No Comments yet'
+  }
 
 };
 

@@ -38,14 +38,12 @@ const InnerSwiper = props => {
   }, []);
 
   const onBuffer = e => {
-    // setIsLoading(false)
     console.log('buffering....');
   };
   const onError = e => {
     // console.log("error released....", e)
   };
   const onLoad = e => {
-    // console.log("play")
     // console.log("error loader....", e)
     /* set loader to true*/
   };
@@ -60,14 +58,13 @@ const InnerSwiper = props => {
   };
 
   const doubleTap = async challengeId => {
-    // setTap(true)
     let param = {
       challengeId: challengeId,
       status: true,
     };
     try {
       const response = await axiosManager.post(
-        APIs.BASE_URL + '/likechallenge',
+        APIs.BASE_URL + APIs.LIKE_CHALLENGE,
         param,
       );
       if (response.data.message === 'Liked Success') {
@@ -85,7 +82,6 @@ const InnerSwiper = props => {
 
     try {
       await Share.open(options).then(res => {
-        console.log('dfdg', res);
       });
     } catch (error) {
       console.log('error');

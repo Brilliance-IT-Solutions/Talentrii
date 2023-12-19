@@ -27,12 +27,10 @@ const HomeComponent = props => {
   }, [props.item.likes_count]);
 
   const pressLike = async () => {
-    console.log('clicked');
     props.LikePress();
   };
 
   const pressShare = async () => {
-    console.log('share');
     props.onShare();
   };
 
@@ -121,7 +119,7 @@ const HomeComponent = props => {
                   uri:
                     props.item.profileImage !== 'undefined'
                       ? props.item.profileImage
-                      : 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png',
+                      : IMAGES.USER_DEFAULT_ICON,
                 }}
                 // source={{ uri: props.payload.profileImage }}
                 resizeMode="cover"
@@ -153,7 +151,7 @@ const HomeComponent = props => {
                     fontSize: 12,
                     color: colors.White,
                   }}>
-                  Challenge Friends
+                 {staticConstant.Home.challengeFriends}
                 </Text>
               ) : (
                 <Text
@@ -162,7 +160,7 @@ const HomeComponent = props => {
                     fontSize: 12,
                     color: colors.White,
                   }}>
-                  Accept/Accepted Friends
+                  {staticConstant.Home.acceptedFriends}
                 </Text>
               )}
             </View>

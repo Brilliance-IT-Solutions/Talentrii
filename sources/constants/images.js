@@ -19,6 +19,7 @@ export const IMAGES = {
     DELETE_ICON: require('../assets/icons/delete.png'),
     LOCATION_ICON: require('../assets/icons/location.png'),
     PLAY_ICON: require('../assets/icons/Play.png'),
-    PLAY_BUTTON_ICON: require('../assets/icons/playbutton.png')
+    PLAY_BUTTON_ICON: require('../assets/icons/playbutton.png'),
+    USER_DEFAULT_ICON:'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png'
 
 }

@@ -5,5 +5,12 @@ export const APIs = {
     DASHBOARD_LINK:'/getDashboardData',
     CREATE_CHALLENGE:'/createChallange',
     UPLOAD_IMAGE:'/upload',
-    CHALLENGE_PRIVACY:'/privacy'
+    CHALLENGE_PRIVACY:'/privacy',
+    LIKE_CHALLENGE:'/likechallenge',
+    GET_ALL_COMMENTS:'/getcommentChallenge',
+    COMMENT_CHALLENGE:'/commentChallenge',
+    GET_USERDETAIL_BY_USERID:'/getUserDetailById',
+    GET_ALL_CHALLENGE_BY_CHALLENGEID:'/getChallengeById',
+    UPDATE_PROFILE:'/updateProfile',
+    GET_PURPOSE_CHALLENGE:'/getPurposeChallenge',
 }

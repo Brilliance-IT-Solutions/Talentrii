@@ -23,6 +23,8 @@ import {useFocusEffect} from '@react-navigation/native';
 const {width} = Dimensions.get('window');
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import RootContainer from '../rootContainer/rootContainer';
+import { Enums } from '../../constants/Enum/enum';
+import { staticConstant } from '../../constants/staticData/staticConstant';
 
 const ProfileComponent = ({userId}) => {
   const videoRef = useRef(null);
@@ -33,10 +35,7 @@ const ProfileComponent = ({userId}) => {
   const layout = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: 'first', title: 'My Challenges'},
-    {key: 'second', title: 'Engaged Challenges'},
-  ]);
+  const [routes] = React.useState(staticConstant.Profile.routeTabs);
 
   const navigateTo = item => {
     navigation.navigate(RouterNames.DETAIL_PROFILE_SCREEN, {
@@ -47,7 +46,6 @@ const ProfileComponent = ({userId}) => {
   };
 
   const onBuffer = e => {
-    //    buffering: true
     // console.log("buffering....", e)
   };
   const onError = e => {
@@ -64,10 +62,9 @@ const ProfileComponent = ({userId}) => {
     const fetchProfileApi = async () => {
       try {
         const response = await axiosManager.post(
-          APIs.BASE_URL + '/getUserDetailById',
+          APIs.BASE_URL + APIs.GET_USERDETAIL_BY_USERID,
           {userId},
         );
-        console.log('test', response.data);
         setUserDetail(response.data);
       } catch (error) {
         console.log(error);
@@ -92,8 +89,8 @@ const ProfileComponent = ({userId}) => {
   }, []);
 
   const FirstRoute = () => (
-    <View style={{flex: 1}}>
       <RootContainer>
+    <View style={{flex: 1}}>
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {userdetail?.media &&
             userdetail?.media?.map((items, i) =>  (
@@ -102,7 +99,8 @@ const ProfileComponent = ({userId}) => {
                     items.inner.map((item, index) => (
                           <TouchableOpacity onPress={() => navigateTo(item.challenge_id)} key={item.id}>
                             {index === 0 ? (
-                              item.type === 'video/mp4' ? (
+                              <View>
+                              {item.type === 'video/mp4' ? (
                                 <View
                                   style={[
                                     styles.bottomHistoryView,
@@ -110,24 +108,18 @@ const ProfileComponent = ({userId}) => {
                                   ]}
                                  >
                                   <Video
+                                  poster={item.thumbnail_url}
+                                  posterResizeMode={'cover'}
                                     source={{uri: item.original_url}}
                                     ref={videoRef}
                                     onBuffer={onBuffer}
                                     onError={onError}
                                     style={styles.bottomHistoryImage}
                                     muted
+                                    paused={true}
                                     onLoadStart={onVideoLoadStart}
                                     onLoad={onLoad}
                                     resizeMode="cover"></Video>
-                                  <Text
-                                    style={{
-                                      position: 'absolute',
-                                      color: colors.White,
-                                      bottom: 0,
-                                      paddingHorizontal: 5,
-                                    }}>
-                                    {item.likes_count}
-                                  </Text>
                                 </View>
                               ) : (
                                 <View
@@ -139,16 +131,26 @@ const ProfileComponent = ({userId}) => {
                                   <Image
                                     source={{
                                       uri:
-                                        item.original_url !== 'undefined' &&
+                                        item.original_url !== 'undefined' ||
                                         item.original_url !== 'null'
                                           ? item.original_url
-                                          : 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png',
+                                          : IMAGES.USER_DEFAULT_ICON,
                                     }}
                                     style={[
                                       styles.bottomHistoryImage,
                                       {resizeMode: 'cover'},
                                     ]}
                                   />
+                                  {items.inner.length > 1 && 
+                                    <Image source={{uri:"https://cdn.iconscout.com/icon/premium/png-256-thumb/multi-post-1702546-1486961.png?f=webp"}}    style={{
+                                      position: 'absolute',
+                                      right: 0,
+                                      height:20,
+                                      width:20,
+                                      resizeMode:'contain',
+                                      paddingHorizontal: 5,
+                                    }}/>
+                                  }
                                   <Text
                                     style={{
                                       position: 'absolute',
@@ -160,6 +162,17 @@ const ProfileComponent = ({userId}) => {
                                   </Text>
                                 </View>
                               )
+
+                                }
+                              <Text style={{
+                                      position: 'absolute',
+                                      color: colors.White,
+                                      bottom: 0,
+                                      paddingHorizontal: 5,
+                                    }}>
+                                    {item.likes_count}
+                                  </Text>
+                            </View>
                             ) : null}
                           </TouchableOpacity>
                       )
@@ -168,8 +181,8 @@ const ProfileComponent = ({userId}) => {
               )
             )}
         </View>
-      </RootContainer>
     </View>
+      </RootContainer>
   );
 
   const SecondRoute = () => <View style={{flex: 1}} />;
@@ -219,7 +232,7 @@ const ProfileComponent = ({userId}) => {
                 userdetail.profileImage !== 'undefined' &&
                 userdetail.profileImage !== 'null'
                   ? userdetail.profileImage
-                  : 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png',
+                  : IMAGES.USER_DEFAULT_ICON,
             }}
             resizeMode="contain"
           />
@@ -241,7 +254,7 @@ const ProfileComponent = ({userId}) => {
                   textDecorationLine: 'underline',
                   fontSize: 10,
                 }}>
-                Edit
+                {Enums.AlertButtons.EDIT}
               </Text>
             </View>
           </TouchableOpacity>

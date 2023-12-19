@@ -125,9 +125,7 @@ const PreviewChallenge = () => {
       
           })
           .catch(error => {
-            // console.log(`The error we're getting from the backend--->${error.response.data.response.message}`),
             showError(error.response.data.response.message)
-
             setLoader(false);
           });
 

@@ -27,6 +27,7 @@ const DetailProfileScreen = () => {
   const [comments , setComments] = useState([])
   const [showComments , setShowComments] = useState(false)
   const [userProfileDetail , setuserProfileDetail] = useState([])
+  const [visibleVideos, setVisibleVideos] = useState(0);
   const [tap, setTap] = useState(false);
   const videoRef = useRef(null);
 
@@ -36,7 +37,6 @@ const DetailProfileScreen = () => {
   };
 
   const onBuffer = e => {
-    // setIsLoading(false)
     console.log('buffering....');
   };
   const onError = e => {
@@ -54,7 +54,7 @@ const DetailProfileScreen = () => {
 
   // Handle visibility changes of videos
   const onViewableItemsChanged = ({index}) => {
-    //   setVisibleVideos(index);
+      setVisibleVideos(index);
   };
 
   const doubleTap = async challengeId => {
@@ -65,7 +65,7 @@ const DetailProfileScreen = () => {
     };
     try {
       const response = await axiosManager.post(
-        APIs.BASE_URL + '/likechallenge',
+        APIs.BASE_URL + APIs.LIKE_CHALLENGE,
         param,
       );
       if (response.data.message === 'Liked Success') {
@@ -83,10 +83,10 @@ const DetailProfileScreen = () => {
 
 
     async function getComments(challengeId) {
-      setShowComments(true)
+      setShowComments((prev)=> !prev)
       try {
         const commentsData = await axiosManager.post(
-          APIs.BASE_URL + '/getcommentChallenge',
+          APIs.BASE_URL + APIs.GET_ALL_COMMENTS,
           {challengeId: challengeId},
         );
         setComments(commentsData.data);
@@ -98,7 +98,7 @@ const DetailProfileScreen = () => {
   async function getChallenges() {
       try {
         const challenges = await axiosManager.post(
-          APIs.BASE_URL + '/getChallengeById',
+          APIs.BASE_URL + APIs.GET_ALL_CHALLENGE_BY_CHALLENGEID,
           {challengeId: challengeId},
         );
          setuserProfileDetail(challenges.data)
@@ -119,7 +119,6 @@ const DetailProfileScreen = () => {
 
     try {
       await Share.open(options).then(res => {
-        console.log('dfdg', res);
       });
     } catch (error) {
       console.log('error');
@@ -152,7 +151,7 @@ const DetailProfileScreen = () => {
                 onLoad={onLoad}
                 preload={'metadata'}
                 repeat
-                // paused={visibleVideos === index ? false:true}
+                paused={visibleVideos === index ? false:true}
                 style={{width: '100%', height: '100%'}}
                 resizeMode="cover"
                 muted
@@ -195,7 +194,7 @@ const DetailProfileScreen = () => {
       <RootContainer>
       <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:"center"}}>
       <View style={{padding:5}}>
-        <Image source={{uri: userProfile}} height={40} width={40} style={{borderRadius:50}}></Image></View>
+        <Image source={{uri:(userProfile !== "undefined") && (userProfile !== "null") ? userProfile : IMAGES.USER_DEFAULT_ICON}} height={40} width={40} style={{borderRadius:50}}></Image></View>
          <View style={{padding:5}}>
         <Text style={{color:colors.Black}}>{userName}</Text>
         </View>
@@ -259,10 +258,10 @@ const DetailProfileScreen = () => {
             />              
                 
                   </View>     
-                  <Text>Likes {item.likes_count}</Text>   
-                  <Text>comments {item.comment_count}</Text>   
+                  <Text>{staticConstant.DetailProfile.Likes} {item.likes_count}</Text>   
+                  <Text>{staticConstant.DetailProfile.Comments} {item.comment_count}</Text>   
                   <TouchableOpacity onPress={()=>getComments(item.challenge_id)}>
-                  <Text>View all comments</Text>
+                  <Text>{staticConstant.DetailProfile.ViewAllComments}</Text>
                   </TouchableOpacity>
                 </View>
               ) : null}
@@ -276,7 +275,7 @@ const DetailProfileScreen = () => {
         comments?.map((item,index) => {
           return (
             <View
-              key={item.id}
+              key={index}
               style={{
                 flexDirection: 'row',
                 marginhorizontal: 10,
@@ -288,7 +287,7 @@ const DetailProfileScreen = () => {
                     uri:
                      item.profileImage !== 'undefined'
                         ? item.profileImage
-                        : 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png',
+                        : IMAGES.USER_DEFAULT_ICON,
                   }}
                   height={40}
                   width={40}
@@ -302,7 +301,7 @@ const DetailProfileScreen = () => {
           );
         })
       ): (
-        <Text style={{textAlign: 'center'}}>No Comments yet</Text>
+        <Text style={{textAlign: 'center'}}>{staticConstant.comments.NO_COMMENTS}</Text>
       ))
       }
       <View>

@@ -24,6 +24,8 @@ export const Enums = {
     },
     AlertButtons : {
         CONFIRM: 'Confirm',
-        CANCEL: 'Cancel'
+        Submit:'Submit',
+        CANCEL: 'Cancel',
+        EDIT:'Edit'
     }
 }

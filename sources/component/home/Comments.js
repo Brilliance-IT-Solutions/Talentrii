@@ -8,6 +8,9 @@ import axiosManager from '../../helpers/axiosHandler';
 import {APIs} from '../../constants/api';
 import CustomHeader from '../customHeader/customHeader';
 import RootContainer from '../rootContainer/rootContainer';
+import { IMAGES } from '../../constants/images';
+import { Enums } from '../../constants/Enum/enum';
+import { staticConstant } from '../../constants/staticData/staticConstant';
 const Comments = () => {
   const route = useRoute();
   const [comments, setComments] = useState([]);
@@ -28,7 +31,7 @@ const Comments = () => {
     async function getComments() {
       try {
         const commentsData = await axiosManager.post(
-          APIs.BASE_URL + '/getcommentChallenge',
+          APIs.BASE_URL + APIs.GET_ALL_COMMENTS,
           {challengeId: challengeId},
         );
 
@@ -47,7 +50,7 @@ const Comments = () => {
     };
     try {
       const response = await axiosManager.post(
-        APIs.BASE_URL + '/commentChallenge',
+        APIs.BASE_URL + APIs.COMMENT_CHALLENGE,
         param,
       );
       if (response.data) {
@@ -99,7 +102,7 @@ const Comments = () => {
                 paddingHorizontal: 12,
                 paddingVertical: 8,
               }}>
-              Submit
+              {Enums.AlertButtons.Submit}
             </Text>
           </TouchableOpacity>
         </View>
@@ -114,7 +117,7 @@ const Comments = () => {
                 paddingHorizontal: 12,
                 paddingVertical: 8,
               }}>
-              Cancel
+              {Enums.AlertButtons.CANCEL}
             </Text>
           </TouchableOpacity>
         </View>
@@ -123,7 +126,7 @@ const Comments = () => {
         comments?.map((item,index) => {
           return (
             <View
-              key={item.id}
+              key={index}
               style={{
                 flexDirection: 'row',
                 marginHorizontal: 10,
@@ -135,7 +138,7 @@ const Comments = () => {
                     uri:
                      item.profileImage !== 'undefined'
                         ? item.profileImage
-                        : 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png',
+                        : IMAGES.USER_DEFAULT_ICON,
                   }}
                   height={40}
                   width={40}
@@ -149,7 +152,7 @@ const Comments = () => {
           );
         })
       ) : (
-        <Text style={{textAlign: 'center'}}>No Comments yet</Text>
+        <Text style={{textAlign: 'center'}}>{staticConstant.comments.NO_COMMENTS}</Text>
       )}
 
     </RootContainer>

@@ -24,7 +24,7 @@ import axios from 'axios';
 
 const UpdateProfileComponent = () => {
     const [selectedImage, setSelectedImage] = useState([]);
-    const [userProfileImage,setUserProfileImage]= useState('')
+    const [userProfileImage,setUserProfileImage]= useState('undefined')
     const [state, setState] = useState({
         showDatePicker: false,
       });
@@ -52,7 +52,7 @@ const UpdateProfileComponent = () => {
         const userDetailID = data ? JSON.parse(data) : '';
         if(userDetailID.id){
             const response = await axiosManager.post(
-              APIs.BASE_URL + '/getUserDetailById',
+              APIs.BASE_URL + APIs.GET_USERDETAIL_BY_USERID,
               {userId:+userDetailID.id},
             );
             setInputValues(response.data);
@@ -105,9 +105,9 @@ const UpdateProfileComponent = () => {
                  console.log('Success!', res.data.response.urls);
          profileUrl = { ...res.data.response.urls[0]};
         }).catch(error=>{
-          console.log(error)
+          console.log(error.response.data.response.message)
         })
-        const url1 = APIs.BASE_URL + '/updateProfile'
+        const url1 = APIs.BASE_URL + APIs.UPDATE_PROFILE
         const DOB = data.DOB
         let param = {
             firstName : data.firstName,
@@ -153,11 +153,11 @@ const UpdateProfileComponent = () => {
     
           if (invalidFiles.length > 0) {
             // setLoader(false);
-            showError(ToastMessage.UNSUPPORTED_FILE)
+            showError(ToastMessage.UNSUPPORTED_PROFILE_FILE)
           } else {
             // setLoader(false);
             setSelectedImage(response)
-            setUserProfileImage('')
+            setUserProfileImage(null)
           }
         } catch (error) {
           console.log(error);
@@ -177,7 +177,8 @@ const UpdateProfileComponent = () => {
             <RootContainer>
                 <View style={styles.rootContainer}>
                     <View style={styles.imageViewContainer}>
-                        {selectedImage.map((item,index)=>(
+                        {selectedImage.length > 0 && 
+                        (selectedImage.map((item,index)=>(
                         <View key={index} >
                         <Image 
                         style={styles.imgaeView}
@@ -186,29 +187,19 @@ const UpdateProfileComponent = () => {
                        />
                         </View>
                         ))
+                        )
                     }
-
-                    {userProfileImage && (
-                    <View>
+                  
+                  {selectedImage.length ===  0 && userProfileImage && 
+                  <View>
                     <Image 
                      style={styles.imgaeView}
-                    source={{uri : userProfileImage }} 
+                    source={{uri : userProfileImage !== 'undefined'  ? userProfileImage : IMAGES.USER_DEFAULT_ICON}} 
                     resizeMode='contain'
                     />
-                    </View>)
-                    }
-
-                  {userProfileImage === '' && selectedImage.length < 0 && (
-                    <View>
-                    <Image 
-                     style={styles.imgaeView}
-                    source={{uri : 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png' }} 
-                    resizeMode='contain'
-                    />
-                    </View>)
-                    }
-
-
+                    </View>
+                  } 
+                  
              <TouchableOpacity onPress={()=>openImagePicker()}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
@@ -237,7 +228,7 @@ const UpdateProfileComponent = () => {
                 <DatePickerComponent control={control} name={'DOB'} isVisible={showDatePicker} 
                 onPress={setVisible => updateState({showDatePicker: setVisible})} rules={{required: 'DOB is required'}}/>
 
-                <ButtonComponent title="Update Profile" onPressFunc={handleSubmit(updateProfile)} width="70%"/>
+                <ButtonComponent title={staticConstant.UpdateProfile.btnTitle} onPressFunc={handleSubmit(updateProfile)} width="70%"/>
                 </View>
                 </View>
             </RootContainer>

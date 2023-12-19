@@ -70,7 +70,7 @@ const CreateChallenegeComponent = ({props}) => {
   );
 
   const callApi = async () => {
-    const url = APIs.BASE_URL + '/privacy';
+    const url = APIs.BASE_URL + APIs.CHALLENGE_PRIVACY;
     let param = {};
     try {
       await axiosManager.get(url, param).then(res => {
@@ -89,7 +89,7 @@ const CreateChallenegeComponent = ({props}) => {
 
   useEffect(() => {
     const fetchapi = async () => {
-      const url = APIs.BASE_URL + '/getPurposeChallenge';
+      const url = APIs.BASE_URL + APIs.GET_PURPOSE_CHALLENGE;
       try {
         const response = await axiosManager.post(url);
         if (response.data) {
@@ -173,11 +173,11 @@ const CreateChallenegeComponent = ({props}) => {
                 return;
               }
             } else {
-              showError("purpose cann't be empty");
+              showError(ToastMessage.REQUIRED_PURPOSE);
               return;
             }
           } else {
-            showError('Description should of 5 characters');
+            showError(ToastMessage.REQUIRED_DESC_CHARACTERS);
             return;
           }
         } else {
@@ -185,7 +185,7 @@ const CreateChallenegeComponent = ({props}) => {
           return;
         }
       } else {
-        showError('Title should of 4 characters');
+        showError(ToastMessage.REQUIRED_TITLE_CHARACTERS);
         return;
       }
     } else {
