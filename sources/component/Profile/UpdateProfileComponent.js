@@ -21,6 +21,7 @@ import DocumentPicker from 'react-native-document-picker';
 import { ToastMessage } from '../../constants/toasterConstants';
 import { getToken } from '../../utils/GenericFunction';
 import axios from 'axios';
+import style from '../../style/styles'
 
 const UpdateProfileComponent = () => {
     const [selectedImage, setSelectedImage] = useState([]);
@@ -228,7 +229,8 @@ const UpdateProfileComponent = () => {
                 <DatePickerComponent control={control} name={'DOB'} isVisible={showDatePicker} 
                 onPress={setVisible => updateState({showDatePicker: setVisible})} rules={{required: 'DOB is required'}}/>
 
-                <ButtonComponent title={staticConstant.UpdateProfile.btnTitle} onPressFunc={handleSubmit(updateProfile)} width="70%"/>
+                <ButtonComponent title={staticConstant.UpdateProfile.btnTitle} onPressFunc={handleSubmit(updateProfile)} width="70%"  buttonStyle={style.btnStyle}
+              textStyle={style.textStyle} />
                 </View>
                 </View>
             </RootContainer>

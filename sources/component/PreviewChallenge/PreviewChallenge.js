@@ -23,7 +23,7 @@ import { ToastMessage } from '../../constants/toasterConstants';
 import { showError, showSuccess } from '../common/toaster/toaster';
 import CustomLoader from '../common/loader/loader';
 import { staticConstant } from '../../constants/staticData/staticConstant';
-
+import style from '../../style/styles';
 
 const {width} = Dimensions.get('window');
 
@@ -187,7 +187,9 @@ const PreviewChallenge = () => {
         />
         </View>
         <View style={{position: 'absolute', right: 10}}>
-          <ButtonComponent title={staticConstant.publishButton} onPressFunc={publishChallenge}/>
+          <ButtonComponent title={staticConstant.publishButton} onPressFunc={publishChallenge} buttonStyle={style.btnStyle}
+          textStyle={style.textStyle}
+         />
         </View>
     </View>
         <CustomLoader isLoading={loader}/>

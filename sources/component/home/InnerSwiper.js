@@ -6,7 +6,7 @@ import {getHeight} from '../../utils/GenericFunction';
 import HomeComponent from './HomeComponent';
 import styles from '../../screen/home/styles';
 import colors from '../../assets/themes/colors';
-import {width} from '../../style/responsiveSize';
+import {height, width} from '../../style/responsiveSize';
 import {AuthContext} from '../../context/context';
 import FastImage from 'react-native-fast-image';
 import DoubleTap from '@memrearal/react-native-doubletap';
@@ -155,14 +155,23 @@ const InnerSwiper = props => {
           data={props.innerdata.inner || []}
           horizontal
           showPagination={props.innerdata.inner.length > 1 ? true : false}
-          paginationActiveColor={colors.Green}
+          paginationActiveColor={colors.White}
           viewabilityConfig={viewabilityConfig}
           onChangeIndex={onViewableItemsChanged}
           removeClippedSubviews={true}
           initialScrollIndex={0}
           maxToRenderPerBatch={1}
           paginationStyle={{
-            bottom: 60,
+           backgroundColor:colors.grey,
+           borderRadius:20,
+           alignItems:'center',
+           paddingHorizontal:7,
+           bottom:90
+          }}
+          paginationStyleItem ={{
+            width:5,
+            height:5,
+            marginHorizontal:1.5,
           }}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}

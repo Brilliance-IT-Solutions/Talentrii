@@ -4,15 +4,15 @@ import { Constants } from "../../constants/constants";
 import { width } from "../../style/responsiveSize";
 
 const numColumns = Constants.PROFILE_PAGE_NUMBER_OF_COLUMNS;
-const size = Dimensions.get('window').width / 3.2;
-const sizeheight = Dimensions.get('window').width / 2;
+const size = Dimensions.get('window').width/2.3;
+const sizeheight = Dimensions.get('window').width / 1.5;
 
 const styles = StyleSheet.create({
        
     rootContainer: {
         backgroundColor: colors.White,
         flex: 1,
-        paddingBottom: 10
+        // paddingBottom: 10
     },
     bioDataSection: {
         flexDirection: 'column',
@@ -30,11 +30,18 @@ const styles = StyleSheet.create({
         // left: 0, 
         width: 70,
         //  marginLeft: '10%'
-        borderRadius:50
+        borderRadius:50,
     },
     bioDataTextView: {
         // flex: 0.5, 
         // justifyContent: 'center'
+    },
+
+    btnStyle:{
+     backgroundColor:colors.lightGrey
+    },
+    textStyle:{
+        color:colors.Black
     },
     bioDataText: {
         fontSize: 16, fontWeight: '700', 
@@ -59,7 +66,10 @@ const styles = StyleSheet.create({
     bottomHistoryView: {
         width: size,
         height: sizeheight,
-        // padding: 8        
+        // padding: 8   
+        borderWidth:1,
+        borderColor:colors.White,
+        borderRadius:20   
     },
     bottomHistoryImageView: {
         flex: 1,
@@ -67,7 +77,10 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     bottomHistoryImage: {
-        height: '100%', width: '100%',
+        height: '60%',
+        width: '100%',
+        borderRadius:20,
+        
        
 
     },

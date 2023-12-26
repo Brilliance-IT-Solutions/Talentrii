@@ -1,11 +1,13 @@
 import React from "react";
-import { StyleSheet , View, Text } from "react-native";
+import { StyleSheet , View, Text, TouchableOpacity } from "react-native";
 import colors from "../../../assets/themes/colors";
-const ParagraphContainer = ({ txt }) => {
+const ParagraphContainer = ({ txt,textstyle,containerStyle ,onPressFunc,numberOfLines=1}) => {
     return (
-        <View style={styles.paragraph}>
-            <Text style={styles.paragraphtxt}>{txt}</Text>
+        <TouchableOpacity onPress={onPressFunc}>
+        <View style={[styles.paragraph,containerStyle]}>
+            <Text style={[styles.paragraphtxt,textstyle]} numberOfLines={numberOfLines} ellipsizeMode="tail">{txt}</Text>
         </View>
+      </TouchableOpacity>
     )
 };
 

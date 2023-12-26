@@ -8,6 +8,7 @@ import Signup from '../component/Signup/SignupComponent';
 import ForgotPassword from '../component/password/ForgotPassword';
 import ResetPassword from '../component/password/ResetPassword';
 import Otp from '../component/password/Otp';
+import Welcome from '../component/welcome/Welcome';
 ///////////////////////
 
 const AuthStack = createStackNavigator();
@@ -17,7 +18,8 @@ const options = () => {
 }
 
 export const AuthStackScreen = () => (
-    <AuthStack.Navigator initialRouteName={RouterNames.LOGIN_SCREEN}>
+    <AuthStack.Navigator initialRouteName={RouterNames.WELCOME_SCREEN}>
+         <AuthStack.Screen name={RouterNames.WELCOME_SCREEN} component={Welcome} options={options}/>     
         <AuthStack.Screen name={RouterNames.LOGIN_SCREEN} component={LoginScreen} options={options}/>     
         <AuthStack.Screen name={RouterNames.SIGNUP_SCREEN} component={Signup} options={options}/>        
         <AuthStack.Screen name={RouterNames.FORGOT_SCREEN} component={ForgotPassword} options={options}/>   

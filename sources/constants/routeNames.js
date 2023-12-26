@@ -1,4 +1,5 @@
 export const RouterNames = {
+  WELCOME_SCREEN:'welcome',
   LOGIN_SCREEN: "loginScreen",  
   SIGNUP_SCREEN: "signupScreen",  
   VIDEO_SCREEN: 'videoScreen',

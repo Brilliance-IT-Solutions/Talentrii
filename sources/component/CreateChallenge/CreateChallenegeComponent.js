@@ -316,6 +316,9 @@ const CreateChallenegeComponent = ({props}) => {
             <ButtonComponent
               title={staticConstant.Button.title}
               onPressFunc={previewChallenge}
+              buttonStyle={style.btnStyle}
+          textStyle={style.textStyle}
+          width={'70%'}
             />
           </View>
         </View>

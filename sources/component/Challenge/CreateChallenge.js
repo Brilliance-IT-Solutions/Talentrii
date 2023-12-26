@@ -11,7 +11,7 @@ import ParagraphContainer from '../common/Paragraph/paragraph';
 import { staticConstant } from '../../constants/staticData/staticConstant';
 import { useNavigation } from '@react-navigation/native';
 import { RouterNames } from '../../constants/routeNames';
-
+import style from '../../style/styles';
 const CreateChallenegeScreenComponent = () => {
 const navigation = useNavigation()
 
@@ -28,13 +28,17 @@ const navigation = useNavigation()
         <View style={{marginTop: 20, height: getHeight()}}>
           <View style={{marginTop: 20, marginBottom: 140}}>
             <Label title={staticConstant.createChallenge.titleLabelOne} />
-            <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextOne} />
-            <ButtonComponent title={staticConstant.createChallenge.buttonTitleOne} onPressFunc={()=>navigateTo('upcoming')}/>
+            <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextOne} numberOfLines={0}/>
+            <ButtonComponent title={staticConstant.createChallenge.buttonTitleOne} onPressFunc={()=>navigateTo('upcoming')} buttonStyle={style.btnStyle}
+          textStyle={style.textStyle}
+          width={'70%'}/>
           </View>
           <View>
             <Label title={staticConstant.createChallenge.titleLabelTwo} />
-            <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextTwo} />
-            <ButtonComponent title={staticConstant.createChallenge.buttonTitleTwo} onPressFunc={()=>navigateTo('past')}/>
+            <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextTwo} numberOfLines={0}/>
+            <ButtonComponent title={staticConstant.createChallenge.buttonTitleTwo} onPressFunc={()=>navigateTo('past')} buttonStyle={style.btnStyle}
+          textStyle={style.textStyle}
+          width={'70%'}/>
           </View>       
         </View>
       </RootContainer>

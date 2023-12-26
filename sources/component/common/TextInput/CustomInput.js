@@ -1,16 +1,20 @@
 import React from "react";
-import { TextInput, View, Text } from "react-native";
-import colors from "../../../assets/themes/colors";
+import { TextInput, View, Text, TouchableOpacity } from "react-native";
 import styles from "../../../style/styles";
 import { Controller } from "react-hook-form";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const CustomInput = ({
     control,
     name,
     placeholder,
     rules = {},
+    icon,
     multiline = false,
-    secureTextEntry,
+    secureTextEntry = false,
+    maxLength=30,
+    onPressIcon,
+    showPassword
   }) => {
 
     return (
@@ -20,16 +24,32 @@ const CustomInput = ({
         rules={rules}
         render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <View>
-            <TextInput
-                style={[styles.textBoxes, styles.leftStandardPadding, 
+              <View style={{flexDirection:'row',alignItems:'center'}}>
+              <View style={{position:'absolute',left:25}}>
+              <Icon name={icon} size={15}/>
+              </View>
+              <TextInput
+                style={[styles.textBoxes, styles.leftStandardPadding, {flex:1,position:'relative',paddingLeft:30},
                 multiline ? {height: 120} : {height:50} ]}
                 value={value}
-                secureTextEntry={ secureTextEntry}
+                secureTextEntry={secureTextEntry}
                 onChangeText={onChange}
                 onBlur={onBlur}
                 placeholder={placeholder}
                 multiline={multiline}
+                maxLength={maxLength}
             ></TextInput>  
+           {!!onPressIcon &&
+              <TouchableOpacity style={{marginBottom:20}} onPress={onPressIcon} hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+
+             <View style={{position:'absolute',right:35}}>
+             {showPassword ? <Icon name={'eye-off'} size={15}/> :
+              <Icon name={'eye'} size={15}/>}
+              </View>
+
+             </TouchableOpacity>
+          }           
+             </View>
              {error && (
             <Text style={[ styles.leftStandardPadding,{
                 color: 'red',
@@ -38,30 +58,10 @@ const CustomInput = ({
               } ,]}>
               {error.message || STRINGS.ERROR}
             </Text>
-          )}              
+          )}                    
         </View>
         )}
         />
-        // <View>
-        //     <TextInput
-        //         style={[styles.textBoxes, styles.leftStandardPadding, 
-        //             props.needMultilie ? {height: 120} : {height:50} ]}
-        //         value={props.value}
-        //         secureTextEntry={props.isSecuredText ? true : false}
-        //         onChangeText={props.onChangeText}
-        //         placeholder={props.placeholder}
-        //         maxLength={props.maxLength}
-        //         multiline = {props.needMultilie ? true : false }
-        //         numberOfLines= {props.noLines || 1}
-                
-        //     ></TextInput>                
-        //        {
-        //            props.error && <Text
-        //             style={[
-        //                 { color: colors.Red, fontSize: 12, marginLeft: 40}
-        //             ]}>{props.error}</Text>
-        //         }
-        // </View>
 
     )
 };

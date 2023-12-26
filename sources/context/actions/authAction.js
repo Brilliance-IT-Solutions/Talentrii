@@ -10,9 +10,8 @@ export const clearAuthState = () => dispatch => {
 const authAction = async (form) => {
     const url = APIs.BASE_URL + APIs.LOGIN_LINK
     const param = {
-        "emailId": form.Email,
-        "password": form.Password,
-        "firstName": "Amandeep Test"
+        "emailId": form.emailId,
+        "password": form.password,
     }
     const response = await axiosManager.post(url, param)    
     return response

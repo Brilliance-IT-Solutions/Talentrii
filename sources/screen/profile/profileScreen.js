@@ -9,11 +9,9 @@ import {useRoute} from '@react-navigation/native';
 
 const ProfileScreen = () => {
     const route = useRoute();
-    const userId = route.params.userId
+    const userId = route.params?.userId
     return (
         <View style={{flex: 1, backgroundColor: colors.White}}>
-            <CustomHeader showImage showBack/>
-            <TittleHeader title={staticConstant.Profile.titleHeader} />
             <ProfileComponent userId={userId}/>
         </View>
     )

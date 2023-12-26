@@ -11,12 +11,17 @@ import DatePickerComponent from '../common/Date/Datepicker';
 import CustomInput from '../common/TextInput/CustomInput';
 import CustomHeader from '../customHeader/customHeader';
 import RootContainer from '../rootContainer/rootContainer';
+import MultiLineContainer from '../common/2LineText/multiLineText';
+import style from '../../style/styles';
+import Checkbox from '../common/checkbox/Checkbox';
 
 const Signup = () => {
   const [state, setState] = useState({
     showDatePicker: false,
   });
   const {showDatePicker} = state;
+  const [showPassword,setShowPassword]=useState(true)
+  const [showCPassword,setShowCPassword]=useState(true)
 
   const updateState = data => setState(state => ({...state, ...data}));
 
@@ -38,6 +43,7 @@ const Signup = () => {
 
   const onSignUpClick = data => {
     console.log(data);
+    props
   };
 
   return (
@@ -45,39 +51,16 @@ const Signup = () => {
       //  height:height,
       flex: 1,}}>
     <View style={{flex: 1}}>
-    {/* <ScrollView style={{flex: 1}}> */}
-         <CustomHeader showImage showBack />
-      <Text
-        style={{
-          alignSelf: 'center',
-          margin: 30,
-          fontSize: 30,
-          color: Colors.Green,
-        }}>
-        Sign Up
-      </Text>
+    <CustomHeader showBack showClose/>
+              <View style={{ justifyContent: 'flex-start', flexDirection: 'row', height: 50, marginTop:25, marginLeft:15}}>
+                <MultiLineContainer txt1={"Let's Get Started!"} txt2="Welcome back.You've been missed!"/>
+                </View>
       <RootContainer>
-      <View style={{paddingBottom: 100}}>
-        <CustomInput
-          control={control}
-          name="firstname"
-          placeholder="Enter First Name"
-          rules={{
-            required: 'First Name is required',
-          }}
-        />
-        <CustomInput
-          control={control}
-          name="lastname"
-          placeholder="Enter Last Name"
-          rules={{
-            required: 'Last Name is required',
-          }}
-        />
+      <View style={{marginTop:25,marginBottom:15}}>
         <CustomInput
           control={control}
           name="email"
-          placeholder="example@email.com"
+          placeholder="Enter your email"
           rules={{
             required: 'email is required',
             pattern: {
@@ -85,11 +68,23 @@ const Signup = () => {
               message: 'Invalid Email',
             },
           }}
+          icon={'email-outline'}
+        />
+         <CustomInput
+          control={control}
+          name="firstname"
+          placeholder="Enter your Name"
+          rules={{
+            required: 'First Name is required',
+          }}
+          icon={'account'}
         />
         <CustomInput
           control={control}
           name="password"
-          placeholder="Enter Password"
+          placeholder="Enter your password"
+          secureTextEntry={showPassword}
+          onPressIcon={()=>setShowPassword(showPassword=>!showPassword)}  showPassword={showPassword}
           rules={{
             required: 'Password is required',
             pattern: {
@@ -99,11 +94,14 @@ const Signup = () => {
                 'Password must have atleast one uppercase one lowercase one digit and one special character',
             },
           }}
+          icon={'lock'}
         />
         <CustomInput
           control={control}
           name="confirmpassword"
-          placeholder="Enter Confirm Password"
+          placeholder="confirm your password"
+          secureTextEntry={showCPassword}
+          onPressIcon={()=>setShowCPassword(showCPassword=>!showCPassword)}  showPassword={showCPassword}
           rules={{
             validate: value => {
               if (!value) return 'confirm password is required';
@@ -111,39 +109,13 @@ const Signup = () => {
                 return 'Password and Confirm Password should be same';
             },
           }}
+          icon={'lock'}
         />
-        <DropDown
-          control={control}
-          name={'gender'}
-          placeholder={'select Gender'}
-          dropdownData={staticConstant.gender}
-          rules={{
-            required: 'Gender is required',
-          }}
-        />
-        <CustomInput
-          control={control}
-          name="mobileno"
-          placeholder="Enter Mobile No"
-          rules={{
-            required: 'Mobile No. is required',
-          }}
-        />
-
-        <DatePickerComponent
-          control={control}
-          name={'dateOfBirth'}
-          isVisible={showDatePicker}
-          onPress={setVisible => updateState({showDatePicker: setVisible})}
-          rules={{
-            required: 'DOB is required',
-          }}
-        />
-
+        <Checkbox control={control}  name="policy" />
         <ButtonComponent
           title="Sign Up"
           onPressFunc={handleSubmit(onSignUpClick)}
-          width="70%"
+          buttonStyle={style.btnStyle} textStyle={style.textStyle} width={'90%'}
         />
         
       </View>

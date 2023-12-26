@@ -23,60 +23,61 @@ import {useFocusEffect} from '@react-navigation/native';
 const {width} = Dimensions.get('window');
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import RootContainer from '../rootContainer/rootContainer';
-import { Enums } from '../../constants/Enum/enum';
-import { staticConstant } from '../../constants/staticData/staticConstant';
+import {Enums} from '../../constants/Enum/enum';
+import {staticConstant} from '../../constants/staticData/staticConstant';
+import ProfileHeader from '../customHeader/profileHeader';
+import ButtonComponent from '../common/Buttons/buttonComponent';
+import IconCont from '../common/IconCount/iconCount';
+import ChallengeCardProfile from './ChallengeCardProfile';
+import CustomFooter from '../customHeader/footer';
+import Icon from '../common/IconCount/Icons';
 
 const ProfileComponent = ({userId}) => {
-  const videoRef = useRef(null);
+  const navigation = useNavigation();
   const [userdetail, setUserDetail] = useState([]);
   const [LoggedInUserId, setLoggedInUserId] = useState('');
-
-  const navigation = useNavigation();
+  const [UserId, setUserId] = useState(0);
   const layout = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState(staticConstant.Profile.routeTabs);
 
-  const navigateTo = item => {
-    navigation.navigate(RouterNames.DETAIL_PROFILE_SCREEN, {
-      userName : userdetail.userName,
-      userProfile : userdetail.profileImage,
-      challengeId : item
-    });
-  };
-
-  const onBuffer = e => {
-    // console.log("buffering....", e)
-  };
-  const onError = e => {
-    // console.log("error released....", e)
-  };
-  const onLoad = e => {};
-
-  const onVideoLoadStart = () => {};
-
   const test = () => {
     navigation.navigate(RouterNames.UPDATE_PROFILE_SCREEN);
   };
 
-    const fetchProfileApi = async () => {
-      try {
-        const response = await axiosManager.post(
-          APIs.BASE_URL + APIs.GET_USERDETAIL_BY_USERID,
-          {userId},
-        );
-        setUserDetail(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-   
-    // useFocusEffect to fetch data for page 1 when the route changes
-    useFocusEffect(
-      React.useCallback(() => {
-        fetchProfileApi();
-      }, [])
-    );
+  useEffect(() => {
+    if (!userId) {
+      getUser().then(data=>{
+        const userDetailID = data ? JSON.parse(data) : '';
+        setUserId(userDetailID.id)
+      }).catch(error=>{console.log(error)});
+    } else {
+      setUserId(userId)
+    }
+  }, [userId]);
+
+  const fetchProfileApi = async () => {
+    try {
+      const response = await axiosManager.post(
+        APIs.BASE_URL + APIs.GET_USERDETAIL_BY_USERID,
+        {userId: UserId},
+      );
+      setUserDetail(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // useFocusEffect to fetch data for page 1 when the route changes
+  useFocusEffect(
+    React.useCallback(() => {
+      setUserDetail([])
+      fetchProfileApi();
+    }, [UserId])
+  );
+
+ 
 
   const getuserDetail = async () => {
     const data = await getUser();
@@ -89,131 +90,42 @@ const ProfileComponent = ({userId}) => {
   }, []);
 
   const FirstRoute = () => (
-      <RootContainer>
-    <View style={{flex: 1}}>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          {userdetail?.media &&
-            userdetail?.media?.map((items, i) =>  (
-                <View style={{padding: 3}} key={items.id}>
-                  {items.inner &&
-                    items.inner.map((item, index) => (
-                          <TouchableOpacity onPress={() => navigateTo(item.challenge_id)} key={item.id}>
-                            {index === 0 ? (
-                              <View>
-                              {item.type === 'video/mp4' ? (
-                                <View
-                                  style={[
-                                    styles.bottomHistoryView,
-                                    {backgroundColor: colors.lightGrey},
-                                  ]}
-                                 >
-                                  <Video
-                                  poster={item.thumbnail_url}
-                                  posterResizeMode={'cover'}
-                                    source={{uri: item.original_url}}
-                                    ref={videoRef}
-                                    onBuffer={onBuffer}
-                                    onError={onError}
-                                    style={styles.bottomHistoryImage}
-                                    muted
-                                    paused={true}
-                                    onLoadStart={onVideoLoadStart}
-                                    onLoad={onLoad}
-                                    resizeMode="cover"></Video>
-                                </View>
-                              ) : (
-                                <View
-                                  style={[
-                                    styles.bottomHistoryView,
-                                    {backgroundColor: colors.lightGrey},
-                                  ]}
-                                  >
-                                  <Image
-                                    source={{
-                                      uri:
-                                        item.original_url !== 'undefined' ||
-                                        item.original_url !== 'null'
-                                          ? item.original_url
-                                          : IMAGES.USER_DEFAULT_ICON,
-                                    }}
-                                    style={[
-                                      styles.bottomHistoryImage,
-                                      {resizeMode: 'cover'},
-                                    ]}
-                                  />
-                                  {items.inner.length > 1 && 
-                                    <Image source={{uri:"https://cdn.iconscout.com/icon/premium/png-256-thumb/multi-post-1702546-1486961.png?f=webp"}}    style={{
-                                      position: 'absolute',
-                                      right: 0,
-                                      height:20,
-                                      width:20,
-                                      resizeMode:'contain',
-                                      paddingHorizontal: 5,
-                                    }}/>
-                                  }
-                                  <Text
-                                    style={{
-                                      position: 'absolute',
-                                      color: colors.White,
-                                      bottom: 0,
-                                      paddingHorizontal: 5,
-                                    }}>
-                                    {item.likes_count}
-                                  </Text>
-                                </View>
-                              )
-
-                                }
-                              <Text style={{
-                                      position: 'absolute',
-                                      color: colors.White,
-                                      bottom: 0,
-                                      paddingHorizontal: 5,
-                                    }}>
-                                    {item.likes_count}
-                                  </Text>
-                            </View>
-                            ) : null}
-                          </TouchableOpacity>
-                      )
-                    )}
-                </View>
-              )
-            )}
-        </View>
-    </View>
-      </RootContainer>
+    <View style={{flex: 1, backgroundColor: colors.lightGrey}}>
+        <RootContainer>
+        <ChallengeCardProfile userdetail={userdetail} />
+    </RootContainer>
+      </View>
   );
 
   const SecondRoute = () => <View style={{flex: 1}} />;
+  const ThirdRoute = () => <View style={{flex: 1}} />;
 
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
+    third: ThirdRoute,
   });
 
   const renderTabBar = props => {
     return (
-      <View style={{marginTop: 28}}>
+      <View
+        style={{
+          marginTop: 0,
+          borderBottomWidth: 1,
+          borderColor: colors.lightGrey,
+        }}>
         <TabBar
           {...props}
-          style={{backgroundColor: colors.White, elevation: 0, height: 36}}
+          style={{backgroundColor: colors.White, elevation: 0, height: 55}}
           indicatorStyle={{backgroundColor: colors.Green, height: 2}}
           renderLabel={({route}) => (
-            <View>
-              <Text
-                style={{
-                  fontSize: 13,
-                  textAlign: 'center',
-                  color:
-                    route.key ===
-                    props.navigationState.routes[props.navigationState.index]
-                      .key
-                      ? colors.Green
-                      : colors.Black,
-                }}>
-                {route.title}
-              </Text>
+            <View style={{alignItems: 'center', alignContent: 'center'}}>
+              <Icon name={route.icon} label={route.title} size={15} iconColor={
+                  route.key ===
+                  props.navigationState.routes[props.navigationState.index].key
+                    ? colors.Green
+                    : colors.Black
+                }/>
             </View>
           )}
         />
@@ -223,8 +135,14 @@ const ProfileComponent = ({userId}) => {
 
   return (
     <View style={styles.rootContainer}>
-      <View style={styles.bioDataSection}>
-        <View style={styles.bioDataImageView}>
+      <ProfileHeader userName={userdetail.firstName}/>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginHorizontal: 10,
+        }}>
+        <View>
           <Image
             style={styles.bioDataImage}
             source={{
@@ -236,35 +154,73 @@ const ProfileComponent = ({userId}) => {
             }}
             resizeMode="contain"
           />
+          <Text>{userdetail.firstName}</Text>
+          <Text>{'Creative Digital Agency'}</Text>
+          <Text>{'linktre./Amandeep'}</Text>
         </View>
-        <View style={styles.bioDataTextView}>
-          <Text style={styles.bioDataText}>{userdetail.firstName}</Text>
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+              marginHorizontal: 5,
+            }}>
+            <MultiLineContainer
+              txt1={'2'}
+              txt2={'Posts'}
+              fontSizetxt1={13}
+              color={colors.Black}
+              align={'center'}
+              fontSizetxt2={12}
+            />
+            <MultiLineContainer
+              txt1={'10'}
+              txt2={'Followers'}
+              fontSizetxt1={13}
+              color={colors.Black}
+              align={'center'}
+              fontSizetxt2={12}
+            />
+            <MultiLineContainer
+              txt1={'120'}
+              txt2={'Following'}
+              fontSizetxt1={13}
+              color={colors.Black}
+              align={'center'}
+              fontSizetxt2={12}
+            />
+          </View>
         </View>
-        {+LoggedInUserId === +userId ? (
-          <TouchableOpacity onPress={test}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                style={{height: 10, width: 10, marginHorizontal: 5}}
-                source={IMAGES.EDIT_ICON}
-                resizeMode="contain"
-              />
-              <Text
-                style={{
-                  color: 'blue',
-                  textDecorationLine: 'underline',
-                  fontSize: 10,
-                }}>
-                {Enums.AlertButtons.EDIT}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ) : null}
       </View>
-      {/* <View style={styles.multiLineContainerSection}>
-                <MultiLineContainer txt1='20K' txt2='Followers' />
-                <View style={styles.multiLineContainerCenterLine} />
-                <MultiLineContainer txt1='20K' txt2='Followings' />
-            </View> */}
+
+      <View style={{marginHorizontal: 10, marginVertical: 10}}>
+        <Text>Followed By Aajizz,Richard and 6 others</Text>
+      </View>
+
+      {+LoggedInUserId === +userId && (
+        <View style={{flexDirection: 'row', marginHorizontal: 10}}>
+          <View style={{flex: 1, marginRight: 10}}>
+            <ButtonComponent
+              title={'Edit Profile'}
+              buttonStyle={styles.btnStyle}
+              textStyle={styles.textStyle}
+              width={'100%'}
+              onPressFunc={test}
+            />
+          </View>
+          <View style={{flex: 1, marginLeft: 10}}>
+            <ButtonComponent
+              title={'Share Profile'}
+              buttonStyle={styles.btnStyle}
+              textStyle={styles.textStyle}
+              width={'100%'}
+            />
+          </View>
+        </View>
+      )}
       <TabView
         navigationState={{index, routes}}
         renderScene={renderScene}

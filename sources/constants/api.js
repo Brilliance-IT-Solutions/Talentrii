@@ -1,6 +1,6 @@
 export const APIs = {
     // BASE_URL : 'http://localhost:3000/router',    
-    BASE_URL : 'http://192.168.1.80:3000/router',    
+    BASE_URL : 'http://192.168.1.16:3000/router',    
     LOGIN_LINK : '/login',
     DASHBOARD_LINK:'/getDashboardData',
     CREATE_CHALLENGE:'/createChallange',

@@ -1,3 +1,5 @@
+import { IMAGES } from "../images";
+
 export const staticConstant = {
   createChallenge: {
     titleHeader: 'Create Challenge',
@@ -42,13 +44,15 @@ export const staticConstant = {
     acceptedFriends:'Accept/Accepted Friends'
   },
   Login: {
-    btnTitle: 'Login',
+    btnTitle: 'Sign In',
   },
   Profile: {
     titleHeader: 'Profile',
     routeTabs:[
-      {key: 'first', title: 'My Challenges'},
-      {key: 'second', title: 'Engaged Challenges'},
+      {key: 'first', title: 'My Challenges',icon:'user'},
+      {key: 'second', title: 'Engaged Challenges',icon:'share-alt'},
+      {key: 'third', title: 'Saved Challenges',icon:'download'},
+
     ]
   },
   DetailProfile:{

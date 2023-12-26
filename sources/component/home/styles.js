@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', marginTop: getTopMargin(), marginLeft: 5, width: width
     },
     topIconRowSection: {
-        flexDirection: 'column', alignItems: 'flex-end' //marginLeft: 20, marginTop: 10
+        marginHorizontal:10,
     },
     topIcon: {
         alignItems: 'center', marginRight: 30, marginVertical: 8
@@ -29,7 +29,9 @@ const styles = StyleSheet.create({
         marginTop: 5, fontSize: 16, color: colors.Green, fontWeight: '600'
     },
     bottomSection: {
-        margin: 20, position: 'absolute', top: getHeight() - 200
+        position: 'absolute', top: getHeight() - 200,
+        width:'100%',
+        marginHorizontal:10,
     },
     bottomProfileImage: {
         width: 50, height: 50, borderRadius: 25
@@ -50,19 +52,40 @@ const styles = StyleSheet.create({
         fontSize: 10, fontWeight: '400', marginLeft: 5, alignSelf: 'center', color: textColor
     },
     bottomChallengeButton: {
-        alignSelf: 'center', position: 'absolute', right: 10, width: 80, alignItems: 'center'
+        alignSelf: 'center', position: 'absolute', right: 10, width: 80, alignItems: 'center',
+        bottom:10
+
     },
     challengeTitleContainer: {
-        maxHeight: 20, marginRight: 20
+        marginRight: 20,
+        // maxHeight:20,
+        width:'70%', 
     },
     challengeTitle: {
-        fontSize: 16, fontWeight: '800', color: textColor
+        fontSize: 10, fontWeight: '700', color: textColor,flexWrap:'wrap',overflow:'scroll', marginLeft:0,marginRight:0,
+        paddingBottom:0,textAlign:"left"
+       
     },
     challengeSubTitleContainer: {
         marginTop: 5, maxHeight: 40, width: width - 40
     },
     challengeSubTitle: {
         width: '100%', fontSize: 12, fontWeight: '600', paddingRight: 20, color: textColor
+    },
+
+    btnStyle:{
+     backgroundColor:colors.White,
+     borderRadius:50,
+     marginVertical:0,
+     paddingHorizontal:5,
+     paddingVertical:2,
+     marginHorizontal:5
+     
+    },
+    textStyle:{
+        color:colors.Black,
+        fontSize:10,
+        marginVertical:0,
     }
 
 });

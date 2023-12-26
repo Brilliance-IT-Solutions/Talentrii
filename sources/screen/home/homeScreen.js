@@ -101,7 +101,7 @@ const handleChangeIndexvalue = ({index}) =>{
   setCurrentRenderVideoIndex(index)
 }
   return (
-    <View style={{flex: 1,height:height}}>
+    <View style={{flex: 1}}>
       <View>
         <FlatList
          vertical
@@ -118,7 +118,7 @@ const handleChangeIndexvalue = ({index}) =>{
           )}
           keyExtractor={(item, index) => index.toString()}
         />
-        <View
+        {/* <View
           style={{
             position: 'absolute',
             bottom: 0,
@@ -128,7 +128,7 @@ const handleChangeIndexvalue = ({index}) =>{
               navigatePage(index);
             }}
           />
-        </View>
+        </View> */}
       </View>
     </View>
   );

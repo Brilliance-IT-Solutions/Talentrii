@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext,useState } from 'react';
 import { GlobalContext } from '../../context/Provider';
 import LoginComponent from '../../component/Login/LoginComponent';
 import { authAction } from '../../context/actions/authAction';
@@ -6,7 +6,7 @@ import { authAction } from '../../context/actions/authAction';
 import CustomAlert from '../../component/common/alert/customAlert';
 import { View } from 'react-native';
 import { Enums } from '../../constants/Enum/enum';
-import { REGISTER_LOADING, REGISTER_SUCCESS } from '../../constants/actionTypes/index'
+import { REGISTER_LOADING, REGISTER_SUCCESS,REGISTER_FAIL } from '../../constants/actionTypes/index'
 import { getUserLocation, saveUserLocation, setToken, setUser } from '../../utils/GenericFunction';
 import { AuthContext } from '../../context/context';
 
@@ -17,17 +17,20 @@ const LoginScreen = () => {
 
   const { authDispatch, authState: { error, loading, data } } = useContext(GlobalContext);
 
-  const [form, setForm] = React.useState({})
+  // const [form, setForm] = React.useState({})
   const [showAlert, setshowAlert] = React.useState(false)
   const [alertMessage, setalertMessage] = React.useState("")
   const [errors, setErrors] = React.useState({})
   const { signIn } = React.useContext(AuthContext);
 
-  const callLoginAPI = async () => {
+  const handleDataFromChild = (data) => {
+    callLoginAPI(data)
+  };
+  const callLoginAPI = async (data) => {
 
     authDispatch({ type: REGISTER_LOADING })
     try {
-      const res = await authAction(form);
+      const res = await authAction(data);
       if (res.token) { await setToken(res.token) }
       if (res.data) { await setUser(JSON.stringify(res.data)) }
       
@@ -37,28 +40,26 @@ const LoginScreen = () => {
 
     } catch (error) {
       showError(error.response.data.response.message)
-      authDispatch({ type: constants.REGISTER_FAIL, payload: error });
+      authDispatch({ type: REGISTER_FAIL, payload: error });
     }
   }
 
-  const onChange = ({ name, value }) => {
+  // const onChange = ({ name, value }) => {
 
-    setForm({ ...form, [name]: value });
-    if (value !== '') {
-      setErrors(prev => {
-        return { ...prev, [name]: null }
-      })
-    } else {
-      setErrors(prev => {
-        return { ...prev, [name]: name + ' is required' }
-      })
-    }
-  };
-
-
-  const onSubmit = () => {
+  //   setForm({ ...form, [name]: value });
+  //   if (value !== '') {
+  //     setErrors(prev => {
+  //       return { ...prev, [name]: null }
+  //     })
+  //   } else {
+  //     setErrors(prev => {
+  //       return { ...prev, [name]: name + ' is required' }
+  //     })
+  //   }
+  // };
 
 
+  // const onSubmit = () => {
     // async function getLocation() {
     //   var loc = await getUserLocation()
     //   console.log("get user location ", loc)
@@ -99,9 +100,9 @@ const LoginScreen = () => {
     //   })
     // }
     // else {
-      callLoginAPI()
+      // callLoginAPI()
     // }
-  };
+  // };
 
   const alertButtonTapped = (data) => {
     switch (data) {
@@ -115,8 +116,8 @@ const LoginScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <LoginComponent onSubmit={onSubmit} form={form} onChange={onChange} errors={errors} loading={loading} />
-      <CustomAlert showCancelButton={true} show={showAlert} confirmText={"Done"} message={alertMessage} buttonTapped={alertButtonTapped} />
+      <LoginComponent errors={errors} loading={loading} sendDataToParent={handleDataFromChild}/>
+      {/* <CustomAlert showCancelButton={true} show={showAlert} confirmText={"Done"} message={alertMessage} buttonTapped={alertButtonTapped} /> */}
     </View>
   );
 };

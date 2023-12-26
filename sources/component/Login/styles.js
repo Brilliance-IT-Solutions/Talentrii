@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
         color: Colors.Green,
     },
 
+    headingTitleContainer:{
+        justifyContent: 'flex-start', flexDirection: 'row', height: 50, marginTop:25, marginLeft:15
+    }
+
 });
 
 export default styles;

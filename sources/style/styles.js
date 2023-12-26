@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 import Colors from "../assets/themes/colors";
+import colors from "../assets/themes/colors";
 
 const { height, width } = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderWidth: 0.8,
         borderColor: Colors.lightGrey,
-        marginHorizontal: 30,
+        marginHorizontal: 18,
         marginVertical: 10,
         borderRadius:10
         
@@ -21,20 +22,27 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         // marginHorizontal: 80,
         paddingHorizontal:30,
-        backgroundColor: Colors.Green,        
+        // backgroundColor: Colors.Green,        
         borderRadius: 8,
         // height:50,
         alignSelf:'center',
         justifyContent: 'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     
     buttonText : {
-        marginVertical: 12,        
-        fontSize: 15,
+        marginVertical: 10,        
+        fontSize: 13,
         fontWeight: '400',
-        color: Colors.White,
+        // color: Colors.White,
     },
+
+    btnStyle:{
+        backgroundColor:Colors.Green,
+       },
+       textStyle:{
+        color:Colors.White
+       },
 
     topMargin20 : {
         top: 20,     
@@ -43,13 +51,15 @@ const styles = StyleSheet.create({
         top: 40    
     },
     bottomMargin5 : {
-        marginBottom: 5    
+        marginBottom: 5,
+        // fontSize:25,
+        color:colors.Black   
     },
 
     //################------> MULTI LINE TEXT CONTAINER (20k Followers) <----------###############
     multiLineTxt: {
-        flex: 0.4, 
-        alignItems: 'center', 
+        flex: 1, 
+        // alignItems: 'center', 
         height: 50, 
         flexDirection: 'column'                
     },
