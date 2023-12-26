@@ -318,7 +318,7 @@ const CreateChallenegeComponent = ({props}) => {
               onPressFunc={previewChallenge}
               buttonStyle={style.btnStyle}
           textStyle={style.textStyle}
-          width={'70%'}
+          width={'50%'}
             />
           </View>
         </View>

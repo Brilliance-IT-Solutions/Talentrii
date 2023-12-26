@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     },
     topIconRowSection: {
         marginHorizontal:10,
+         top:50
     },
     topIcon: {
         alignItems: 'center', marginRight: 30, marginVertical: 8

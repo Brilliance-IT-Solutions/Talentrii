@@ -12,13 +12,7 @@ const ProfileHeader = ({userName}) =>{
         <View style={{width:'100%',height:44,flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingHorizontal:10}}>
             <Text>{userName}</Text>
             <View style={{flexDirection:'row'}}>
-              <IconCont
-              imageSource={IMAGES.CREATE_CHALLENGE}
-              width={20}
-              height={20}
-              onIconPress={() => props.didTapped(Enums.ChallengeIconRedirection.CREATE_CHALLENGE_SCREEN)}
-              marginhorizontal={7}
-              />
+              <Icon name={"plus-square-o"} size={20} iconColor={colors.Black}/>
               <Icon name={"navicon"} size={20} iconColor={colors.Black}/>
               </View>
         </View>

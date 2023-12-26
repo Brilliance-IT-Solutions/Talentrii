@@ -9,6 +9,8 @@ import {HomeStackScreen} from './HomeStackNav';
 import {AuthStackScreen} from './AuthStackNav';
 import {Enums} from '../constants/Enum/enum';
 import Comments from '../component/home/Comments';
+import DetailProfileScreen from '../component/Profile/DetailProfileScreen';
+import UpdateProfileScreen from '../screen/profile/updateProfile';
 
 const Navigation = () => {
   const [isLogged, setisLogged] = React.useState(Enums.LoggedInStatus.initial);
@@ -47,6 +49,16 @@ const Navigation = () => {
           <RootStack.Screen
             name={RouterNames.COMMENTS}
             component={Comments}
+            options={{animationEnabled: true, headerShown: false}}
+          />
+            <RootStack.Screen
+            name={RouterNames.DETAIL_PROFILE_SCREEN}
+            component={DetailProfileScreen}
+            options={{animationEnabled: true, headerShown: false}}
+          />
+            <RootStack.Screen
+            name={RouterNames.UPDATE_PROFILE_SCREEN}
+            component={UpdateProfileScreen}
             options={{animationEnabled: true, headerShown: false}}
           />
         </>

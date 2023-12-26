@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
+  FlatList
 } from 'react-native';
 import {IMAGES} from '../../constants/images';
 import MultiLineContainer from '../common/2LineText/multiLineText';
@@ -46,6 +47,12 @@ const ProfileComponent = ({userId}) => {
     navigation.navigate(RouterNames.UPDATE_PROFILE_SCREEN);
   };
 
+   // Dummy data for users who are following the profile user
+   const followedBy = [
+    { id: 'follower1', imageUrl: 'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg' },
+    { id: 'follower2', imageUrl: 'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg' },
+    { id: 'follower3', imageUrl: 'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg' },
+  ];
   useEffect(() => {
     if (!userId) {
       getUser().then(data=>{
@@ -197,10 +204,26 @@ const ProfileComponent = ({userId}) => {
       </View>
 
       <View style={{marginHorizontal: 10, marginVertical: 10}}>
+      <FlatList
+          data={followedBy}
+          keyExtractor={(item) => item.id}
+          horizontal
+          renderItem={({ item }) => (
+          
+            <Image
+              source={{ uri: item.imageUrl }}
+              style={{ width: 15,
+                height: 15,
+                borderRadius: 50
+                }}
+              />
+              
+          )}
+        />
         <Text>Followed By Aajizz,Richard and 6 others</Text>
       </View>
 
-      {+LoggedInUserId === +userId && (
+      {+LoggedInUserId === +UserId && (
         <View style={{flexDirection: 'row', marginHorizontal: 10}}>
           <View style={{flex: 1, marginRight: 10}}>
             <ButtonComponent

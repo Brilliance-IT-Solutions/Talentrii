@@ -102,10 +102,10 @@ const handleChangeIndexvalue = ({index}) =>{
 }
   return (
     <View style={{flex: 1}}>
-      <View>
         <FlatList
          vertical
           data={users}
+          snapToAlignment="center"
           pagingEnabled={true}
           decelerationRate={'fast'}
           disableintervalmomentum={true}   
@@ -118,19 +118,7 @@ const handleChangeIndexvalue = ({index}) =>{
           )}
           keyExtractor={(item, index) => index.toString()}
         />
-        {/* <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-          }}>
-          <CustomFooter
-            didTapped={index => {
-              navigatePage(index);
-            }}
-          />
-        </View> */}
-      </View>
-    </View>
+     </View>
   );
 };
 export default HomeScreen;
