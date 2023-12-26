@@ -5,7 +5,7 @@ import { IMAGES } from '../../constants/images';
 import { RouterNames } from '../../constants/routeNames';
 import { useNavigation } from '@react-navigation/native';
 import { getTopMargin } from '../../utils/GenericFunction';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const CustomHeader = (props) => {
  
@@ -20,11 +20,12 @@ const CustomHeader = (props) => {
     }
     return (
         <View style={[styles.header, styles.headerExt]}>
-            { props.showBack && <TouchableOpacity onPress={didBackTapped} style={[styles.header, styles.backLogoContainer]}>
+            { props.showBack && <TouchableOpacity onPress={didBackTapped}>
                 <Image style={styles.backLogo}
                     source={IMAGES.BACK_ICON}
                     resizeMode="contain" />
             </TouchableOpacity> }
+            <View style={{flexDirection:'row',alignItems:'center'}}>
             {<View>
                 {props.title && <Text style={styles.headerTitle}>
                     {props.title}
@@ -35,6 +36,15 @@ const CustomHeader = (props) => {
                     source={IMAGES.BRAND_FULL_LOGO}
                     resizeMode="contain" />}
             </View>
+            </View>
+            { props.showClose && <TouchableOpacity onPress={didBackTapped}>
+            {/* <Image style={styles.close}
+                    source={IMAGES.BACK_ICON}
+                    resizeMode="contain" /> */}
+                    <View style={{marginHorizontal:10}}>
+                    <Icon name={'close-thick'} size={18} color={colors.Black}/>
+                    </View>
+            </TouchableOpacity> }
         </View>
     )
 }
@@ -49,7 +59,7 @@ const styles = StyleSheet.create({
     headerExt: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
     },
     headerTitle: {
         color: colors.Green,
@@ -57,7 +67,7 @@ const styles = StyleSheet.create({
         fontWeight:"500"
     },
     centerLogo: {
-        flex: 1,
+        // flex: 1,
         width: 100
     },
     backLogoContainer: {
@@ -66,7 +76,12 @@ const styles = StyleSheet.create({
     backLogo: {
         flex: 1,
         width: 20,
-        marginLeft: 20
+        marginLeft:14
+    },
+    close:{
+        flex: 1,
+        width: 20,
+        marginRight: 14
     }
 })
 export default CustomHeader;
