@@ -16,4 +16,15 @@ const authAction = async (form) => {
     const response = await axiosManager.post(url, param)    
     return response
 }
-export { authAction }
+
+const authSignUpAction = async (form) => {
+    const url = APIs.BASE_URL + APIs.SIGNUP_LINK
+    const param = {
+        "firstName":form.firstName,
+        "emailId": form.emailId,
+        "password": form.password,
+    }
+    const response = await axiosManager.post(url, param)    
+    return response
+}
+export { authAction,authSignUpAction }

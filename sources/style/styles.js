@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
         borderColor: Colors.lightGrey,
         marginHorizontal: 18,
         marginVertical: 10,
-        borderRadius:10
+        borderRadius:10,
+        backgroundColor:'#E6E6E3'
         
     },
     leftStandardPadding : {

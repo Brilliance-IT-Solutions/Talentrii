@@ -25,8 +25,8 @@ const CustomInput = ({
         render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <View>
               <View style={{flexDirection:'row',alignItems:'center'}}>
-              <View style={{position:'absolute',left:25}}>
-              <Icon name={icon} size={15}/>
+              <View style={{position:'absolute',left:25,zIndex:1}}>
+              <Icon name={icon} size={15} color={'#9EA3A8'}/>
               </View>
               <TextInput
                 style={[styles.textBoxes, styles.leftStandardPadding, {flex:1,position:'relative',paddingLeft:30},
@@ -40,11 +40,11 @@ const CustomInput = ({
                 maxLength={maxLength}
             ></TextInput>  
            {!!onPressIcon &&
-              <TouchableOpacity style={{marginBottom:20}} onPress={onPressIcon} hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}>
+              <TouchableOpacity style={{marginBottom:20}} onPress={onPressIcon} hitSlop={{ top: 20, bottom: 20, left: 30, right: 20 }}>
 
              <View style={{position:'absolute',right:35}}>
-             {showPassword ? <Icon name={'eye-off'} size={15}/> :
-              <Icon name={'eye'} size={15}/>}
+             {showPassword ? <Icon name={'eye-off'} size={15} color={'#9EA3A8'}/> :
+              <Icon name={'eye'} size={15} color={'#9EA3A8'}/>}
               </View>
 
              </TouchableOpacity>

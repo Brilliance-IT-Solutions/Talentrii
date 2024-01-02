@@ -16,6 +16,7 @@ import multistyle from '../../component/Profile/styles';
 import CustomInput from '../common/TextInput/CustomInput';
 import {useForm} from 'react-hook-form';
 import Checkbox from '../common/checkbox/Checkbox';
+import Social from '../common/social/Social';
 
 const LoginComponent = props => {
   const navigation = useNavigation();
@@ -49,6 +50,7 @@ const LoginComponent = props => {
           <MultiLineContainer
             txt1={"Let's Get Started!"}
             txt2="Welcome back.You've been missed!"
+            fontWeight={'700'}
           />
         </View>
         <View style={{marginTop: 25, marginBottom: 15}}>
@@ -90,6 +92,7 @@ const LoginComponent = props => {
           textStyle={style.textStyle}
           width={'90%'}
         />
+        <Social/>
       </View>
     </SafeAreaView>
   );

@@ -18,7 +18,7 @@ const Checkbox = ({
         disabled={false}
         value={value}
         onValueChange={onChange}
-        tintColors={{true : colors.Green , false: colors.Grey}}
+        tintColors={{true : colors.Green , false: '#9EA3A8'}}
       />
       </View>
       <View style={{paddingHorizontal:14,flex:1,marginVertical:5}}>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useContext} from 'react';
 import {useForm} from 'react-hook-form';
 import {Text, View, ScrollView} from 'react-native';
 import InputContainer from '../common/TextInput/textInput';
@@ -14,6 +14,14 @@ import RootContainer from '../rootContainer/rootContainer';
 import MultiLineContainer from '../common/2LineText/multiLineText';
 import style from '../../style/styles';
 import Checkbox from '../common/checkbox/Checkbox';
+import Social from '../common/social/Social';
+import axiosManager from '../../helpers/axiosHandler';
+import { authSignUpAction } from '../../context/actions/authAction';
+import { setToken,setUser } from '../../utils/GenericFunction';
+import { GlobalContext } from '../../context/Provider';
+import { showError, showSuccess } from '../../component/common/toaster/toaster';
+import { REGISTER_LOADING, REGISTER_SUCCESS,REGISTER_FAIL } from '../../constants/actionTypes/index'
+import { AuthContext } from '../../context/context';
 
 const Signup = () => {
   const [state, setState] = useState({
@@ -22,7 +30,8 @@ const Signup = () => {
   const {showDatePicker} = state;
   const [showPassword,setShowPassword]=useState(true)
   const [showCPassword,setShowCPassword]=useState(true)
-
+  const { authDispatch, authState: { error, loading, data } } = useContext(GlobalContext);
+  const { signIn } = React.useContext(AuthContext);
   const updateState = data => setState(state => ({...state, ...data}));
 
   const {
@@ -41,25 +50,42 @@ const Signup = () => {
     },
   });
 
+
+  const callSignUpAPI = async (data) => {
+
+    authDispatch({ type: REGISTER_LOADING })
+    try {
+      const res = await authSignUpAction(data);
+      if (res.token) { await setToken(res.token) }
+      if (res?.data) { await setUser(JSON.stringify(res?.data)) }
+      
+      authDispatch({ type: REGISTER_SUCCESS, payload: res.response })
+      signIn()
+      showSuccess(res.message)
+
+    } catch (error) {
+      showError(error.response.data.response.message)
+      authDispatch({ type: REGISTER_FAIL, payload: error });
+    }
+  }
+
   const onSignUpClick = data => {
-    console.log(data);
-    props
+      callSignUpAPI(data)
   };
 
   return (
     <View style={{backgroundColor: Colors.White,
-      //  height:height,
       flex: 1,}}>
     <View style={{flex: 1}}>
     <CustomHeader showBack showClose/>
               <View style={{ justifyContent: 'flex-start', flexDirection: 'row', height: 50, marginTop:25, marginLeft:15}}>
-                <MultiLineContainer txt1={"Let's Get Started!"} txt2="Welcome back.You've been missed!"/>
+                <MultiLineContainer txt1={"Let's Get Started!"} txt2="Welcome back.You've been missed!"  fontWeight={'700'}/>
                 </View>
       <RootContainer>
       <View style={{marginTop:25,marginBottom:15}}>
         <CustomInput
           control={control}
-          name="email"
+          name="emailId"
           placeholder="Enter your email"
           rules={{
             required: 'email is required',
@@ -72,7 +98,7 @@ const Signup = () => {
         />
          <CustomInput
           control={control}
-          name="firstname"
+          name="firstName"
           placeholder="Enter your Name"
           rules={{
             required: 'First Name is required',
@@ -117,7 +143,7 @@ const Signup = () => {
           onPressFunc={handleSubmit(onSignUpClick)}
           buttonStyle={style.btnStyle} textStyle={style.textStyle} width={'90%'}
         />
-        
+         <Social/>
       </View>
       </RootContainer>
     </View>
