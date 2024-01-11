@@ -49,10 +49,10 @@ const TimePicker = ({
             onPress={()=> onPress(!isVisible)}
             style={[{padding:10,borderWidth:1,borderRadius:5,borderColor:colors.searchborder,elevation:0.5},style]}
             >
-             <View style={{flexDirection:'row',alignItems:'center'}}>
+             <View style={{flexDirection:'row',alignItems:'center',alignContent:'center'}}>
               <Icon name={'clock-time-four-outline'} size={15} color={iconColor}/>
-             {!value ? <Text style={{fontSize:10,fontFamily:fontFamily.regular}}>select date</Text> :
-              <Text style={{fontSize:10,color:styleIcon,fontFamily:fontFamily.regular}}>{value.toLocaleTimeString()}</Text> }  
+             {!value ? <Text style={{fontSize:10,fontFamily:fontFamily.regular}}>select time</Text> :
+              <Text style={{fontSize:10,color:styleIcon,fontFamily:fontFamily.regular,paddingTop:2,paddingLeft:2}}>{value.toLocaleTimeString()}</Text> }  
               <View style={{position:'absolute',right:0}}>
               <Icon name={'menu-down'} size={15} color={styleIcon}/></View>   
              </View>

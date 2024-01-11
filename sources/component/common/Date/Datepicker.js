@@ -22,12 +22,13 @@ const DatePickerComponent = ({
   isVisible = false,
 }) => {
 
-  const formatDate = (utcString, format = 'dd/mm/yyyy') => {
-    if (!utcString) {
-        return ''
-    }
-    var local = new Date(utcString);
-    return local.toJSON().slice(0, 10);
+  const formatDate = (date) => {
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' }); // Use short month name
+    const year = date.getFullYear();
+    
+    const formattedDate = `${day} ${month}, ${year}`;
+    return formattedDate.toString()
   };
 
 
@@ -51,7 +52,7 @@ const DatePickerComponent = ({
              <View style={{flexDirection:'row',alignItems:'center'}}>
               <Icon name={'calendar-blank'} size={15} color={iconColor}/>
              {!value ? <Text style={{fontSize:10,fontFamily:fontFamily.regular}}>select date</Text> :
-              <Text style={{fontSize:10,color:styleIcon,fontFamily:fontFamily.regular}}>{value.toLocaleDateString()}</Text> }  
+              <Text style={{fontSize:10,color:styleIcon,fontFamily:fontFamily.regular,paddingTop:2,paddingLeft:2}}>{formatDate(value)}</Text> }  
               <View style={{position:'absolute',right:0}}>
               <Icon name={'menu-down'} size={15} color={styleIcon}/></View>   
              </View>
