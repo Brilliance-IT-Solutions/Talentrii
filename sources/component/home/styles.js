@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 import colors from "../../assets/themes/colors";
 import {getHeight, getTopMargin} from '../../utils/GenericFunction'
+import fontFamily from "../../style/fontFamily";
 
 const { height, width } = Dimensions.get('window')
 const textColor = colors.White
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
     },
     topIconRowSection: {
         marginHorizontal:10,
-         top:50
+        marginTop:getTopMargin() + 35,
     },
     topIcon: {
         alignItems: 'center', marginRight: 30, marginVertical: 8
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         width:'70%', 
     },
     challengeTitle: {
-        fontSize: 10, fontWeight: '700', color: textColor,flexWrap:'wrap',overflow:'scroll', marginLeft:0,marginRight:0,
+        fontSize: 10, fontFamily:fontFamily.medium, color: textColor,flexWrap:'wrap',overflow:'scroll', marginLeft:0,marginRight:0,
         paddingBottom:0,textAlign:"left"
        
     },
@@ -79,14 +80,16 @@ const styles = StyleSheet.create({
      borderRadius:50,
      marginVertical:0,
      paddingHorizontal:5,
-     paddingVertical:2,
+     paddingVertical:1,
      marginHorizontal:5
      
     },
     textStyle:{
         color:colors.Black,
-        fontSize:10,
-        marginVertical:0,
+        fontSize:7,
+        marginBottom:0,
+        marginTop:1,
+        fontFamily:fontFamily.medium,
     }
 
 });

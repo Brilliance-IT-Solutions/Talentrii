@@ -1,13 +1,12 @@
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../../assets/themes/colors';
-import { IMAGES } from '../../constants/images';
-import { RouterNames } from '../../constants/routeNames';
 import { useNavigation } from '@react-navigation/native';
 import { getTopMargin } from '../../utils/GenericFunction';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import fontFamily from '../../style/fontFamily';
 
-const CustomHeader = (props) => {
+const CustomHeader = ({showBack,title,showClose,rightIcon='close',colorRightIcon,styleBox,containerStyle,navigationPage}) => {
  
     const navigation = useNavigation();
 
@@ -20,31 +19,26 @@ const CustomHeader = (props) => {
     }
     return (
         <View style={[styles.header, styles.headerExt]}>
-            { props.showBack && <TouchableOpacity onPress={didBackTapped}>
-                <Image style={styles.backLogo}
-                    source={IMAGES.BACK_ICON}
-                    resizeMode="contain" />
-            </TouchableOpacity> }
-            <View style={{flexDirection:'row',alignItems:'center'}}>
-            {<View>
-                {props.title && <Text style={styles.headerTitle}>
-                    {props.title}
-                </Text>}
-            </View>}
-            <View>
-                {props.showImage && <Image style={styles.centerLogo}
-                    source={IMAGES.BRAND_FULL_LOGO}
-                    resizeMode="contain" />}
+            { showBack && <TouchableOpacity onPress={didBackTapped}>
+                <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+            <Icon name={'arrow-left'} size={18} color={colors.Black} style={styles.backLogo}/>
             </View>
-            </View>
-            { props.showClose && <TouchableOpacity onPress={didBackTapped}>
-            {/* <Image style={styles.close}
-                    source={IMAGES.BACK_ICON}
-                    resizeMode="contain" /> */}
-                    <View style={{marginHorizontal:10}}>
-                    <Icon name={'close-thick'} size={18} color={colors.Black}/>
+            </TouchableOpacity> }    
+           
+                {title && 
+                <View style={{position:'absolute',left:0,right:0,margin:"auto"}}>
+                    <Text style={styles.headerTitle}>
+                    {title}
+                </Text>
+                </View>}
+        
+            <View style={{position:'absolute',right:0}}>
+            { showClose && <TouchableOpacity onPress={navigationPage ? navigationPage : didBackTapped}>
+                <View style={[styleBox ? containerStyle : '',{marginRight:10}]}>
+                    <Icon name={rightIcon} size={18} color={colorRightIcon ? colorRightIcon :colors.Black} style={[styles.close]}/>
                     </View>
-            </TouchableOpacity> }
+            </TouchableOpacity>}
+                    </View>
         </View>
     )
 }
@@ -59,12 +53,14 @@ const styles = StyleSheet.create({
     headerExt: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
     },
     headerTitle: {
-        color: colors.Green,
-        fontSize: 18,
-        fontWeight:"500"
+        color: colors.Black,
+        fontSize: 16,
+        fontWeight:"500",
+        textAlign:'center',
+        fontFamily:fontFamily.medium
+        
     },
     centerLogo: {
         // flex: 1,
@@ -74,14 +70,14 @@ const styles = StyleSheet.create({
         position: 'absolute', justifyContent: 'center'
     },
     backLogo: {
-        flex: 1,
         width: 20,
-        marginLeft:14
+        marginHorizontal:10,
     },
     close:{
-        flex: 1,
+        textAlign:'center',
         width: 20,
-        marginRight: 14
+        marginRight:0,
+        borderRadius:5
     }
 })
 export default CustomHeader;

@@ -1,5 +1,6 @@
 export const IMAGES = {
     SPLASH_SCREEN_LOGO : require('../assets/image/talentriLogo.png'),
+    WELCOME_SCREEN_LOGO : require('../assets/image/welcome.png'),
     BRAND_FULL_LOGO : require('../assets/image/splashLogo.png'),
     USER_PIC : require('../assets/image/aman.png'),
     LIKE : require('../assets/icons/like.png'),
@@ -20,6 +21,21 @@ export const IMAGES = {
     LOCATION_ICON: require('../assets/icons/location.png'),
     PLAY_ICON: require('../assets/icons/Play.png'),
     PLAY_BUTTON_ICON: require('../assets/icons/playbutton.png'),
-    USER_DEFAULT_ICON:'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png'
+    USER_DEFAULT_ICON:'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png',
+    CHALLENGE_IMAGE:require('../assets/image/challenge.png'),
+    ELLIPSE_IMAGE1:require('../assets/image/Ellipse1.png'),
+    ELLIPSE_IMAGE2:require('../assets/image/Ellipse2.png'),
+    ELLIPSE_IMAGE3:require('../assets/image/Ellipse3.png'),
+    ELLIPSE_IMAGE4:require('../assets/image/Ellipse4.png'),
+    RECTANGLE_IMAGE1:require('../assets/image/Rectangle63.png'),
+    RECTANGLE_IMAGE2:require('../assets/image/Rectangle69.png'),
+    RECTANGLE_IMAGE3:require('../assets/image/Rectangle70.png'),
+    RECTANGLE_IMAGE4:require('../assets/image/Rectangle68.png'),
+    RECTANGLE_IMAGE5:require('../assets/image/Rectangle71.png'),
+    GALLERY:require("../assets/image/gallery.png")
+
+
+    
+
 
 }

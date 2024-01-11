@@ -34,7 +34,7 @@ const LoginScreen = () => {
       if (res.token) { await setToken(res.token) }
       if (res.data) { await setUser(JSON.stringify(res.data)) }
       
-      authDispatch({ type: REGISTER_SUCCESS, payload: res.response })
+      authDispatch({ type: REGISTER_SUCCESS, payload: res.data })
       signIn()
       showSuccess(res.message)
 
@@ -117,7 +117,7 @@ const LoginScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <LoginComponent errors={errors} loading={loading} sendDataToParent={handleDataFromChild}/>
-      {/* <CustomAlert showCancelButton={true} show={showAlert} confirmText={"Done"} message={alertMessage} buttonTapped={alertButtonTapped} /> */}
+      <CustomAlert showCancelButton={true} show={showAlert} confirmText={"Done"} message={alertMessage} buttonTapped={alertButtonTapped} />
     </View>
   );
 };

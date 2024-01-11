@@ -1,11 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import {
   View,
   Text,
   Image,
-  TouchableOpacity,
   useWindowDimensions,
-  FlatList
 } from 'react-native';
 import {IMAGES} from '../../constants/images';
 import MultiLineContainer from '../common/2LineText/multiLineText';
@@ -16,30 +14,25 @@ import {RouterNames} from '../../constants/routeNames';
 import {useNavigation} from '@react-navigation/native';
 import axiosManager from '../../helpers/axiosHandler';
 import {APIs} from '../../constants/api';
-import Video from 'react-native-video';
-import {getHeight} from '../../utils/GenericFunction';
 import {Dimensions} from 'react-native';
 import {getUser} from '../../utils/GenericFunction';
 import {useFocusEffect} from '@react-navigation/native';
-const {width} = Dimensions.get('window');
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import RootContainer from '../rootContainer/rootContainer';
-import {Enums} from '../../constants/Enum/enum';
 import {staticConstant} from '../../constants/staticData/staticConstant';
 import ProfileHeader from '../customHeader/profileHeader';
 import ButtonComponent from '../common/Buttons/buttonComponent';
-import IconCont from '../common/IconCount/iconCount';
 import ChallengeCardProfile from './ChallengeCardProfile';
-import CustomFooter from '../customHeader/footer';
 import Icon from '../common/IconCount/Icons';
-
+import {GlobalContext} from '../../context/Provider';
+import fontFamily from '../../style/fontFamily';
 const ProfileComponent = ({userId}) => {
   const navigation = useNavigation();
   const [userdetail, setUserDetail] = useState([]);
   const [LoggedInUserId, setLoggedInUserId] = useState('');
   const [UserId, setUserId] = useState(0);
   const layout = useWindowDimensions();
-
+  const {authState} = useContext(GlobalContext);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState(staticConstant.Profile.routeTabs);
 
@@ -47,20 +40,37 @@ const ProfileComponent = ({userId}) => {
     navigation.navigate(RouterNames.UPDATE_PROFILE_SCREEN);
   };
 
-   // Dummy data for users who are following the profile user
-   const followedBy = [
-    { id: 'follower1', imageUrl: 'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg' },
-    { id: 'follower2', imageUrl: 'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg' },
-    { id: 'follower3', imageUrl: 'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg' },
+  // Dummy data for users who are following the profile user
+  const followedBy = [
+    {
+      id: 'follower1',
+      imageUrl:
+        'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg',
+    },
+    {
+      id: 'follower2',
+      imageUrl:
+        'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg',
+    },
+    {
+      id: 'follower3',
+      imageUrl:
+        'https://dutchuppblob.s3.amazonaws.com/originals/1698196732122/lavender-1595581_1280.jpg',
+    },
   ];
+  
   useEffect(() => {
     if (!userId) {
-      getUser().then(data=>{
-        const userDetailID = data ? JSON.parse(data) : '';
-        setUserId(userDetailID.id)
-      }).catch(error=>{console.log(error)});
+      getUser()
+        .then(data => {
+          const userDetailID = data ? JSON.parse(data) : '';
+          setUserId(userDetailID.id);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     } else {
-      setUserId(userId)
+      setUserId(userId);
     }
   }, [userId]);
 
@@ -68,7 +78,7 @@ const ProfileComponent = ({userId}) => {
     try {
       const response = await axiosManager.post(
         APIs.BASE_URL + APIs.GET_USERDETAIL_BY_USERID,
-        {userId: UserId},
+        {userId: userId},
       );
       setUserDetail(response.data);
     } catch (error) {
@@ -79,12 +89,14 @@ const ProfileComponent = ({userId}) => {
   // useFocusEffect to fetch data for page 1 when the route changes
   useFocusEffect(
     React.useCallback(() => {
-      setUserDetail([])
+      setUserDetail([]);
       fetchProfileApi();
-    }, [UserId])
+    }, [UserId]),
   );
 
- 
+  // useEffect(()=>{
+  //  fetchProfileApi()
+  // },[userId])
 
   const getuserDetail = async () => {
     const data = await getUser();
@@ -97,11 +109,11 @@ const ProfileComponent = ({userId}) => {
   }, []);
 
   const FirstRoute = () => (
-    <View style={{flex: 1, backgroundColor: colors.lightGrey}}>
-        <RootContainer>
+    <View style={{flex: 1, backgroundColor: colors.White}}>
+      <RootContainer>
         <ChallengeCardProfile userdetail={userdetail} />
-    </RootContainer>
-      </View>
+      </RootContainer>
+    </View>
   );
 
   const SecondRoute = () => <View style={{flex: 1}} />;
@@ -127,12 +139,17 @@ const ProfileComponent = ({userId}) => {
           indicatorStyle={{backgroundColor: colors.Green, height: 2}}
           renderLabel={({route}) => (
             <View style={{alignItems: 'center', alignContent: 'center'}}>
-              <Icon name={route.icon} label={route.title} size={15} iconColor={
+              <Icon
+                name={route.icon}
+                label={route.title}
+                size={15}
+                iconColor={
                   route.key ===
                   props.navigationState.routes[props.navigationState.index].key
                     ? colors.Green
-                    : colors.Black
-                }/>
+                    : colors.Grey
+                }
+              />
             </View>
           )}
         />
@@ -142,7 +159,7 @@ const ProfileComponent = ({userId}) => {
 
   return (
     <View style={styles.rootContainer}>
-      <ProfileHeader userName={userdetail.firstName}/>
+      <ProfileHeader userName={userdetail.firstName} />
       <View
         style={{
           flexDirection: 'row',
@@ -155,15 +172,37 @@ const ProfileComponent = ({userId}) => {
             source={{
               uri:
                 userdetail.profileImage !== 'undefined' &&
-                userdetail.profileImage !== 'null'
+                userdetail.profileImage !== null
                   ? userdetail.profileImage
                   : IMAGES.USER_DEFAULT_ICON,
             }}
             resizeMode="contain"
           />
-          <Text>{userdetail.firstName}</Text>
-          <Text>{'Creative Digital Agency'}</Text>
-          <Text>{'linktre./Amandeep'}</Text>
+
+          <Text
+            style={{
+              color: colors.Black,
+              fontFamily: fontFamily.medium,
+              fontSize: 10,
+            }}>
+            {userdetail.firstName}
+          </Text>
+          <Text
+            style={{
+              color: colors.Black,
+              fontFamily: fontFamily.regular,
+              fontSize: 10,
+            }}>
+            {'Creative Digital Agency'}
+          </Text>
+          <Text
+            style={{
+              color: colors.Green,
+              fontFamily: fontFamily.regular,
+              fontSize: 10,
+            }}>
+            {'linktre./Amandeep'}
+          </Text>
         </View>
         <View>
           <View
@@ -181,7 +220,8 @@ const ProfileComponent = ({userId}) => {
               fontSizetxt1={13}
               color={colors.Black}
               align={'center'}
-              fontSizetxt2={12}
+              fontSizetxt2={10}
+              style={{marginBottom: 0}}
             />
             <MultiLineContainer
               txt1={'10'}
@@ -189,7 +229,8 @@ const ProfileComponent = ({userId}) => {
               fontSizetxt1={13}
               color={colors.Black}
               align={'center'}
-              fontSizetxt2={12}
+              fontSizetxt2={10}
+              style={{marginBottom: 0}}
             />
             <MultiLineContainer
               txt1={'120'}
@@ -197,35 +238,50 @@ const ProfileComponent = ({userId}) => {
               fontSizetxt1={13}
               color={colors.Black}
               align={'center'}
-              fontSizetxt2={12}
+              fontSizetxt2={10}
+              style={{marginBottom: 0}}
             />
           </View>
         </View>
       </View>
 
-      <View style={{marginHorizontal: 10, marginVertical: 10}}>
-      <FlatList
-          data={followedBy}
-          keyExtractor={(item) => item.id}
-          horizontal
-          renderItem={({ item }) => (
-          
+      <View
+        style={{
+          marginHorizontal: 10,
+          marginVertical: 10,
+          flexDirection: 'row',
+          alignItems:'center',
+        
+        }}>
+        {followedBy &&
+          followedBy.map((item, index) => (
+            <View key={item.id}>
             <Image
-              source={{ uri: item.imageUrl }}
-              style={{ width: 15,
+              source={{uri: item.imageUrl}}
+              style={{
+                width: 15,
                 height: 15,
                 borderRadius: 50
-                }}
+              }}
               />
-              
-          )}
-        />
-        <Text>Followed By Aajizz,Richard and 6 others</Text>
+              </View>
+          ))}
+        <Text
+          style={{
+            color: colors.Black,
+            fontFamily: fontFamily.medium,
+            fontSize: 10,
+            marginHorizontal:5,
+            flex:1,
+            flexWrap:'wrap'
+          }}>
+          Followed By Aajizz,Richard and 6 others
+        </Text>
       </View>
 
       {+LoggedInUserId === +UserId && (
         <View style={{flexDirection: 'row', marginHorizontal: 10}}>
-          <View style={{flex: 1, marginRight: 10}}>
+          <View style={{flex: 1, marginRight: 6}}>
             <ButtonComponent
               title={'Edit Profile'}
               buttonStyle={styles.btnStyle}
@@ -234,7 +290,7 @@ const ProfileComponent = ({userId}) => {
               onPressFunc={test}
             />
           </View>
-          <View style={{flex: 1, marginLeft: 10}}>
+          <View style={{flex: 1, marginLeft: 6}}>
             <ButtonComponent
               title={'Share Profile'}
               buttonStyle={styles.btnStyle}

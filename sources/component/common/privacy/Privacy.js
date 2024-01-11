@@ -1,20 +1,19 @@
-import CustomHeader from "../../customHeader/customHeader"
-import TittleHeader from "../../customHeader/tittleHeader"
-import { View,Switch,TouchableOpacity ,Text} from "react-native"
+import { View ,Text} from "react-native"
 import React,{useContext, useEffect, useState} from "react"
 import colors from "../../../assets/themes/colors"
-import ParagraphContainer from "../Paragraph/paragraph"
 import { ToggleContext } from '../../../context/privacy/context';
 import axiosManager from "../../../helpers/axiosHandler"
 import { APIs } from "../../../constants/api"
-import { staticConstant } from "../../../constants/staticData/staticConstant"
+import {Switch} from 'react-native-switch'
+import { Controller } from "react-hook-form"
+import fontFamily from "../../../style/fontFamily"
 
-const PrivacyComponent = ({props}) => {
+const PrivacyComponent = ({control,name,defaultValue=true}) => {
     const { isToggled, setToggled } = useContext(ToggleContext);
     const [isEnabled, setIsEnabled] = useState(false);
 
     useEffect(()=>{
-      callApi()
+      // callApi()
     },[])
     
 
@@ -51,26 +50,41 @@ const PrivacyComponent = ({props}) => {
   }
 
   return(
-    <View style={{flex:1}}>
-        <CustomHeader showImage showBack/>
-        <TittleHeader title={staticConstant.privacyTitle}/>
-        <Switch
-        trackColor={{false: colors.grey , true: colors.Green}}
-        thumbColor={isEnabled ? colors.Green : colors.Grey}
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-        />
-      <View style={{margin:10,padding:10}}>
-      <View style={{marginBottom:5}}>
-        <Text style={{fontSize:16,fontWeight:'700',color:colors.grey}}>{staticConstant.publicTitle}</Text>
-        <Text style={{fontSize:14,fontWeight:'200',color:colors.Grey,paddingVertical:7}}>{staticConstant.publicChallenge}</Text>
-      </View>
-      <View style={{marginTop:5}}>
-        <Text style={{fontSize:16,fontWeight:'700',color:colors.grey}}>{staticConstant.privateTitle}</Text>
-        <Text style={{fontSize:14,fontWeight:'200',color:colors.Grey,paddingVertical:7}}>{staticConstant.privateChallenge}</Text>
-      </View>
-      </View>
-
+    <View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
+       <Controller
+        control={control}
+        name={name}
+        render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
+          <>
+        <Text style={[{fontSize:8,color:value ? colors.Icon : colors.Black,fontFamily:fontFamily.regular}]}>Private</Text>
+        <View style={{marginHorizontal:3}}>
+         <Switch
+          barHeight={15}
+          value={value}
+          onValueChange={onChange}
+          backgroundActive={colors.Green}
+          backgroundInactive={colors.Grey}
+          circleActiveColor={colors.White}
+          circleInActiveColor={colors.White}
+          renderActiveText={false}
+          renderInActiveText={false}
+          innerCircleStyle={{
+            borderWidth: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            width:15,
+            height:15,
+            borderColor:colors.Filterborder
+          }}
+          switchLeftPx={4} 
+        switchRightPx={4} 
+        switchWidthMultiplier={1} 
+        
+         />
+         </View>
+        <Text style={[{fontSize:8,color:!value ? colors.Icon : colors.Black,fontFamily:fontFamily.regular}]}>Public</Text>
+        </>
+        )}/>
     </View>
   )
 }

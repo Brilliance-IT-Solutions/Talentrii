@@ -1,13 +1,15 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import colors from "../../../assets/themes/colors";
+import fontFamily from "../../../style/fontFamily";
 
-const Label = (props) => {
+const Label = ({title,style,asterisk}) => {
 
     return (
-        <View style={styles.subHeading}>
-        <Text style={styles.subHeadingText}>
-            {props.title}
+        <View style={[styles.subHeading,style]}>
+        <Text style={[styles.subHeadingText,style]}>
+            {title}
+            {/* {asterisk && <Text style={{color:asterisk ? 'red':'black'}}>{"*"}</Text>} */}
         </Text>
     </View>
 
@@ -17,16 +19,15 @@ const styles = StyleSheet.create({
     subHeading: {
         width: '100%',
         flexDirection: 'row',
-        justifyContent:'center',
         alignItems:'center'
      
     },
     subHeadingText: {
         marginLeft: 20,
-        fontSize: 13,
-        paddingTop:10,
-        paddingBottom:10,
-        color:colors.grey
+        fontSize: 12,
+         marginVertical:4,
+        color:colors.Black,
+        fontFamily:fontFamily.medium
 
     }
 });

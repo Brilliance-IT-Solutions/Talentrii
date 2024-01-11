@@ -1,29 +1,26 @@
 import React, {useEffect, useContext} from 'react';
-import {StyleSheet, View, TextInput, Text} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import colors from '../../assets/themes/colors';
-import InputContainer from '../common/TextInput/textInput';
 import CustomHeader from '../customHeader/customHeader';
 import RootContainer from '../rootContainer/rootContainer';
-import PopupComponent from '../common/Buttons/popupComponent';
-import TittleHeader from '../customHeader/tittleHeader';
-import {staticConstant} from '../../constants/staticData/staticConstant';
-import EndDate from '../common/Date/EndDate';
-import Time from '../common/time/Time';
-import Images from '../common/images/Images';
+import UploadImage from '../common/images/UploadImage';
 import Location from '../common/location/Location';
 import {useState} from 'react';
 import ButtonComponent from '../common/Buttons/buttonComponent';
-import moment from 'moment';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {RouterNames} from '../../constants/routeNames';
+import {useNavigation} from '@react-navigation/native';
 import {ToastMessage} from '../../constants/toasterConstants';
-import {width} from '../../style/responsiveSize';
 import {showError} from '../common/toaster/toaster';
 import style from '../../style/styles';
 import {ToggleContext} from '../../context/privacy/context';
 import {APIs} from '../../constants/api';
 import axiosManager from '../../helpers/axiosHandler';
-import CustomDropdown from '../common/dropdown/CustomDropdown';
+import PrivacyComponent from '../common/privacy/Privacy';
+import {useForm} from 'react-hook-form';
+import CustomInput from '../common/TextInput/CustomInput';
+import DatePickerComponent from '../common/Date/Datepicker';
+import TimePicker from '../common/time/Time';
+import CustomRadio from '../common/radio/Radio';
+import fontFamily from '../../style/fontFamily';
 
 const CreateChallenegeComponent = ({props}) => {
   const {isToggled} = useContext(ToggleContext);
@@ -45,47 +42,63 @@ const CreateChallenegeComponent = ({props}) => {
   //         })
   //     }
   // };
-  const [addImage, setAddImage] = useState(false);
-  const [addStartDate, setStartDate] = useState(false);
-  const [addEndDate, setEndDate] = useState(false);
-  const [addLocation, setLocation] = useState(false);
-  const [addTime, setTime] = useState(false);
-  const [minimumDate, setminimumDate] = useState(false);
   const [images, AddImages] = useState([]);
-  const [title, addTitle] = useState('');
-  const [description, addDescription] = useState('');
-  const [location, setLocationValue] = useState('');
   const [startdate, setStartDateValue] = useState(new Date());
   const [enddate, setEndDateValue] = useState(startdate);
-  const [time, setTimeValue] = useState(new Date());
-  const [privacy, setIsPrivate] = useState(false);
-  const [privacyVal, setIPrivacyVal] = useState(false);
-  const [dropdown, setDropdown] = useState('');
   const [dropdownData, setDropdownData] = useState([]);
+  const [showDatepicker, setShowDatePicker] = useState(false);
+  const [showEndDatepicker, setShowEndDatePicker] = useState(false);
+  const [setStartTime, setStartTimeValue] = useState(new Date());
+  const [setEndTime, setEndTimeValue] = useState(new Date());
+  const [showStartTimepicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimepicker, setShowEndTimePicker] = useState(false);
+  const [error, setError] = useState(false);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      callApi();
-    }, []),
-  );
+  const data = [{value: 'Break'}, {value: 'Joinees'}];
+  const dropdownelement = [
+    {id: 1, title: 'test'},
+    {id: 2, title: 'testds'},
+    {id: 3, title: 'testdsvv'},
+  ];
 
-  const callApi = async () => {
-    const url = APIs.BASE_URL + APIs.CHALLENGE_PRIVACY;
-    let param = {};
-    try {
-      await axiosManager.get(url, param).then(res => {
-        const privacy = res.data[0].privacy;
-        setIPrivacyVal(privacy);
-        if (privacy === '1') {
-          setIsPrivate(true);
-        } else {
-          setIsPrivate(false);
-        }
-      });
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  };
+  const {
+    control,
+    register,
+    resetField,
+    getValues,
+    setValue,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {},
+  });
+
+  const updateState = data => setShowDatePicker(data);
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     callApi();
+  //   }, []),
+  // );
+
+  // const callApi = async () => {
+  //   const url = APIs.BASE_URL + APIs.CHALLENGE_PRIVACY;
+  //   let param = {};
+  //   try {
+  //     await axiosManager.get(url, param).then(res => {
+  //       const privacy = res.data[0].privacy;
+  //       setIPrivacyVal(privacy);
+  //       if (privacy === '1') {
+  //         setIsPrivate(true);
+  //       } else {
+  //         setIsPrivate(false);
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.log(error.response.data);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchapi = async () => {
@@ -102,233 +115,289 @@ const CreateChallenegeComponent = ({props}) => {
     fetchapi();
   }, []);
 
-  const updateParentVariable = value => {
-    setStartDate(value);
-    setEndDate(value);
-  };
-
-  // const updateParentVariable2 = value => {
-  //   setEndDate(value);
-  // };
-
-  const updateParentVariable3 = value => {
-    setLocation(value);
-  };
-
-  const updateParentVariable4 = value => {
-    setTime(value);
-  };
-
   const handleChildStateChange = newValue => {
     AddImages(newValue);
   };
 
-  const AddComponents = item => {
-    if (item === 'add image') {
-      setAddImage(true);
-    } else if (item === 'add startDate') {
-      setStartDate(true);
-      setEndDate(true);
+  const CreateChallenge = async data => {
+    if (images.length < 1) {
+      setError(true);
+      return;
     }
-    //  else if (item === 'add endDate' && addStartDate) {
-    //   setEndDate(true);
-    // }
-    else if (item === 'add time') {
-      setTime(true);
-    } else if (item === 'add location') {
-      setLocation(true);
+    if (data) {
+      console.log('fgfdhfg', data);
+      // const formData = new FormData();
+      //  images.forEach((file, index) => {
+      //    formData.append('files', file);
+      //  });
+      // //  setLoader(true)
+      //  const url = APIs.BASE_URL + APIs.UPLOAD_IMAGE;
+
+      //  const token = await getToken();
+      //  await axios
+      //    .post(url, formData, {
+      //      headers: {
+      //        'Content-Type': 'multipart/form-data',
+      //        token: token,
+      //      },
+      //    })
+      //    .then( async res => {
+
+      //      console.log('====================================');
+      //      console.log('Success!', res.data.response.urls);
+
+      //      const urls = APIs.BASE_URL + APIs.CREATE_CHALLENGE;
+      //      if(res?.data?.response?.urls?.length > 0){
+      //    console.log("dfsddfdfdfgdfgdfgh",data)
+      //      let param = {
+      //        title: data?.title,
+      //        description: data?.description,
+      //        url: res?.data?.response.urls,
+      //        latitude: '',
+      //        longitude: '',
+      //        startDate: moment(data?.startDate).utc().format('YYYY-MM-DD'),
+      //        endDate:  moment(data?.endDate).utc().format('YYYY-MM-DD'),
+      //        startTime:  moment(data?.startTime).format('HH:mm:ss'),
+      //        category:data?.category,
+      //        endTime:  moment(data?.endTime).format('HH:mm:ss'),
+      //        location:data?.location.toString(),
+      //        privacy:data?.privacy.toString()
+      //      }
+      //      console.log("gghjhdfjsdhgfdh",param)
+
+      //      await axiosManager
+      //        .post(urls, param)
+      //        .then(res => {
+      //         //  setLoader(false)
+      //          showSuccess(res.message)
+      //          navigation.navigate(RouterNames.HOME_SCREEN);
+      //        }).catch(error => {
+
+      //         //  setLoader(false)
+      //          showError(error.response.data.response.message)
+      //        });
+      //      }else{
+      //       //  setLoader(false)
+      //        showError(ToastMessage.REQUIRED_MEDIA)
+
+      //         return
+      //      }
+
+      //    })
+      //    .catch(error => {
+      //      showError(error.response.data.response.message)
+      //      setLoader(false);
+      //    });
     } else {
+      showError(ToastMessage.REQUIRED_FIELDS);
       return;
     }
   };
-
-  const privacyChallenge = () => {
-    navigation.navigate(RouterNames.PRIVACY);
-  };
-
-  const previewChallenge = async () => {
-    const param = {
-      title: title,
-      description: description,
-      url: images,
-      latitude: location ? location : '',
-      longitude: location ? location : '',
-      from_date: moment(startdate).utc().format('YYYY-MM-DD'),
-      to_date: moment(enddate).utc().format('YYYY-MM-DD'),
-      time: moment(time).format('HH:mm:ss'),
-      purpose: dropdown,
-    };
-
-    if (param.title !== '') {
-      if (param.title.length >= 4) {
-        if (param.description !== '') {
-          if (param.description.length >= 5) {
-            if (param.purpose !== '') {
-              if (param.url.length > 0) {
-                navigation.navigate(RouterNames.PREVIEW_CHALLENGE_SCREEN, {
-                  data: JSON.stringify(param),
-                });
-              } else {
-                showError(ToastMessage.REQUIRED_MEDIA);
-                return;
-              }
-            } else {
-              showError(ToastMessage.REQUIRED_PURPOSE);
-              return;
-            }
-          } else {
-            showError(ToastMessage.REQUIRED_DESC_CHARACTERS);
-            return;
-          }
-        } else {
-          showError(ToastMessage.REQUIRED_DESCRIPTION);
-          return;
-        }
-      } else {
-        showError(ToastMessage.REQUIRED_TITLE_CHARACTERS);
-        return;
-      }
-    } else {
-      showError(ToastMessage.REQUIRED_TITLE);
-      return;
-    }
-  };
-
-  if (!props.data && !addStartDate) return null;
+  // if (!props.data && !addStartDate) return null;
 
   return (
     <View style={styles.rootContainer}>
-      <CustomHeader showImage showBack />
-      <TittleHeader title={staticConstant.createChallenge.titleHeader} />
+      <CustomHeader showBack title={'Create Challenge'} />
 
       <RootContainer>
-        <View style={{marginTop: 20}}>
-          <InputContainer
-            placeholder="Title"
-            maxLength={30}
-            onChangeText={title => addTitle(title)}
-          />
-          <InputContainer
-            placeholder="Description"
-            maxLength={120}
-            needMultilie={true}
-            noLines={4}
-            onChangeText={description => addDescription(description)}
-          />
-
-          <View style={{position: 'relative'}}>
-            <TextInput
-              inputMode="none"
-              placeholder="Challenge Privacy"
-              style={[style.textBoxes, style.leftStandardPadding, {height: 50}]}
-              onPressOut={privacyChallenge}
-            />
-            <View style={{position: 'absolute', right: 40, marginVertical: 25}}>
-              <Text>{privacy === false ? 'public' : 'private'}</Text>
-            </View>
-          </View>
-
+        <View
+          style={{
+            marginTop: 20,
+            marginHorizontal: 18,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 15,
+              color: colors.Black,
+              fontFamily: fontFamily.semiBold,
+              paddingVertical: 5,
+            }}>
+            Mandatory Information{' '}
+          </Text>
           <View>
-            <CustomDropdown
-              placeholder={'Purpose'}
-              dropdownData={dropdownData}
-              onChange={value => {
-                setDropdown(value);
-              }}
+            <PrivacyComponent control={control} name={'privacy'} />
+          </View>
+        </View>
+
+        <View>
+          <CustomInput
+            control={control}
+            name={'title'}
+            placeholder={'Enter Title'}
+            label={'Title'}
+            rules={{
+              required: 'Title is required',
+              minLength: {
+                value: 3,
+                message: 'Title should have atleast 3 characters',
+              },
+            }}
+          />
+        </View>
+        <View>
+          <UploadImage
+            onChildStateChange={handleChildStateChange}
+            control={control}
+            name={'url'}
+            label={'Upload'}
+            placeholder={
+              'You Can Upload 1 Media Atleast (5 Max Images, Max Videos)'
+            }
+          />
+          {error && (
+            <Text
+              style={[
+                styles.leftStandardPadding,
+                {
+                  color: 'red',
+                  alignSelf: 'stretch',
+                  marginHorizontal: 36,
+                  fontSize: 11,
+                  fontFamily: fontFamily.medium,
+                },
+              ]}>
+              {'Please upload atleast 1 image/video'}
+              {error}
+            </Text>
+          )}
+        </View>
+        <View>
+          <CustomRadio
+            control={control}
+            name={'category'}
+            data={dropdownData}
+            label={'Category'}
+            defaultValue={'Break'}
+          />
+        </View>
+        <View>
+          <CustomInput
+            control={control}
+            name={'description'}
+            placeholder={'Enter Description'}
+            label={'Description'}
+            multiline={true}
+            rules={{
+              required: 'Description is required',
+              minLength: {
+                value: 4,
+                message: 'Description should have atleast 4 characters',
+              },
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            marginTop: 20,
+            marginHorizontal: 18,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 15,
+              color: colors.Black,
+              fontFamily: fontFamily.semiBold,
+              paddingVertical: 5,
+            }}>
+            Optional Information{' '}
+          </Text>
+          <View>
+            <PrivacyComponent control={control} name={'privacy'} />
+          </View>
+        </View>
+
+        <View style={{flexDirection: 'row', marginHorizontal: 18}}>
+          <View style={{flex: 1, marginRight: 20}}>
+            <DatePickerComponent
+              control={control}
+              name={'startDate'}
+              value={startdate}
+              onChange={setStartDateValue}
+              minimumDate={new Date()}
+              isVisible={showDatepicker}
+              onPress={() => setShowDatePicker(prev => !prev)}
+              label={'Start Date'}
+              style={{backgroundColor: colors.White}}
+              styleIcon={colors.Icon}
+              iconColor={colors.Green}
             />
           </View>
-
-          {/* ///////////////  START DATE ////////////////////////////////// */}
-          {addStartDate && props.data === 'upcoming' && (
-            <View>
-              <EndDate
-                title={staticConstant.Date.startDate}
-                minimumDate={new Date()}
-                updateParent={updateParentVariable}
-                onChange={date => {
-                  setminimumDate(date);
-                  setStartDateValue(date);
-                }}
-              />
-            </View>
-          )}
-
-          {addStartDate && props.data === 'past' && (
-            <View>
-              <EndDate
-                title={staticConstant.Date.startDate}
-                updateParent={updateParentVariable}
-                onChange={date => {
-                  setminimumDate(date);
-                  setStartDateValue(date);
-                }}
-              />
-            </View>
-          )}
-
-          {/* ///////////////  END DATE ////////////////////////////////// */}
-
-          {addStartDate && props.data === 'upcoming' && (
-            <View>
-              <EndDate
-                title={staticConstant.Date.endDate}
-                minimumDate={minimumDate}
-                updateParent={updateParentVariable}
-                onChange={date => setEndDateValue(date)}
-              />
-            </View>
-          )}
-
-          {addStartDate && props.data === 'past' && (
-            <View>
-              <EndDate
-                title={staticConstant.Date.endDate}
-                minimumDate={minimumDate}
-                updateParent={updateParentVariable}
-                onChange={date => setEndDateValue(date)}
-              />
-            </View>
-          )}
-
-          {addLocation && (
-            <View>
-              <Location
-                updateParent={updateParentVariable3}
-                onChangeText={location => setLocationValue(location)}
-              />
-            </View>
-          )}
-          {addTime && (
-            <View>
-              <Time
-                title={staticConstant.Time.timer}
-                updateParent={updateParentVariable4}
-                onChange={time => setTimeValue(time)}
-              />
-            </View>
-          )}
-          {addImage && (
-            <View style={{width: width}}>
-              <Images onChildStateChange={handleChildStateChange} />
-            </View>
-          )}
-          <View style={{paddingBottom: 10}}>
-            <ButtonComponent
-              title={staticConstant.Button.title}
-              onPressFunc={previewChallenge}
-              buttonStyle={style.btnStyle}
-          textStyle={style.textStyle}
-          width={'50%'}
+          <View style={{flex: 1, marginLeft: 20}}>
+            <DatePickerComponent
+              control={control}
+              name={'endDate'}
+              value={enddate}
+              onChange={setEndDateValue}
+              minimumDate={new Date()}
+              isVisible={showEndDatepicker}
+              onPress={() => setShowEndDatePicker(prev => !prev)}
+              label={'End Date'}
+              style={{backgroundColor: colors.Green}}
+              styleIcon={colors.White}
+              iconColor={colors.White}
             />
           </View>
         </View>
-      </RootContainer>
-      <View style={{position: 'absolute', bottom: 0, right: 0, padding: 15}}>
-        <PopupComponent
-          title={staticConstant.Popup.icon}
-          addComponent={AddComponents}
+
+        <View style={{flexDirection: 'row', marginHorizontal: 18}}>
+          <View style={{flex: 1, marginRight: 20}}>
+            <TimePicker
+              control={control}
+              name={'startTime'}
+              value={setStartTime}
+              onChange={setStartTimeValue}
+              minimumDate={new Date()}
+              isVisible={showStartTimepicker}
+              onPress={() => setShowStartTimePicker(prev => !prev)}
+              label={'Start Time'}
+              style={{backgroundColor: colors.White}}
+              styleIcon={colors.Icon}
+              iconColor={colors.Green}
+            />
+          </View>
+          <View style={{flex: 1, marginLeft: 20}}>
+            <TimePicker
+              control={control}
+              name={'endTime'}
+              value={setEndTimeValue}
+              onChange={setEndTimeValue}
+              minimumDate={new Date()}
+              isVisible={showEndTimepicker}
+              onPress={() => setShowEndTimePicker(prev => !prev)}
+              label={'End Time'}
+              style={{backgroundColor: colors.Green}}
+              styleIcon={colors.White}
+              iconColor={colors.White}
+            />
+          </View>
+        </View>
+
+        <View>
+          <Location
+            control={control}
+            name={'location'}
+            placeholder={'select location'}
+            dropdowndata={dropdownelement}
+            label={'Location'}
+            rules={{
+              required: 'location is required',
+            }}
+          />
+        </View>
+        <ButtonComponent
+          title={'submit'}
+          onPressFunc={handleSubmit(CreateChallenge)}
+          buttonStyle={style.btnStyle}
+          textStyle={style.textStyle}
+          width={'90%'}
         />
-      </View>
+      </RootContainer>
     </View>
   );
 };

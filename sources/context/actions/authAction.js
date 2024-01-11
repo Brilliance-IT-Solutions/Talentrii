@@ -12,6 +12,7 @@ const authAction = async (form) => {
     const param = {
         "emailId": form.emailId,
         "password": form.password,
+        "authProvider":form.authProvider
     }
     const response = await axiosManager.post(url, param)    
     return response
@@ -23,6 +24,7 @@ const authSignUpAction = async (form) => {
         "firstName":form.firstName,
         "emailId": form.emailId,
         "password": form.password,
+        "authProvider":form.authProvider
     }
     const response = await axiosManager.post(url, param)    
     return response

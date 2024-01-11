@@ -5,7 +5,7 @@ import {useRoute} from '@react-navigation/native';
 
 const CreateChallengeScreen = () => {
     const route = useRoute();
-    const challenge = route.params.data
+    const challenge = route.params?.data
     return (
         <CreateChallenegeComponent props={{data:challenge}}/>
     )

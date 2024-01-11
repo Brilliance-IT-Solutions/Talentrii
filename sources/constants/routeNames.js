@@ -5,12 +5,14 @@ export const RouterNames = {
   VIDEO_SCREEN: 'videoScreen',
   SPLASH_SCREEN: "splashScreen",  
   CREATE_CHALLENGE_SCREEN: "createChallengeScreen",
+  CHALLENGE_SCREEN: "ChallengeScreen",
+  SHOW_ALL_CHALLENGES:"showChallengeScreen",
+  SHOW_CHALLNEGE_DETAIL:"showChallengeDetailScreen",
   PROFILE_SCREEN: "profileScreen",
   DETAIL_PROFILE_SCREEN: "detailProfileScreen",
   UPDATE_PROFILE_SCREEN: "UpdateProfileScreen",
   EDIT_PROFILE_SCREEN: "editProfileScreen",
   HOME_SCREEN: "homeScreen",
-  CHALLENGE_SCREEN: "ChallengeScreen",
   PREVIEW_CHALLENGE_SCREEN: "previewChallenge",
   CHALLENGE :"challenge",
   LOGIN :"login",
@@ -18,5 +20,6 @@ export const RouterNames = {
   FORGOT_SCREEN:'forgotPassword',
   OTP_SCREEN:'otp',
   RESET_SCREEN:'resetPassword',
-  COMMENTS:'comments'
+  COMMENTS:'comments',
+  NOTIFICATION_SCREEN:"NotificationScreen"
 };

@@ -26,7 +26,7 @@ axiosManager.interceptors.request.use(
 axiosManager.interceptors.response.use(
   (response) => {
     // return response
-    return response.data ? response.data.response : response.data
+    return response?.data ? response?.data?.response : response?.data
   },
   (error) => {    
 

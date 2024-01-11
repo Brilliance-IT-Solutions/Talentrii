@@ -26,7 +26,7 @@ const Social = () =>{
 
 const styles = StyleSheet.create({
     iconBorder:{
-        borderWidth:1,borderRadius:40,padding:15,borderColor:colors.gray,marginHorizontal:6
+        borderWidth:1,borderRadius:40,padding:15,borderColor:colors.InputBox,marginHorizontal:6
     }
 })
 

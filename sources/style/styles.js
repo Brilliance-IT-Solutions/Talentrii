@@ -1,19 +1,21 @@
 import { StyleSheet, Dimensions } from "react-native";
 import Colors from "../assets/themes/colors";
-import colors from "../assets/themes/colors";
+import fontFamily from "./fontFamily";
 
 const { height, width } = Dimensions.get('window')
 const styles = StyleSheet.create({
 
     //################-----> COMMON CSS <-----##############//    
     textBoxes : {
-        fontSize: 16,
-        borderWidth: 0.8,
-        borderColor: Colors.lightGrey,
+        fontSize: 11,
+        borderWidth: 0.5,
+        borderColor: Colors.searchborder,
         marginHorizontal: 18,
-        marginVertical: 10,
-        borderRadius:10,
-        backgroundColor:'#E6E6E3'
+        marginVertical: 5,
+        borderRadius:5,
+        backgroundColor:Colors.White,
+        fontFamily:fontFamily.regular,
+        elevation:0.5
         
     },
     leftStandardPadding : {
@@ -24,7 +26,7 @@ const styles = StyleSheet.create({
         // marginHorizontal: 80,
         paddingHorizontal:30,
         // backgroundColor: Colors.Green,        
-        borderRadius: 8,
+        borderRadius: 5,
         // height:50,
         alignSelf:'center',
         justifyContent: 'center',
@@ -32,13 +34,14 @@ const styles = StyleSheet.create({
     },
     
     buttonText : {
-        marginVertical: 10,        
+        marginVertical: 10, 
         fontSize: 13,
-        fontWeight: '400',
+        fontFamily:fontFamily.medium
         // color: Colors.White,
     },
 
     btnStyle:{
+        marginVertical:2,
         backgroundColor:Colors.Green,
        },
        textStyle:{
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
     bottomMargin5 : {
         marginBottom: 5,
         // fontSize:25,
-        color:colors.Black   
+        color:Colors.Black   
     },
 
     //################------> MULTI LINE TEXT CONTAINER (20k Followers) <----------###############

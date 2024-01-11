@@ -2,6 +2,7 @@ import { Dimensions, StyleSheet } from "react-native";
 import colors from "../../assets/themes/colors";
 import { Constants } from "../../constants/constants";
 import { width } from "../../style/responsiveSize";
+import fontFamily from "../../style/fontFamily";
 
 const numColumns = Constants.PROFILE_PAGE_NUMBER_OF_COLUMNS;
 const size = Dimensions.get('window').width/2.3;
@@ -38,9 +39,10 @@ const styles = StyleSheet.create({
     },
 
     btnStyle:{
-     backgroundColor:colors.lightGrey
+     backgroundColor:colors.Button
     },
     textStyle:{
+        fontFamily:fontFamily.medium,
         color:colors.Black
     },
     bioDataText: {
@@ -67,8 +69,9 @@ const styles = StyleSheet.create({
         width: size,
         height: sizeheight,
         // padding: 8   
-        borderWidth:1,
-        borderColor:colors.White,
+        // borderWidth:0.5,
+        elevation:1,
+        // borderColor:colors.searchborder,
         borderRadius:20   
     },
     bottomHistoryImageView: {

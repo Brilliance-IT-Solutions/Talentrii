@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {IMAGES} from '../../constants/images';
 import colors from '../../assets/themes/colors';
 import IconCont from '../../component/common/IconCount/iconCount';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import {staticConstant} from '../../constants/staticData/staticConstant';
-import axiosManager from '../../helpers/axiosHandler';
-import {APIs} from '../../constants/api';
 import {useNavigation} from '@react-navigation/native';
 import {RouterNames} from '../../constants/routeNames';
 import UserProfile from '../common/profile/profile';
@@ -15,6 +13,7 @@ import {height, width} from '../../style/responsiveSize';
 import ButtonComponent from '../common/Buttons/buttonComponent';
 import ParagraphContainer from '../common/Paragraph/paragraph';
 import Icon from '../common/IconCount/Icons'
+import fontFamily from '../../style/fontFamily';
 
 
 const HomeComponent = props => {
@@ -81,25 +80,27 @@ const HomeComponent = props => {
       <View>
         <View style={styles.topIconRowSection}>
         
-          <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+          <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+            <View style={{flex:1}}>
             <View style={{flexDirection:'row',alignItems:'center'}}>
-            <Text style={{fontSize:18,fontWeight:'700',color:colors.White}}>{props.item.title}</Text>
+            <Text style={{fontSize:14,fontFamily:fontFamily.semiBold,color:colors.White}}>{props.item.title}</Text>
             <Icon name={"sort-desc"} size={18} paddingTop={8}></Icon>
             </View>
-            
+            <View>
+            <ParagraphContainer txt={props.item.description} textstyle={styles.challengeTitle} containerStyle={styles.challengeTitleContainer} onPressFunc={onPressIcon} numberOfLines={numberOfLines}/>
+          </View>
+          </View>
+            <View>
           <UserProfile
                 userName={props.item.userName}
-                location={'Noida, India'}
                 imageSource={IMAGES.USER_DEFAULT_ICON}
                 height={40}
                 width={40}
-                userNameTextColor={colors.White}
+                userNameTextStyle={{fontSize:7,color:colors.White}}
                 style={styleUser.container}
                 onIconPress={() => navigateTo(props.item.userId)}
               />
-          </View>
-          <View>
-            <ParagraphContainer txt={props.item.description} textstyle={styles.challengeTitle} containerStyle={styles.challengeTitleContainer} onPressFunc={onPressIcon} numberOfLines={numberOfLines}/>
+              </View>
           </View>
         </View>
 
@@ -114,7 +115,8 @@ const HomeComponent = props => {
                 imageSource={IMAGES.USER_DEFAULT_ICON}
                 height={40}
                 width={40}
-                userNameTextColor={colors.White}
+                userNameTextStyle={{fontSize:10,color:colors.White}}
+                locationTextStyle={{fontSize:8,color:colors.Grey}}
                 style={styleUser.container}
                 onIconPress={() => navigateTo(props.item.userId)}
               />
@@ -152,8 +154,9 @@ const HomeComponent = props => {
                 <Text
                   style={{
                     textAlign: 'center',
-                    fontSize: 12,
-                    color: colors.White,
+                    fontSize: 8,
+                    color: colors.Green,
+                    fontFamily:fontFamily.regular
                   }}>
                   {staticConstant.Home.challengeFriends}
                 </Text>
@@ -162,7 +165,7 @@ const HomeComponent = props => {
                   style={{
                     textAlign: 'center',
                     fontSize: 12,
-                    color: colors.White,
+                    color: colors.Green,
                   }}>
                   {staticConstant.Home.acceptedFriends}
                 </Text>
@@ -182,8 +185,8 @@ const styleUser = StyleSheet.create({
   container: {
     backgroundColor: colors.grey,
     borderRadius: 30,
-    paddingHorizontal: 10,
+    paddingHorizontal: 6,
     paddingVertical: 3,
-  },
+  }
 });
 export default HomeComponent;

@@ -17,6 +17,7 @@ import CustomInput from '../common/TextInput/CustomInput';
 import {useForm} from 'react-hook-form';
 import Checkbox from '../common/checkbox/Checkbox';
 import Social from '../common/social/Social';
+import RootContainer from '../rootContainer/rootContainer';
 
 const LoginComponent = props => {
   const navigation = useNavigation();
@@ -39,21 +40,26 @@ const LoginComponent = props => {
   };
 
   const onSignInClick = async data => {
-    props.sendDataToParent(data);
+    let formdata = {
+      emailId: data.emailId,
+      password: data.password,
+      authProvider:'local'
+      }
+    props.sendDataToParent(formdata);
   };
 
   return (
     <SafeAreaView style={styles.loginScreen}>
-      <View>
+      <View style={{flex:1}}>
         <CustomHeader showBack showClose />
         <View style={styles.headingTitleContainer}>
           <MultiLineContainer
             txt1={"Let's Get Started!"}
-            txt2="Welcome back.You've been missed!"
-            fontWeight={'700'}
+            txt2="Welcome back.You've been missed!"    
           />
         </View>
-        <View style={{marginTop: 25, marginBottom: 15}}>
+        <RootContainer>
+        <View style={{marginTop: 25, marginBottom: 5}}>
           <CustomInput
             control={control}
             name="emailId"
@@ -78,7 +84,9 @@ const LoginComponent = props => {
             showPassword={showPassword}
             icon={'lock'}
           />
-          <Checkbox control={control} name="policy" />
+          <View style={{marginHorizontal:18}}>
+          <Checkbox control={control} name="policy" label={'By Creating An Account You Agree To Our General Terms & Conditions'}/>
+          </View>
         </View>
         {/* <TouchableOpacity onPress={GoToSignup}>
                     <Text style={{textAlign:'center'}}>Do not have an account? Sign up</Text>
@@ -93,6 +101,7 @@ const LoginComponent = props => {
           width={'90%'}
         />
         <Social/>
+        </RootContainer>
       </View>
     </SafeAreaView>
   );

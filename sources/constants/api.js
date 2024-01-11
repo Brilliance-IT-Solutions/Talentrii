@@ -1,6 +1,6 @@
 export const APIs = {
     // BASE_URL : 'http://localhost:3000/router',    
-    BASE_URL : 'http://192.168.1.19:3000/router',    
+    BASE_URL : 'http://192.168.1.16:3000/router',    
     LOGIN_LINK : '/login',
     SIGNUP_LINK:'/signUp',
     DASHBOARD_LINK:'/getDashboardData',

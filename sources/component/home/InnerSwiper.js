@@ -174,6 +174,9 @@ const InnerSwiper = props => {
             marginHorizontal:1.5,
           }}
           renderItem={renderItem}
+          snapToAlignment="center"
+          decelerationRate={'fast'}
+          disableintervalmomentum={true}   
           keyExtractor={(item, index) => index.toString()}
         />
       </View>

@@ -7,6 +7,7 @@ import colors from '../../assets/themes/colors';
 import { useNavigation } from '@react-navigation/native';
 import { RouterNames } from '../../constants/routeNames';
 import styles from '../../style/styles';
+import Fonts from '../../style/fontFamily'
 
 
 const Welcome = () =>{
@@ -25,12 +26,17 @@ const Welcome = () =>{
             source={IMAGES.SPLASH_SCREEN_LOGO}
             resizeMode="contain" />
             </View> 
+            <View style={{marginVertical:15}}>
+            <Image style={style.welcomeLogo}
+            source={IMAGES.WELCOME_SCREEN_LOGO}
+            resizeMode="contain" />
+            </View>
             <View style={{marginVertical:20}}>
-                <Text style={{fontSize:25, color:colors.Black}}>Welcome to 
-                      <Text style={{color:colors.Green,fontWeight:'700'}}>Talentrii!</Text>
+                <Text style={{fontSize:22, color:colors.Black,fontFamily:Fonts.medium}}>Welcome to 
+                      <Text style={{color:colors.Green,fontWeight:'700',fontFamily:Fonts.semiBold}}>Talentrii!</Text>
                 </Text>
             </View>
-            <ButtonComponent title={'Get Started'} width={'70%'} buttonStyle={styles.btnStyle} textStyle={styles.textStyle} onPressFunc={GoToLogin}></ButtonComponent>
+            <ButtonComponent title={'Get Started'} width={'70%'} buttonStyle={styles.btnStyle} textStyle={styles.textStyle} onPressFunc={GoToLogin} icon={true} iconName={"arrow-right"}></ButtonComponent>
             <ButtonComponent title={'Sign Up'} width={'70%'}  buttonStyle={style.btnStyle} textStyle={style.textStyle} onPressFunc={GoToSignUp}></ButtonComponent>
        </View>
     )
@@ -42,6 +48,9 @@ const style = StyleSheet.create({
     },
     centerLogo:{
         width: width * 0.3,        
+   },
+   welcomeLogo:{
+    height:height * 0.35
    },
    btnStyle:{
     borderWidth:1

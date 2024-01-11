@@ -1,5 +1,5 @@
 import react, {useRef} from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
+import {View, TouchableOpacity, Image,Text} from 'react-native';
 import styles from './styles';
 import Video from 'react-native-video';
 import {IMAGES} from '../../constants/images';
@@ -38,7 +38,7 @@ const ChallengeCardProfile = ({userdetail}) => {
         flexDirection: 'row',
         flexWrap: 'wrap',
       }}>
-      {userdetail?.media &&
+      {userdetail?.media && userdetail?.media.length > 0 ?(
         userdetail?.media?.map((items, i) => (
           <View key={items.id} style={{marginTop: 15}}>
             {items.inner &&
@@ -67,8 +67,11 @@ const ChallengeCardProfile = ({userdetail}) => {
                             onLoadStart={onVideoLoadStart}
                             onLoad={onLoad}
                             resizeMode="cover"></Video>
-                         <UserProfile userName={userdetail.userName} location={"Noida India"}/>
-                         <ProfileIconCount likecount={item.likes_count}  commentcount={item.comments_count}/>
+                         <UserProfile userName={userdetail.userName} location={"Noida India"} 
+                         userNameTextStyle={{fontSize:10,color:colors.Black}}
+                           locationTextStyle={{fontSize:8,color:colors.Icon}}
+                />
+                         <ProfileIconCount likecount={item.likes_count}  commentcount={item.comments_count} style={{justifyContent:'space-between'}}/>
                         </View>
                       ) : (
                         <View
@@ -89,7 +92,7 @@ const ChallengeCardProfile = ({userdetail}) => {
                               {resizeMode: 'cover'},
                             ]}
                           />
-                          {items.inner.length > 1 && (
+                          {/* {items.inner.length > 1 && (
                             <Image
                               source={{
                                 uri: 'https://cdn.iconscout.com/icon/premium/png-256-thumb/multi-post-1702546-1486961.png?f=webp',
@@ -103,9 +106,10 @@ const ChallengeCardProfile = ({userdetail}) => {
                                 paddingHorizontal: 5,
                               }}
                             />
-                          )}
-                          <UserProfile userName={userdetail.userName} location={"Noida India"}/>
-                           <ProfileIconCount likecount={item.likes_count} commentcount={item.comments_count}/>
+                          )} */}
+                          <UserProfile userName={userdetail.userName} location={"Noida India"} userNameTextStyle={{fontSize:10,color:colors.Black}}
+                             locationTextStyle={{fontSize:8,color:colors.Icon}}/>
+                           <ProfileIconCount likecount={item.likes_count} commentcount={item.comments_count} style={{justifyContent:'space-between'}}/>
                         </View>
                       )}
                     </View>
@@ -113,7 +117,11 @@ const ChallengeCardProfile = ({userdetail}) => {
                 </TouchableOpacity>
               ))}
           </View>
-        ))}
+        ))):(
+          <View style={{flex:1,alignItems:'center',paddingVertical:20}}>
+          <Text style={{}}>No Challenge Found</Text>
+          </View>
+        )}
     </View>
   );
 };

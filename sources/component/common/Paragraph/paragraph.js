@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet , View, Text, TouchableOpacity } from "react-native";
 import colors from "../../../assets/themes/colors";
+import fontFamily from "../../../style/fontFamily";
 const ParagraphContainer = ({ txt,textstyle,containerStyle ,onPressFunc,numberOfLines=1}) => {
     return (
         <TouchableOpacity onPress={onPressFunc}>
@@ -19,9 +20,10 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         marginRight: 30,
         textAlign:'center',
-        fontSize: 13,
+        fontSize: 12,
         paddingBottom:10,
-        color:colors.gray
+        color:colors.gray,
+        fontFamily:fontFamily.regular
     }
 })
 export default ParagraphContainer;

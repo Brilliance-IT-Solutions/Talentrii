@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {RouterNames} from '../constants/routeNames';
 
 /////////////////// SCREEN LIST /////////////////////////
 import HomeScreen from '../screen/home/homeScreen';
@@ -8,12 +7,30 @@ import ProfileScreen from '../screen/profile/profileScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import colors from '../assets/themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ChallengeScreen from '../screen/Challenge/ChallengeScreen';
+import Icons from 'react-native-vector-icons/MaterialIcons';
+
 import {ChallengeStackScreen} from './ChallengeStackNav';
 import { height } from '../style/responsiveSize';
-import Comments from '../component/home/Comments';
+import { View } from 'react-native';
+import { NotificationSTackNav } from './NotificationStackNav';
+import fontFamily from '../style/fontFamily';
+import UploadFile from '../screen/uploadScreen';
 ///////////////////////
+const MyTabScreen = ({ focused, color }) => {
+  const borderColor = focused ? colors.Green : colors.Grey;
 
+  return (
+    <View style={{
+      borderRadius: 50,
+      borderWidth: 8,
+      paddingHorizontal: 12,
+      paddingVertical:10,
+      borderColor: borderColor,
+    }}>
+      <Icon name="plus" color={color} size={15} />
+    </View>
+  );
+};
 const HomeStack = createStackNavigator();
 
 const options = () => {
@@ -28,13 +45,14 @@ export const HomeStackScreen = () => (
     initialRouteName="home"
     screenOptions={{
       tabBarActiveTintColor: colors.Green,
+      tabBarInactiveTintColor:colors.Grey,
       tabBarStyle: {
         height: height * 0.15,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         paddingHorizontal:20,
       },
-      tabBarLabelStyle: {marginBottom: 30},
+      tabBarLabelStyle: {marginBottom: 30,fontFamily:fontFamily.medium,fontSize:10},
       tabBarIconStyle: {marginTop: 30},
     }}>
     <Tab.Screen
@@ -59,31 +77,31 @@ export const HomeStackScreen = () => (
     
     />
     <Tab.Screen
-      name="challengeScreen"
+      name="challenge"
       component={ChallengeStackScreen}
       options={{
         tabBarLabel: '',
         animationEnabled: true,
         headerShown: false,
-        tabBarIconStyle: {bottom: 10},
-        tabBarIcon: ({color}) => (
-          <Icon name="plus-circle" color={color} size={25} />
+        tabBarIconStyle: {bottom: -5},
+        tabBarIcon: ({focused,color}) => (
+          <MyTabScreen focused={focused} color={color} />
         ),
       }}
     />
     <Tab.Screen
-      name="Join"
-      component={ChallengeScreen}
+      name="alerts"
+      component={NotificationSTackNav}
       options={{
-        tabBarLabel: 'join',
+        tabBarLabel: 'Alerts',
         animationEnabled: true,
         headerShown: false,
-        tabBarIcon: ({color}) => <Icon name="user" color={color} size={20} />,
+        tabBarIcon: ({color}) => <Icons name="join-inner" color={color} size={20} />
       }}
     />
     <Tab.Screen
       name="settings"
-      component={ChallengeScreen}
+      component={UploadFile}
       options={{
         tabBarLabel: 'settings',
         animationEnabled: true,

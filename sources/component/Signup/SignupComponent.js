@@ -1,13 +1,8 @@
 import React, {useState,useContext} from 'react';
 import {useForm} from 'react-hook-form';
-import {Text, View, ScrollView} from 'react-native';
-import InputContainer from '../common/TextInput/textInput';
+import {View} from 'react-native';
 import Colors from '../../assets/themes/colors';
 import ButtonComponent from '../common/Buttons/buttonComponent';
-import DropDown from '../common/dropdown/Dropdown';
-import {staticConstant} from '../../constants/staticData/staticConstant';
-import EndDate from '../common/Date/EndDate';
-import DatePickerComponent from '../common/Date/Datepicker';
 import CustomInput from '../common/TextInput/CustomInput';
 import CustomHeader from '../customHeader/customHeader';
 import RootContainer from '../rootContainer/rootContainer';
@@ -15,7 +10,6 @@ import MultiLineContainer from '../common/2LineText/multiLineText';
 import style from '../../style/styles';
 import Checkbox from '../common/checkbox/Checkbox';
 import Social from '../common/social/Social';
-import axiosManager from '../../helpers/axiosHandler';
 import { authSignUpAction } from '../../context/actions/authAction';
 import { setToken,setUser } from '../../utils/GenericFunction';
 import { GlobalContext } from '../../context/Provider';
@@ -44,9 +38,6 @@ const Signup = () => {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      //   password: '',
-      //   confirmPassword: '',
-      // dateOfBirth: new Date(),
     },
   });
 
@@ -59,7 +50,7 @@ const Signup = () => {
       if (res.token) { await setToken(res.token) }
       if (res?.data) { await setUser(JSON.stringify(res?.data)) }
       
-      authDispatch({ type: REGISTER_SUCCESS, payload: res.response })
+      authDispatch({ type: REGISTER_SUCCESS, payload: res.data })
       signIn()
       showSuccess(res.message)
 
@@ -70,7 +61,13 @@ const Signup = () => {
   }
 
   const onSignUpClick = data => {
-      callSignUpAPI(data)
+    let formdata = {
+    firstName:data.firstName,
+    emailId: data.emailId,
+    password: data.password,
+    authProvider:'local'
+    }
+      callSignUpAPI(formdata)
   };
 
   return (
@@ -137,7 +134,9 @@ const Signup = () => {
           }}
           icon={'lock'}
         />
-        <Checkbox control={control}  name="policy" />
+          <View style={{marginHorizontal:18}}>
+        <Checkbox control={control}  name="policy" label={'By Creating An Account You Agree To Our General Terms & Conditions'}/>
+        </View>
         <ButtonComponent
           title="Sign Up"
           onPressFunc={handleSubmit(onSignUpClick)}

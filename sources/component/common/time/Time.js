@@ -1,73 +1,95 @@
-import {View, StyleSheet,TouchableOpacity} from 'react-native' 
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React from "react";
-import {useState} from 'react'
-import {TextInput,Image} from 'react-native'
-import { IMAGES } from '../../../constants/images';
+import React from 'react';
+import { Controller } from 'react-hook-form';
+import {TouchableOpacity, View ,Text} from 'react-native';
 import colors from '../../../assets/themes/colors';
+import Label from '../label/label';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import fontFamily from '../../../style/fontFamily';
 
-const Time = (props) =>{
-    const [time, setTime] = useState(new Date());
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
-  
-    const onChange = (event, selectedDate) => {
-      const currentTime = selectedDate || time;
-      setShow(false);
-      setTime(currentTime);
-      props.onChange(currentTime)
-    };
-  
-    const showMode = (currentMode) => {
-      setShow(true);
-      setMode(currentMode);
-    };
-  
-    const showTimepicker = () => {
-      showMode('time');
-    };
+var maximumDate = new Date();
 
-    const handleEvent = () => {
-      const eventValue = false;   
-      props.updateParent(eventValue);
-    };
-    
+const TimePicker = ({
+  control,
+  name,
+  value,
+  onPress,
+  mode = 'time',
+  label,
+  style,
+  styleIcon,
+  iconColor,
+  // selectedDate = new Date(),
+  isVisible = false,
+}) => {
 
-   return(
-    <View style={styles.container}>
-    <Image source={IMAGES.CALENDER_ICON} style={{marginVertical:6}}/> 
-    <View  style={{flex:6,marginLeft:15.5,marginRight:9.5}}>
-      <TextInput inputMode='none' placeholder='Choose Time' value={time.toLocaleTimeString()} onPressOut={showTimepicker}  style={styles.inputbox}/>
-      </View>
-      {show && (
-        <DateTimePicker
-        testID='time'
-          value={time}
-          mode={mode}
-          onChange={onChange}
-         style={{color:'blue'}}
-        />
+  const formatDate = (utcString, format = 'dd/mm/yyyy') => {
+    if (!utcString) {
+        return ''
+    }
+    var local = new Date(utcString);
+    return local.toJSON().slice(0, 10);
+  };
+
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      // rules={rules}
+      defaultValue={maximumDate}
+      render={({
+        field: { value, onChange },
+        fieldState: { error },
+      }) => (
+        <View>
+            <Label title={label} style={{marginLeft:0}}></Label>
+           
+           <TouchableOpacity
+            onPress={()=> onPress(!isVisible)}
+            style={[{padding:10,borderWidth:1,borderRadius:5,borderColor:colors.searchborder,elevation:0.5},style]}
+            >
+             <View style={{flexDirection:'row',alignItems:'center'}}>
+              <Icon name={'clock-time-four-outline'} size={15} color={iconColor}/>
+             {!value ? <Text style={{fontSize:10,fontFamily:fontFamily.regular}}>select date</Text> :
+              <Text style={{fontSize:10,color:styleIcon,fontFamily:fontFamily.regular}}>{value.toLocaleTimeString()}</Text> }  
+              <View style={{position:'absolute',right:0}}>
+              <Icon name={'menu-down'} size={15} color={styleIcon}/></View>   
+             </View>
+            </TouchableOpacity>
+
+            { isVisible && (
+              <DateTimePicker
+              testID='date'
+              value={value || new Date()}
+                mode={mode}
+                is24Hour={false}
+                onChange={d => {
+                  if (d.type === 'set') {
+                    onPress(false);
+                    onChange(new Date(d.nativeEvent.timestamp));
+                    return;
+                  }
+                  onPress(false);
+                }}
+                maximumDate={maximumDate}
+              />
+             )} 
+        
+        {error && (
+            <Text style={{
+              color: 'red',
+              alignSelf: 'stretch',
+              fontSize:11,
+              fontFamily:fontFamily.regular
+            }}>
+              {error.message}
+            </Text>
+          )}
+        </View>
       )}
-      <TouchableOpacity onPress={handleEvent}><Image source={IMAGES.DELETE_ICON} style={{marginVertical:12}}/></TouchableOpacity>
-    </View>
-   )
-}
+    />
+  );
+};
 
-const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    flexDirection:'row',
-    marginHorizontal:30,
-    marginVertical: 10
-  },
-  inputbox:{
-    borderWidth: 0.8,
-    borderColor: colors.lightGrey,
-    borderRadius:10,
-    height:50,
-    paddingHorizontal:16,
-    fontSize:16
-  }
-})
-
-export default Time;
+export default TimePicker;

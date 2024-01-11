@@ -1,21 +1,19 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect,useContext} from 'react';
 import {
   View,
   FlatList
 } from 'react-native';
-import CustomFooter from '../../component/customHeader/footer';
 import {RouterNames} from '../../constants/routeNames';
 import {Enums} from '../../constants/Enum/enum';
 import {AuthContext} from '../../context/context';
 import {APIs} from '../../constants/api';
 import axiosManager from '../../helpers/axiosHandler';
 import {useFocusEffect} from '@react-navigation/native';
-import {height} from '../../style/responsiveSize';
 import {showError} from '../../component/common/toaster/toaster';
 import InnerSwiper from '../../component/home/InnerSwiper';
-import HomeComponent from '../../component/home/HomeComponent';
-import DoubleTap from "@memrearal/react-native-doubletap";
-import { getUser } from '../../utils/GenericFunction';
+import { width } from '../../style/responsiveSize';
+import colors from '../../assets/themes/colors';
+import { GlobalContext } from '../../context/Provider';
 
 const HomeScreen = ({navigation}) => {
   const {signOut} = React.useContext(AuthContext);
@@ -23,38 +21,7 @@ const HomeScreen = ({navigation}) => {
   const pressLike = () => setCount(prevCount => prevCount + 1);
   const [currentRenderVideoIndex, setCurrentRenderVideoIndex] = useState(0);
   const [users, setUsers] = useState([]);
-  const [userDetail, setUserDetail] = useState('');
-
-  
-  const getuserDetail = async () =>{
-    const data = await getUser();
-    const userDetailID = data ? JSON.parse(data) : ''
-  setUserDetail(userDetailID.id)
- }
-
- useEffect(()=>{
-   getuserDetail()
- },[])
-
-  const navigatePage = index => {
-    var link = RouterNames.HOME_SCREEN;
-    var params = {};
-    switch (index) {
-      case Enums.HomeIconRedirection.HOME:
-        link = RouterNames.HOME_SCREEN;
-        break;
-      case Enums.ChallengeIconRedirection.CREATE_CHALLENGE_SCREEN:
-        (link = RouterNames.CHALLENGE), {screen: RouterNames.CHALLENGE_SCREEN};
-        break;
-      case Enums.HomeIconRedirection.PROFILE:
-        link = RouterNames.PROFILE_SCREEN;
-        params = {userId : userDetail}
-        break;
-      default:
-        break;
-    }
-    navigation.navigate(link,params);
-  };
+  const { authState} = useContext(GlobalContext);
 
   async function fetchMyAPI(pagenumber) {
     try {
@@ -63,8 +30,10 @@ const HomeScreen = ({navigation}) => {
       const response = await axiosManager.post(url, param);
       setUsers(response.data);
     } catch (error) {
-      console.log('gfhhhhhhhhhhhhhh', error);
       const data = error.response.data.response.message ? error.response.data.response.message : error.response.data.error
+      if(error.response.data.response.message === "Your session has expired. Please login again to continue."){
+        signOut();
+      }
       showError(data);
     }
   }
@@ -76,37 +45,21 @@ const HomeScreen = ({navigation}) => {
     }, [])
   );
 
-  // const callDashboardAPI = async () => {
-
-  //     authDispatch({
-  //         type: DASHBOARD_LOADING
-  //     })
-  //     try {
-  //         const res = await dashboardAction();
-  //         authDispatch({
-  //             type: DASHBOARD_SUCCESS,
-  //             payload: res
-  //         })
-  //         setUsers(res)
-
-  //     } catch (error) {
-  //          console.log("error is ", error)
-  //         authDispatch({
-  //             type: DASHBOARD_FAIL,
-  //             payload: error
-  //         });
-  //     }
-  //   }
 const handleChangeIndexvalue = ({index}) =>{
   setCurrentRenderVideoIndex(index)
 }
+
+const separator = () => {
+  return <View style={{width:width,height:0.4,backgroundColor:colors.Grey}}/>;
+};
+
   return (
     <View style={{flex: 1}}>
         <FlatList
          vertical
           data={users}
-          snapToAlignment="center"
           pagingEnabled={true}
+          snapToAlignment="center"
           decelerationRate={'fast'}
           disableintervalmomentum={true}   
           onChangeIndex={handleChangeIndexvalue}   
@@ -117,6 +70,7 @@ const handleChangeIndexvalue = ({index}) =>{
               <InnerSwiper innerdata={item} index={index} currentIndex={currentRenderVideoIndex}/>
           )}
           keyExtractor={(item, index) => index.toString()}
+          ItemSeparatorComponent={separator}
         />
      </View>
   );

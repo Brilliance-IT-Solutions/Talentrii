@@ -22,19 +22,18 @@ const navigation = useNavigation()
   }
   return (
     <View style={styles.rootContainer}>
-      <CustomHeader showImage showBack />
-      <TittleHeader title={staticConstant.createChallenge.titleHeader} />
+      <CustomHeader showBack title={'Create Challenge'}/>
       <RootContainer>
         <View style={{marginTop: 20, height: getHeight()}}>
           <View style={{marginTop: 20, marginBottom: 140}}>
-            <Label title={staticConstant.createChallenge.titleLabelOne} />
+            <Label title={staticConstant.createChallenge.titleLabelOne} style={{justifyContent:'center'}}/>
             <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextOne} numberOfLines={0}/>
             <ButtonComponent title={staticConstant.createChallenge.buttonTitleOne} onPressFunc={()=>navigateTo('upcoming')} buttonStyle={style.btnStyle}
           textStyle={style.textStyle}
           width={'70%'}/>
           </View>
           <View>
-            <Label title={staticConstant.createChallenge.titleLabelTwo} />
+            <Label title={staticConstant.createChallenge.titleLabelTwo} style={{justifyContent:'center'}}/>
             <ParagraphContainer txt={staticConstant.createChallenge.paragraphTextTwo} numberOfLines={0}/>
             <ButtonComponent title={staticConstant.createChallenge.buttonTitleTwo} onPressFunc={()=>navigateTo('past')} buttonStyle={style.btnStyle}
           textStyle={style.textStyle}
