@@ -32,7 +32,9 @@ export const IMAGES = {
     RECTANGLE_IMAGE3:require('../assets/image/Rectangle70.png'),
     RECTANGLE_IMAGE4:require('../assets/image/Rectangle68.png'),
     RECTANGLE_IMAGE5:require('../assets/image/Rectangle71.png'),
-    GALLERY:require("../assets/image/gallery.png")
+    GALLERY:require("../assets/image/gallery.png"),
+    RECTANGLE_IMAGE:require("../assets/image/Rectangle.png")
+
 
 
     

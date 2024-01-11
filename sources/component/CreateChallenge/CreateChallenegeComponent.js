@@ -9,7 +9,7 @@ import {useState} from 'react';
 import ButtonComponent from '../common/Buttons/buttonComponent';
 import {useNavigation} from '@react-navigation/native';
 import {ToastMessage} from '../../constants/toasterConstants';
-import {showError} from '../common/toaster/toaster';
+import {showError,showSuccess} from '../common/toaster/toaster';
 import style from '../../style/styles';
 import {ToggleContext} from '../../context/privacy/context';
 import {APIs} from '../../constants/api';
@@ -21,6 +21,10 @@ import DatePickerComponent from '../common/Date/Datepicker';
 import TimePicker from '../common/time/Time';
 import CustomRadio from '../common/radio/Radio';
 import fontFamily from '../../style/fontFamily';
+import { getToken } from '../../utils/GenericFunction';
+import axios from 'axios';
+import moment from 'moment';
+import { RouterNames } from '../../constants/routeNames';
 
 const CreateChallenegeComponent = ({props}) => {
   const {isToggled} = useContext(ToggleContext);
@@ -125,75 +129,62 @@ const CreateChallenegeComponent = ({props}) => {
       return;
     }
     if (data) {
-      console.log('fgfdhfg', data);
-      // const formData = new FormData();
-      //  images.forEach((file, index) => {
-      //    formData.append('files', file);
-      //  });
-      // //  setLoader(true)
-      //  const url = APIs.BASE_URL + APIs.UPLOAD_IMAGE;
+      const formData = new FormData();
+       images.forEach((file, index) => {
+         formData.append('files', file);
+       });
+       const url = APIs.BASE_URL + APIs.UPLOAD_IMAGE;
 
-      //  const token = await getToken();
-      //  await axios
-      //    .post(url, formData, {
-      //      headers: {
-      //        'Content-Type': 'multipart/form-data',
-      //        token: token,
-      //      },
-      //    })
-      //    .then( async res => {
+       const token = await getToken();
+       await axios
+         .post(url, formData, {
+           headers: {
+             'Content-Type': 'multipart/form-data',
+             token: token,
+           },
+         })
+         .then( async res => {
+           const urls = APIs.BASE_URL + APIs.CREATE_CHALLENGE;
+           if(res?.data?.response?.urls?.length > 0){
+           let param = {
+             title: data?.title,
+             description: data?.description,
+             url: res?.data?.response.urls,
+             latitude: '',
+             longitude: '',
+             startDate: moment(data?.startDate).utc().format('YYYY-MM-DD'),
+             endDate:  moment(data?.endDate).utc().format('YYYY-MM-DD'),
+             startTime:  moment(data?.startTime).format('HH:mm:ss'),
+             category:data?.category,
+             endTime:  moment(data?.endTime).format('HH:mm:ss'),
+             location:data?.location.toString(),
+             privacy:data?.privacy.toString()
+           }
 
-      //      console.log('====================================');
-      //      console.log('Success!', res.data.response.urls);
+           await axiosManager
+             .post(urls, param)
+             .then(res => {
+               showSuccess(res.message)
+               navigation.navigate(RouterNames.HOME_SCREEN);
+             }).catch(error => {
 
-      //      const urls = APIs.BASE_URL + APIs.CREATE_CHALLENGE;
-      //      if(res?.data?.response?.urls?.length > 0){
-      //    console.log("dfsddfdfdfgdfgdfgh",data)
-      //      let param = {
-      //        title: data?.title,
-      //        description: data?.description,
-      //        url: res?.data?.response.urls,
-      //        latitude: '',
-      //        longitude: '',
-      //        startDate: moment(data?.startDate).utc().format('YYYY-MM-DD'),
-      //        endDate:  moment(data?.endDate).utc().format('YYYY-MM-DD'),
-      //        startTime:  moment(data?.startTime).format('HH:mm:ss'),
-      //        category:data?.category,
-      //        endTime:  moment(data?.endTime).format('HH:mm:ss'),
-      //        location:data?.location.toString(),
-      //        privacy:data?.privacy.toString()
-      //      }
-      //      console.log("gghjhdfjsdhgfdh",param)
+               showError(error.response.data.response.message)
+             });
+           }else{
+             showError(ToastMessage.REQUIRED_MEDIA)
 
-      //      await axiosManager
-      //        .post(urls, param)
-      //        .then(res => {
-      //         //  setLoader(false)
-      //          showSuccess(res.message)
-      //          navigation.navigate(RouterNames.HOME_SCREEN);
-      //        }).catch(error => {
+              return
+           }
 
-      //         //  setLoader(false)
-      //          showError(error.response.data.response.message)
-      //        });
-      //      }else{
-      //       //  setLoader(false)
-      //        showError(ToastMessage.REQUIRED_MEDIA)
-
-      //         return
-      //      }
-
-      //    })
-      //    .catch(error => {
-      //      showError(error.response.data.response.message)
-      //      setLoader(false);
-      //    });
+         })
+         .catch(error => {
+           showError(error.response.data.response.message)
+         });
     } else {
       showError(ToastMessage.REQUIRED_FIELDS);
       return;
     }
   };
-  // if (!props.data && !addStartDate) return null;
 
   return (
     <View style={styles.rootContainer}>
@@ -215,7 +206,7 @@ const CreateChallenegeComponent = ({props}) => {
               fontFamily: fontFamily.semiBold,
               paddingVertical: 5,
             }}>
-            Mandatory Information{' '}
+            Mandatory Information
           </Text>
           <View>
             <PrivacyComponent control={control} name={'privacy'} />
@@ -305,7 +296,7 @@ const CreateChallenegeComponent = ({props}) => {
               fontFamily: fontFamily.semiBold,
               paddingVertical: 5,
             }}>
-            Optional Information{' '}
+            Optional Information
           </Text>
           <View>
             <PrivacyComponent control={control} name={'privacy'} />

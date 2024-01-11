@@ -118,7 +118,7 @@ const ShowChallengeDetail = () => {
                 width: '100%',
               }}>
               <Image
-                source={IMAGES.ELLIPSE_IMAGE2}
+                source={IMAGES.RECTANGLE_IMAGE}
                 style={{width: '100%', height: '100%', resizeMode: 'contain'}}
               />
             </View>

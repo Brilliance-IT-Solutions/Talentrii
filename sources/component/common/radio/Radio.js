@@ -15,7 +15,7 @@ const CustomRadio = ({control,name,data,label,defaultValue,search}) =>{
     <View>
        {label && <Label title={label}></Label>}
     <View style={{flexDirection:'row',marginHorizontal:10}}>
-       {data.map((item,i) => {
+       {data?.map((item,i) => {
            return (
             <View key={i} style={{flex:1}}>
             <Pressable
