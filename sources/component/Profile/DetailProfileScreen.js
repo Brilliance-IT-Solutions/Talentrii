@@ -189,7 +189,7 @@ const DetailProfileScreen = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: colors.White}}>
-      <CustomHeader showImage showBack />
+      <CustomHeader showImage showBack title={'Detail Profile'}/>
       <TittleHeader title={staticConstant.DetailProfile.titleHeader} />
       <RootContainer>
       <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:"center"}}>

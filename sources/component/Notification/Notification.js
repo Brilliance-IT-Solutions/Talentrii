@@ -11,7 +11,7 @@ const NotificationComponent = ({notification}) =>{
          <Icon name={"bar-chart"} size={25} color={colors.White}></Icon>
          </View>
          <View style={{flex:1,marginLeft:10}}>
-         <Text style={{fontSize:8,flexWrap:'wrap',color:colors.Black,fontFamily:fontFamily.medium}}>{notification}</Text>
+         <Text style={{fontSize:10,flexWrap:'wrap',color:colors.Black,fontFamily:fontFamily.medium}}>{notification}</Text>
          </View>
         </View>
         </View>

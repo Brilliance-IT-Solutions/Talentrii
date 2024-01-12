@@ -14,4 +14,5 @@ export const APIs = {
     GET_ALL_CHALLENGE_BY_CHALLENGEID:'/getChallengeById',
     UPDATE_PROFILE:'/updateProfile',
     GET_PURPOSE_CHALLENGE:'/getPurposeChallenge',
+    GET_CHALENGE_BY_USERID:'/getChallengeByUserId'
 }

@@ -173,7 +173,7 @@ const UpdateProfileComponent = () => {
         }
     return (
         <View style={styles.rootContainer}>
-            <CustomHeader showImage showBack/>
+            <CustomHeader showImage showBack title={'Update Profile'}/>
             <TittleHeader title={staticConstant.UpdateProfile.btnTitle}/>
             <RootContainer>
                 <View style={styles.rootContainer}>

@@ -20,6 +20,8 @@ const Checkbox = ({
         value={value}
         onValueChange={onChange}
         tintColors={{true : colors.Green , false: colors.Icon}}
+        boxType={'square'}
+        tintColor={{true : colors.Green , false: colors.Icon}}
       />
       </View>
       <View style={{flex:1}}>

@@ -51,7 +51,7 @@ const HomeComponent = props => {
   };
 
   const navigateTo = id => {
-    navigation.navigate(RouterNames.PROFILE_SCREEN, {
+    navigation.navigate(RouterNames.OTHER_PROFILE_SCREEN, {
       userId: id,
     });
   };

@@ -13,6 +13,7 @@ export const RouterNames = {
   UPDATE_PROFILE_SCREEN: "UpdateProfileScreen",
   EDIT_PROFILE_SCREEN: "editProfileScreen",
   HOME_SCREEN: "homeScreen",
+  OTHER_PROFILE_SCREEN:'othersProfile',
   PREVIEW_CHALLENGE_SCREEN: "previewChallenge",
   CHALLENGE :"challenge",
   LOGIN :"login",

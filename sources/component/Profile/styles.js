@@ -27,11 +27,13 @@ const styles = StyleSheet.create({
         // justifyContent: 'center'
     },
     bioDataImage: {
-        height: 70, 
+        height: '100%', 
         // left: 0, 
-        width: 70,
+        width: "100%",
         //  marginLeft: '10%'
         borderRadius:50,
+        resizeMode:'cover'
+       
     },
     bioDataTextView: {
         // flex: 0.5, 

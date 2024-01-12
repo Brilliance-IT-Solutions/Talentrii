@@ -159,6 +159,7 @@ const CreateChallenegeComponent = ({props}) => {
              endTime:  moment(data?.endTime).format('HH:mm:ss'),
              location:data?.location.toString(),
              privacy:data?.privacy.toString()
+            //  privacy:data?.privacy !== undefined && data?.privacy === true ? "public" : "private"
            }
 
            await axiosManager

@@ -4,7 +4,7 @@ import colors from "../../../assets/themes/colors";
 import ButtonComponent from "../Buttons/buttonComponent";
 import { IMAGES } from "../../../constants/images";
 import fontFamily from "../../../style/fontFamily";
-const CardComponent = ({onPressFunc}) =>{
+const CardComponent = ({onPressFunc,title,description}) =>{
     return(
 <TouchableOpacity onPress={onPressFunc}>
 <View style={{flex:1,backgroundColor:colors.White,elevation:1,borderRadius:10,marginHorizontal:15,marginVertical:5}}>
@@ -13,8 +13,8 @@ const CardComponent = ({onPressFunc}) =>{
     <Image source={IMAGES.CHALLENGE_IMAGE}  style={{height:20,width:20,resizeMode:'contain'}}></Image>
     </View>
     <View style={{marginLeft:15}}>
-    <Text style={{fontSize:10,color:colors.Black,fontFamily:fontFamily.medium}}>Challenge</Text>
-    <Text  style={{fontSize:10,color:colors.Black,fontFamily:fontFamily.semiBold}}>Pepper Roast</Text>
+    <Text style={{fontSize:10,color:colors.Black,fontFamily:fontFamily.medium}}>{title}</Text>
+    <Text  style={{fontSize:10,color:colors.Black,fontFamily:fontFamily.semiBold}}>{description}</Text>
     </View>
     <View style={{position:'absolute',right:0}}>
     <View style={{flexDirection:'row',marginVertical:3}}>

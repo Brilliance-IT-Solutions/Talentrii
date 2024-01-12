@@ -5,7 +5,7 @@ import {RouterNames} from '../constants/routeNames';
 import splashScreen from '../screen/splash/splashScreen';
 import {AuthContext} from '../context/context';
 import {getToken, clearToken} from '../utils/GenericFunction';
-import {HomeStackScreen} from './HomeStackNav';
+import {BottomStackScreen} from './BottomStackNav';
 import {AuthStackScreen} from './AuthStackNav';
 import {Enums} from '../constants/Enum/enum';
 
@@ -36,8 +36,8 @@ const Navigation = () => {
       return (
         <>
           <RootStack.Screen
-            name="home"
-            component={HomeStackScreen}
+            name="bottom"
+            component={BottomStackScreen}
             options={{
               animationEnabled: true,
               headerShown: false,

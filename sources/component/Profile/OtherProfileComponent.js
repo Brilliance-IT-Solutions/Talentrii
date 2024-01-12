@@ -26,7 +26,11 @@ import ChallengeCardProfile from './ChallengeCardProfile';
 import Icon from '../common/IconCount/Icons';
 import {GlobalContext} from '../../context/Provider';
 import fontFamily from '../../style/fontFamily';
-const ProfileComponent = ({userId}) => {
+import {useRoute} from '@react-navigation/native';
+
+const OtherProfileComponent = () => {
+const route = useRoute();
+const userId = route.params?.userId
   const navigation = useNavigation();
   const [userdetail, setUserDetail] = useState([]);
   const [LoggedInUserId, setLoggedInUserId] = useState('');
@@ -59,26 +63,26 @@ const ProfileComponent = ({userId}) => {
     },
   ];
   
-  // useEffect(() => {
-    // if (!userId) {
-      // getUser()
-      //   .then(data => {
-      //     const userDetailID = data ? JSON.parse(data) : '';
-      //     setUserId(userDetailID.id);
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-    // } else {
-    //   setUserId(userId);
-    // }
-  // }, []);
+//   useEffect(() => {
+//     if (!userId) {
+//       getUser()
+//         .then(data => {
+//           const userDetailID = data ? JSON.parse(data) : '';
+//           setUserId(userDetailID.id);
+//         })
+//         .catch(error => {
+//           console.log(error);
+//         });
+//     } else {
+//       setUserId(userId);
+//     }
+//   }, [userId]);
 
-  const fetchProfileApi = async (id) => {
+  const fetchProfileApi = async () => {
     try {
       const response = await axiosManager.post(
         APIs.BASE_URL + APIs.GET_USERDETAIL_BY_USERID,
-        {userId: id},
+        {userId: userId},
       );
       setUserDetail(response.data);
     } catch (error) {
@@ -87,29 +91,26 @@ const ProfileComponent = ({userId}) => {
   };
 
   // useFocusEffect to fetch data for page 1 when the route changes
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     setUserDetail([]);
-  //     fetchProfileApi();
-  //   }, [UserId]),
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      setUserDetail([]);
+      fetchProfileApi();
+    }, [userId]),
+  );
 
   // useEffect(()=>{
   //  fetchProfileApi()
-  // },[])
+  // },[userId])
 
   const getuserDetail = async () => {
     const data = await getUser();
     const userDetailID = data ? JSON.parse(data) : '';
     setLoggedInUserId(userDetailID.id);
-    fetchProfileApi(userDetailID.id)
   };
 
-  useFocusEffect(
-  React.useCallback(() => {
+  useEffect(() => {
     getuserDetail();
-  }, []),
-  )
+  }, []);
 
   const FirstRoute = () => (
     <View style={{flex: 1, backgroundColor: colors.White}}>
@@ -170,7 +171,7 @@ const ProfileComponent = ({userId}) => {
           marginHorizontal: 10,
         }}>
         <View>
-          <View style={{backgroundColor:colors.lightGrey,height:70,width:70,borderRadius:50}}>
+        <View style={{backgroundColor:colors.lightGrey,height:70,width:70,borderRadius:50}}>
           <Image
             style={styles.bioDataImage}
             source={{
@@ -283,7 +284,8 @@ const ProfileComponent = ({userId}) => {
           Followed By Aajizz,Richard and 6 others
         </Text>
       </View>
-      {/* {+LoggedInUserId === +UserId && ( */}
+
+      {+LoggedInUserId === +userId && (
         <View style={{flexDirection: 'row', marginHorizontal: 10}}>
           <View style={{flex: 1, marginRight: 6}}>
             <ButtonComponent
@@ -303,7 +305,7 @@ const ProfileComponent = ({userId}) => {
             />
           </View>
         </View>
-      {/* )} */}
+      )}
       <TabView
         navigationState={{index, routes}}
         renderScene={renderScene}
@@ -314,4 +316,4 @@ const ProfileComponent = ({userId}) => {
     </View>
   );
 };
-export default ProfileComponent;
+export default OtherProfileComponent;
