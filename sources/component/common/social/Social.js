@@ -1,9 +1,9 @@
 import react from 'react'
-import { View,Text, StyleSheet } from 'react-native'
-import Icon from '../IconCount/Icons';
+import { View, StyleSheet, TouchableOpacity,Image } from 'react-native'
 import Icons from 'react-native-vector-icons/FontAwesome5'
 import colors from '../../../assets/themes/colors';
-const Social = () =>{
+import {IMAGES} from '../../../constants/images'
+const Social = ({onPressFunc}) =>{
     return(
         <View style={{marginHorizontal:10,marginVertical:16}}>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',alignContent:'center'}}>
@@ -17,7 +17,10 @@ const Social = () =>{
             <Icons name={'apple'} size={20} color={colors.Black}/>
             </View>
             <View style={[styles.iconBorder,{paddingHorizontal:16}]}>
-            <Icons name={'google'} size={20}/>
+             <TouchableOpacity onPress={onPressFunc}>
+                  <Image source={IMAGES.GOOGLE} style={{width:20,height:20,resizeMode:'contain'}}/>
+             </TouchableOpacity>
+
             </View>
             </View>
         </View>

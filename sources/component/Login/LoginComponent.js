@@ -18,6 +18,8 @@ import {useForm} from 'react-hook-form';
 import Checkbox from '../common/checkbox/Checkbox';
 import Social from '../common/social/Social';
 import RootContainer from '../rootContainer/rootContainer';
+import { GoogleSignin ,statusCodes } from '@react-native-google-signin/google-signin';
+
 
 const LoginComponent = props => {
   const navigation = useNavigation();
@@ -48,10 +50,46 @@ const LoginComponent = props => {
     props.sendDataToParent(formdata);
   };
 
+  GoogleSignin.configure({
+    // apiKey:"AIzaSyAi3jmbXmkVz08rkgpApv230c7KDkecETA",
+    AndroidClientId:"899441618311-t6j3uo57dcbpeaocrbsikosjh560nq9d.apps.googleusercontent.com"
+   
+  });
+
+  const signInWithGoogle = async () =>{
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      let data = {
+        firstName : userInfo.user.givenName,
+        emailId:userInfo.user.email,
+        authProvider:"google"
+      }
+      props.sendDataToParent(data)
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log("cancelled")
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("in progree")
+
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("not avaible")
+
+      } else {
+        // some other error happened
+        console.log("wererr",error)
+
+      }
+    }
+  }
+
   return (
     <SafeAreaView style={styles.loginScreen}>
       <View style={{flex:1}}>
-        <CustomHeader showBack showClose />
+        <CustomHeader showBack  />
         <View style={styles.headingTitleContainer}>
           <MultiLineContainer
             txt1={"Let's Get Started!"}
@@ -84,8 +122,9 @@ const LoginComponent = props => {
             showPassword={showPassword}
             icon={'lock'}
           />
-          <View style={{marginHorizontal:18}}>
-          <Checkbox control={control} name="policy" label={'By Creating An Account You Agree To Our General Terms & Conditions'}/>
+          <View style={{marginHorizontal:18,marginTop:10}}>
+          <Checkbox control={control} name="policy" label={'By Creating An Account You Agree To Our General Terms & Conditions'}  rules={{
+              required: 'please check the checkbox to agree terms & conditions'}} />
           </View>
         </View>
         {/* <TouchableOpacity onPress={GoToSignup}>
@@ -100,7 +139,7 @@ const LoginComponent = props => {
           textStyle={style.textStyle}
           width={'90%'}
         />
-        <Social/>
+        <Social onPressFunc={signInWithGoogle}/>
         </RootContainer>
       </View>
     </SafeAreaView>

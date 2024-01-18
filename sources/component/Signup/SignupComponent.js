@@ -10,12 +10,13 @@ import MultiLineContainer from '../common/2LineText/multiLineText';
 import style from '../../style/styles';
 import Checkbox from '../common/checkbox/Checkbox';
 import Social from '../common/social/Social';
-import { authSignUpAction } from '../../context/actions/authAction';
+import { authSignUpAction ,authSignUpWithGoogle} from '../../context/actions/authAction';
 import { setToken,setUser } from '../../utils/GenericFunction';
 import { GlobalContext } from '../../context/Provider';
 import { showError, showSuccess } from '../../component/common/toaster/toaster';
 import { REGISTER_LOADING, REGISTER_SUCCESS,REGISTER_FAIL } from '../../constants/actionTypes/index'
 import { AuthContext } from '../../context/context';
+import { GoogleSignin ,statusCodes } from '@react-native-google-signin/google-signin';
 
 const Signup = () => {
   const [state, setState] = useState({
@@ -43,10 +44,15 @@ const Signup = () => {
 
 
   const callSignUpAPI = async (data) => {
-
     authDispatch({ type: REGISTER_LOADING })
     try {
-      const res = await authSignUpAction(data);
+      let res 
+      if(data.authProvider !== 'google'){
+         res = await authSignUpAction(data);
+
+      }else{
+      res = await authSignUpWithGoogle(data)
+      }
       if (res.token) { await setToken(res.token) }
       if (res?.data) { await setUser(JSON.stringify(res?.data)) }
       
@@ -60,6 +66,41 @@ const Signup = () => {
     }
   }
 
+  GoogleSignin.configure({
+    // apiKey:"AIzaSyAi3jmbXmkVz08rkgpApv230c7KDkecETA",
+    AndroidClientId:"899441618311-t6j3uo57dcbpeaocrbsikosjh560nq9d.apps.googleusercontent.com"
+   
+  });
+
+  const signInWithGoogle = async () =>{
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      let data = {
+        firstName : userInfo.user.givenName,
+        emailId:userInfo.user.email,
+        authProvider:"google"
+      }
+     callSignUpAPI(data)
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log("cancelled")
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("in progree")
+
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("not avaible")
+
+      } else {
+        // some other error happened
+        console.log("wererr",error.response.data.response.message)
+
+      }
+    }
+  }
   const onSignUpClick = data => {
     let formdata = {
     firstName:data.firstName,
@@ -74,7 +115,7 @@ const Signup = () => {
     <View style={{backgroundColor: Colors.White,
       flex: 1,}}>
     <View style={{flex: 1}}>
-    <CustomHeader showBack showClose/>
+    <CustomHeader showBack/>
               <View style={{ justifyContent: 'flex-start', flexDirection: 'row', height: 50, marginTop:25, marginLeft:15}}>
                 <MultiLineContainer txt1={"Let's Get Started!"} txt2="Welcome back.You've been missed!"  fontWeight={'700'}/>
                 </View>
@@ -134,15 +175,15 @@ const Signup = () => {
           }}
           icon={'lock'}
         />
-          <View style={{marginHorizontal:18}}>
-        <Checkbox control={control}  name="policy" label={'By Creating An Account You Agree To Our General Terms & Conditions'}/>
+          <View style={{marginHorizontal:18,marginTop:10}}>
+        <Checkbox control={control}  name="policy" label={'By Creating An Account You Agree To Our General Terms & Conditions'} rules={{required:"please check the checkbox to agree terms & conditions"}}/>
         </View>
         <ButtonComponent
           title="Sign Up"
           onPressFunc={handleSubmit(onSignUpClick)}
           buttonStyle={style.btnStyle} textStyle={style.textStyle} width={'90%'}
         />
-         <Social/>
+         <Social onPressFunc={signInWithGoogle}/>
       </View>
       </RootContainer>
     </View>

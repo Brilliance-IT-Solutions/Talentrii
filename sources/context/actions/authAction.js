@@ -29,4 +29,30 @@ const authSignUpAction = async (form) => {
     const response = await axiosManager.post(url, param)    
     return response
 }
-export { authAction,authSignUpAction }
+
+const authSignUpWithGoogle = async (form) => {
+    const url = APIs.BASE_URL + APIs.SIGNUP_LINK_WITH_GOOGLE
+    const param = {
+        "firstName":form.firstName,
+        "emailId": form.emailId,
+        "authProvider":form.authProvider
+    }
+
+    const response = await axiosManager.post(url, param)    
+    console.log(response)
+    return response
+}
+
+const authSignInWithGoogle = async (form) => {
+    const url = APIs.BASE_URL + APIs.SIGNIn_LINK_WITH_GOOGLE
+    const param = {
+        "firstName":form.firstName,
+        "emailId": form.emailId,
+        "authProvider":form.authProvider
+    }
+
+    const response = await axiosManager.post(url, param)    
+    console.log(response)
+    return response
+}
+export { authAction,authSignUpAction ,authSignUpWithGoogle,authSignInWithGoogle}

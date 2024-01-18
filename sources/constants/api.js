@@ -1,6 +1,6 @@
 export const APIs = {
     // BASE_URL : 'http://localhost:3000/router',    
-    BASE_URL : 'http://192.168.1.16:3000/router',    
+    BASE_URL : 'http://192.168.1.33:3000/router',    
     LOGIN_LINK : '/login',
     SIGNUP_LINK:'/signUp',
     DASHBOARD_LINK:'/getDashboardData',
@@ -14,5 +14,8 @@ export const APIs = {
     GET_ALL_CHALLENGE_BY_CHALLENGEID:'/getChallengeById',
     UPDATE_PROFILE:'/updateProfile',
     GET_PURPOSE_CHALLENGE:'/getPurposeChallenge',
-    GET_CHALENGE_BY_USERID:'/getChallengeByUserId'
+    GET_CHALENGE_BY_USERID:'/getChallengeByUserId',
+    SIGNUP_LINK_WITH_GOOGLE:'/googleSignUp',
+    SIGNIn_LINK_WITH_GOOGLE:'/googleSignIn'
+
 }

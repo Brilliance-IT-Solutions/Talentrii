@@ -72,6 +72,7 @@ const CreateChallenegeComponent = ({props}) => {
     getValues,
     setValue,
     handleSubmit,
+    reset,
     formState: {errors},
   } = useForm({
     mode: 'onChange',
@@ -167,6 +168,7 @@ const CreateChallenegeComponent = ({props}) => {
              .then(res => {
                showSuccess(res.message)
                navigation.navigate(RouterNames.HOME_SCREEN);
+               reset()
              }).catch(error => {
 
                showError(error.response.data.response.message)

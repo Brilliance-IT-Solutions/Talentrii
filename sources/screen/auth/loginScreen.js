@@ -1,7 +1,7 @@
 import React, { useContext,useState } from 'react';
 import { GlobalContext } from '../../context/Provider';
 import LoginComponent from '../../component/Login/LoginComponent';
-import { authAction } from '../../context/actions/authAction';
+import { authAction, authSignInWithGoogle } from '../../context/actions/authAction';
 
 import CustomAlert from '../../component/common/alert/customAlert';
 import { View } from 'react-native';
@@ -27,10 +27,15 @@ const LoginScreen = () => {
     callLoginAPI(data)
   };
   const callLoginAPI = async (data) => {
-
     authDispatch({ type: REGISTER_LOADING })
     try {
-      const res = await authAction(data);
+      let res 
+      if(data.authProvider !== 'google'){
+         res = await authAction(data);
+      }
+      else{
+         res = await authSignInWithGoogle(data);
+      }
       if (res.token) { await setToken(res.token) }
       if (res.data) { await setUser(JSON.stringify(res.data)) }
       

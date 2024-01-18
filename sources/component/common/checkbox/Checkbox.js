@@ -4,16 +4,19 @@ import { Controller } from "react-hook-form";
 import {View,Text} from 'react-native'
 import colors from '../../../assets/themes/colors';
 import fontFamily from '../../../style/fontFamily';
+import styles from "../../../style/styles";
 
 const Checkbox = ({ 
     control,
-    name,label}) => {
+    name,label,rules}) => {
     return(
         <Controller
         control={control}
         name={name}
+        rules={rules}
         render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
-        <View style={{flexDirection:'row',alignItems:'center',flex:1}}>
+        <View style={{flex:1}}>
+        <View style={{flexDirection:'row',alignItems:'center'}}>
           <View>
         <CheckBox
         disabled={false}
@@ -28,6 +31,19 @@ const Checkbox = ({
        <Text style={{fontSize:10,color:colors.Black,fontFamily:fontFamily.medium}}>{label}</Text>
        </View>
       </View>
+          {error && (
+            <Text style={[{
+                color: 'red',
+                alignSelf: 'stretch',
+                marginHorizontal: 10,
+                fontSize:10,
+                // flex:1,
+                fontFamily:fontFamily.medium
+              }]}>
+              {error.message || STRINGS.ERROR}
+            </Text>
+          )}  
+          </View>
     )}/>
     )
 }

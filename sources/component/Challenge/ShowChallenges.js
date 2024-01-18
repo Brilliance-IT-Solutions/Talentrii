@@ -67,11 +67,11 @@ const ShowChallenges = () =>{
             const response = await axiosManager.post(url,param);
             if (response.data) {
               if(userOption === "Break"){
-                 setPastChallenges(response.data.Break.pastChallenge)
-                 setUpcomingChallenges(response.data.Break.upcomingChallenge)
+                 setPastChallenges(response.data?.Break?.pastChallenge)
+                 setUpcomingChallenges(response.data?.Break?.upcomingChallenge)
               }else{
-                setPastChallenges(response.data.Joinees.pastChallenge)
-                setUpcomingChallenges(response.data.Joinees.upcomingChallenge)
+                setPastChallenges(response.data?.Joinees?.pastChallenge)
+                setUpcomingChallenges(response.data?.Joinees?.upcomingChallenge)
               }           
             }
           } catch (error) {
@@ -89,8 +89,10 @@ const ShowChallenges = () =>{
         };
 
 
-      const navigateTo = () =>{
-        navigation.navigate(RouterNames.SHOW_CHALLNEGE_DETAIL)
+      const navigateTo = (challengeId) =>{
+        navigation.navigate(RouterNames.SHOW_CHALLNEGE_DETAIL,{
+          challengeId:challengeId
+        })
       }
 
       const navigationPage = () =>{
@@ -129,14 +131,14 @@ return(
 
         {PastChallenges?.map((item)=>(
           <View key={item.id}>
-          <CardComponent onPressFunc={navigateTo} title={item.title} description={item.description}/>
+          <CardComponent onPressFunc={()=>navigateTo(item.id)} title={item.title} description={item.description}/>
           </View>
         ))}
        
         <Text style={{color:colors.Black,marginHorizontal:15,marginVertical:10,fontFamily:fontFamily.semiBold}}>Upcoming Challenges</Text>
         {UpcomingChallenges?.map((item)=>(
           <View key={item.id}>
-          <CardComponent onPressFunc={navigateTo} title={item.title} description={item.description}/>
+          <CardComponent onPressFunc={()=>navigateTo(item.id)} title={item.title} description={item.description}/>
           </View>
 
         ))}

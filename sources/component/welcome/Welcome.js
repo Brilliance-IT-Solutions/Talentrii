@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { RouterNames } from '../../constants/routeNames';
 import styles from '../../style/styles';
 import Fonts from '../../style/fontFamily'
+import { getTopMargin } from '../../utils/GenericFunction';
+import RootContainer from '../rootContainer/rootContainer';
 
 
 const Welcome = () =>{
@@ -21,7 +23,8 @@ const Welcome = () =>{
     }
     return(
        <View style={style.container}>
-            <View style={{marginTop:30}}>
+        <RootContainer>
+            <View style={{marginTop:getTopMargin(),alignItems:'center'}}>
             <Image style={style.centerLogo}
             source={IMAGES.SPLASH_SCREEN_LOGO}
             resizeMode="contain" />
@@ -31,13 +34,14 @@ const Welcome = () =>{
             source={IMAGES.WELCOME_SCREEN_LOGO}
             resizeMode="contain" />
             </View>
-            <View style={{marginVertical:20}}>
+            <View style={{marginVertical:20,alignItems:'center'}}>
                 <Text style={{fontSize:22, color:colors.Black,fontFamily:Fonts.medium}}>Welcome to 
                       <Text style={{color:colors.Green,fontWeight:'700',fontFamily:Fonts.semiBold}}>Talentrii!</Text>
                 </Text>
             </View>
             <ButtonComponent title={'Get Started'} width={'70%'} buttonStyle={styles.btnStyle} textStyle={styles.textStyle} onPressFunc={GoToLogin} icon={true} iconName={"arrow-right"}></ButtonComponent>
             <ButtonComponent title={'Sign Up'} width={'70%'}  buttonStyle={style.btnStyle} textStyle={style.textStyle} onPressFunc={GoToSignUp}></ButtonComponent>
+            </RootContainer>
        </View>
     )
 }
