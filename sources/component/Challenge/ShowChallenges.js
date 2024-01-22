@@ -65,7 +65,7 @@ const ShowChallenges = () =>{
           let param ={userId:userId}
           try {
             const response = await axiosManager.post(url,param);
-            if (response.data) {
+            if (response.data.length > 0) {
               if(userOption === "Break"){
                  setPastChallenges(response.data?.Break?.pastChallenge)
                  setUpcomingChallenges(response.data?.Break?.upcomingChallenge)

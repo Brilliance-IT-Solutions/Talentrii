@@ -29,13 +29,7 @@ const LoginScreen = () => {
   const callLoginAPI = async (data) => {
     authDispatch({ type: REGISTER_LOADING })
     try {
-      let res 
-      if(data.authProvider !== 'google'){
-         res = await authAction(data);
-      }
-      else{
-         res = await authSignInWithGoogle(data);
-      }
+        const res = await authAction(data);   
       if (res.token) { await setToken(res.token) }
       if (res.data) { await setUser(JSON.stringify(res.data)) }
       

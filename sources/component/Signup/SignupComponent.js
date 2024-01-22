@@ -10,7 +10,7 @@ import MultiLineContainer from '../common/2LineText/multiLineText';
 import style from '../../style/styles';
 import Checkbox from '../common/checkbox/Checkbox';
 import Social from '../common/social/Social';
-import { authSignUpAction ,authSignUpWithGoogle} from '../../context/actions/authAction';
+import { authSignUpAction ,Google} from '../../context/actions/authAction';
 import { setToken,setUser } from '../../utils/GenericFunction';
 import { GlobalContext } from '../../context/Provider';
 import { showError, showSuccess } from '../../component/common/toaster/toaster';
@@ -46,13 +46,7 @@ const Signup = () => {
   const callSignUpAPI = async (data) => {
     authDispatch({ type: REGISTER_LOADING })
     try {
-      let res 
-      if(data.authProvider !== 'google'){
-         res = await authSignUpAction(data);
-
-      }else{
-      res = await authSignUpWithGoogle(data)
-      }
+       const res = await authSignUpAction(data);
       if (res.token) { await setToken(res.token) }
       if (res?.data) { await setUser(JSON.stringify(res?.data)) }
       
@@ -66,47 +60,24 @@ const Signup = () => {
     }
   }
 
-  GoogleSignin.configure({
-    // apiKey:"AIzaSyAi3jmbXmkVz08rkgpApv230c7KDkecETA",
-    AndroidClientId:"899441618311-t6j3uo57dcbpeaocrbsikosjh560nq9d.apps.googleusercontent.com"
-   
-  });
-
-  const signInWithGoogle = async () =>{
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      let data = {
-        firstName : userInfo.user.givenName,
-        emailId:userInfo.user.email,
-        authProvider:"google"
-      }
-     callSignUpAPI(data)
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-        console.log("cancelled")
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log("in progree")
-
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        console.log("not avaible")
-
-      } else {
-        // some other error happened
-        console.log("wererr",error.response.data.response.message)
-
-      }
+  const signUpWithGoogle = async () =>{
+    const userInfo = await Google();
+    let data = {
+      firstName:userInfo?.user?.givenName,
+      emailId: userInfo?.user?.email,
+      authProvider:'google'
+    }
+    if(data.emailId !== undefined){
+      callSignUpAPI(data)
     }
   }
+
   const onSignUpClick = data => {
     let formdata = {
     firstName:data.firstName,
     emailId: data.emailId,
     password: data.password,
-    authProvider:'local'
+    authProvider:'traditional'
     }
       callSignUpAPI(formdata)
   };
@@ -183,7 +154,7 @@ const Signup = () => {
           onPressFunc={handleSubmit(onSignUpClick)}
           buttonStyle={style.btnStyle} textStyle={style.textStyle} width={'90%'}
         />
-         <Social onPressFunc={signInWithGoogle}/>
+         <Social onPressFunc={signUpWithGoogle}/>
       </View>
       </RootContainer>
     </View>
